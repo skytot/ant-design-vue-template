@@ -1,7 +1,7 @@
 <template>
 <section>
     <div class="deme">
-        <img src="../assets/logo.png"> sss </div>
+        <img src="../../assets/logo.png"> 二级页2</div>
     <!-- <el-dialog title="新增企业" :visible.sync="copDialog" width="600px" center :close-on-click-modal="false" top="30px">
         <el-form :label-position="labelPosition" label-width="170px" :model="copForm">
             <el-form-item label="公司名称：" required>
@@ -55,7 +55,7 @@
 <script>
 import {
     login
-} from '../api/api'
+} from '../../api/api'
 export default {
     data() {
         return {

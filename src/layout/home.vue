@@ -2,32 +2,20 @@
 <a-layout id="components-layout-demo-side" style="min-height: 100vh">
     <a-layout-sider collapsible v-model="collapsed">
         <div class="logo" />
-        <a-menu theme="dark" :defaultSelectedKeys="['1']" mode="inline">
-            <a-menu-item key="1">
-                <a-icon type="pie-chart" />
-                <span>Option 1</span>
+        <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline">
+            <a-menu-item :key="item.key" v-for="item in menus" v-if="item.leaf">
+                <router-link :to="item.path" :data-keys="item.key">
+                    <a-icon :type="item.meta.icon" />{{item.meta.title}}</router-link>
             </a-menu-item>
-            <a-menu-item key="2">
-                <a-icon type="desktop" />
-                <span>Option 2</span>
-            </a-menu-item>
-            <a-sub-menu key="sub1">
+            <a-sub-menu :key="item.key" v-for="item in menus" v-if="!item.leaf">
                 <span slot="title">
-                    <a-icon type="user" /><span>User</span></span>
-                <a-menu-item key="3">Tom</a-menu-item>
-                <a-menu-item key="4">Bill</a-menu-item>
-                <a-menu-item key="5">Alex</a-menu-item>
+                    <a-icon :type="item.meta.icon" /><span>{{item.name}}</span></span>
+                <a-menu-item :key="itm.Key" v-for="itm in item.children">
+                    <router-link :to="itm.path">
+                        {{itm.name}}
+                    </router-link>
+                </a-menu-item>
             </a-sub-menu>
-            <a-sub-menu key="sub2">
-                <span slot="title">
-                    <a-icon type="team" /><span>Team</span></span>
-                <a-menu-item key="6">Team 1</a-menu-item>
-                <a-menu-item key="8">Team 2</a-menu-item>
-            </a-sub-menu>
-            <a-menu-item key="9">
-                <a-icon type="file" />
-                <span>File</span>
-            </a-menu-item>
         </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -55,10 +43,24 @@
         </a-layout-header>
         <a-layout-content style="margin: 0 16px">
             <a-breadcrumb style="margin: 16px 0">
-                <a-breadcrumb-item>User</a-breadcrumb-item>
-                <a-breadcrumb-item>Bill</a-breadcrumb-item>
+                <a-breadcrumb-item :key="item.path" v-for="(item, index) in breadcrumb">
+                    <span v-if="index === 0"><a href="#/home">{{item.name}}</a></span>
+                    <router-link v-else :to="item.path">
+                        {{item.name}}
+                    </router-link>
+                </a-breadcrumb-item>
             </a-breadcrumb>
-            <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }"> Bill is a cat. </div>
+            <!-- <a-breadcrumb style="margin: 16px 0">
+                <a-breadcrumb-item :key="item.path" v-for="(item, index) in breadcrumb">
+                    <span v-if="index === 0"><a href="#/dashboard/workplace">{{item.name}}</a></span>
+                    <span v-else>{{item.name}}</span>
+                </a-breadcrumb-item>
+            </a-breadcrumb> -->
+            <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+                <transition name="fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
+            </div>
         </a-layout-content>
         <a-layout-footer style="text-align: center"> tea admin ©2018 Created by Sky ,Power by Ant design</a-layout-footer>
     </a-layout>
@@ -72,7 +74,10 @@ export default {
             isMobile: false,
             layout: false,
             theme: 'light',
-            systemName: 'admin'
+            systemName: 'admin',
+            breadcrumb: [],
+            menus: [],
+            defaultKey: []
         }
     },
     methods: {
@@ -95,6 +100,40 @@ export default {
                 onCancel() {}
             })
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            const nav = vm.$router.options.routes.filter((i) => {
+                return i.hidden !== true
+            })
+            var arr = []
+            nav.map(i => {
+                if (i.leaf) {
+                    var ob = {}
+                    ob.key = i.key
+                    ob.path = i.path
+                    arr.push(ob)
+                } else if (!i.leaf) {
+                    i.children.map(x => {
+                        var obs = {}
+                        obs.key = x.key
+                        obs.path = x.path
+                        arr.push(obs)
+                    })
+                }
+                return arr
+            })
+            // vm.defaultKey.push(arr.filter(i => {
+            //     return i.path === to.path
+            // })[0].key)
+            // console.log(vm.defaultKey)
+        })
+    },
+    mounted() {
+        this.breadcrumb = this.$route.matched
+        this.menus = this.$router.options.routes.filter((i) => {
+            return (i.hidden !== true)
+        })
     }
 }
 </script>

@@ -44,6 +44,13 @@ Vue.prototype.$error = Modal.error
 Vue.prototype.$warning = Modal.warning
 Vue.prototype.$confirm = Modal.confirm
 const router = new VueRouter({routes})
+router.beforeEach((to, from, next) => {
+    if (to.path === '/') {
+        next('/index')
+    } else {
+        next()
+    }
+})
 /* eslint eol-last: [0, "always"] */
 new Vue({
     router,
