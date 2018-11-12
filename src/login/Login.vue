@@ -38,7 +38,7 @@
                                     </a-input>
                                 </a-col>
                                 <a-col :span="8" style="padding-left: 4px">
-                                    <a-button style="width: 100%" class="captcha-button" size="large">获取验证码</a-button>
+                                    <a-button style="width: 100%" class="captcha-button" size="large">{{codeMsg}}</a-button>
                                 </a-col>
                             </a-row>
                         </a-form-item>
@@ -69,7 +69,8 @@ export default {
         return {
             logging: false,
             error: '',
-            rememberMe: true
+            rememberMe: true,
+            codeMsg: '获取验证码'
         }
     },
     computed: {
@@ -84,7 +85,11 @@ export default {
                 if (!err) {
                     this.logging = true
                     if (this.form.getFieldValue('name') === 'admin' && this.form.getFieldValue('password') === '888888') {
-                        this.$router.push('/')
+                        sessionStorage.setItem('tx_ua', '{name:"admin"}')
+                        sessionStorage.setItem('tx_tk', '888888')
+                        this.$store.dispatch('setUser', '{name:"admin"}')
+                        this.$store.dispatch('setToken', '888888')
+                        this.$router.push('/dashboard')
                     } else {
                         this.logging = false
                         this.$error({

@@ -1,4 +1,4 @@
-/* eslint func-call-spacing: ["error", "always"] */
+/* eslint func-call-spacing: ['error', 'always'] */
 // *******vue路由********
 // ***首页模板****
 const Home = () => import ('../layout/Home.vue')
@@ -12,6 +12,20 @@ const Login = () => import ('../login/Login.vue')
 const Register = () => import ('../login/Register.vue')
 const Index2 = () => import ('../views/test/index2.vue')
 const Index3 = () => import ('../views/test/index3.vue')
+// 企业信息
+const corporate = () => import ('../views/corporate/corporate.vue')
+const corporateInfo = () => import ('../views/corporate/corporateInfo.vue')
+// 地址管理
+const addAdmin = () => import ('../views/add/addAdmin.vue')
+// 门店管理
+const storeAdmin = () => import ('../views/store/storeAdmin.vue')
+// 类目管理
+const sortAdmin = () => import ('../views/sort/sortAdmin.vue')
+// 文章管理
+const articleAdmin = () => import ('../views/article/articleAdmin.vue')
+// 首页管理
+const indexAdmin = () => import ('../views/index/indexAdmin.vue')
+
 const routes = [
     {
         path: '/dashboard',
@@ -22,6 +36,7 @@ const routes = [
         leaf: true,
         key: '1',
         meta: {
+            leaf: true,
             title: '首页',
             icon: 'pie-chart',
             permission: ['base']
@@ -60,6 +75,32 @@ const routes = [
             }
         ]
     }, {
+        path: '/corporate',
+        component: Home,
+        name: '企业',
+        redirect: '/corporate/mycorporate',
+        iconCls: 'icon icon-nav-home',
+        leaf: true,
+        hidden: true,
+        key: '3',
+        meta: {
+            leaf: true,
+            title: '企业信息',
+            icon: 'pie-chart',
+            permission: ['base']
+        },
+        children: [
+            {
+                path: '/corporate/mycorporate',
+                component: corporate,
+                name: '我的企业'
+            }, {
+                path: '/corporate/mycorporateInfo',
+                component: corporateInfo,
+                name: '企业信息'
+            }
+        ]
+    }, {
         path: '/login',
         component: Login,
         name: '',
@@ -81,12 +122,12 @@ const routes = [
         meta: 'base',
         hidden: true
     }, {
-        path: '*',
+        path: '/',
         hidden: true,
         leaf: true,
         meta: 'base',
         redirect: {
-            path: '/404'
+            path: '/dashboard'
         }
     }
 ]

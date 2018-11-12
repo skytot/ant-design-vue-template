@@ -2,7 +2,7 @@
 <a-layout id="components-layout-demo-side" style="min-height: 100vh">
     <a-layout-sider collapsible v-model="collapsed">
         <div class="logo" />
-        <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline">
+        <a-menu theme="dark" :defaultSelectedKeys="['1']" mode="inline">
             <a-menu-item :key="item.key" v-for="item in menus" v-if="item.leaf">
                 <router-link :to="item.path" :data-keys="item.key">
                     <a-icon :type="item.meta.icon" />{{item.meta.title}}</router-link>
@@ -31,23 +31,38 @@
                 </div>
                 <div :class="['global-header-right', theme]">
                     <!-- <header-search class="header-item" /> -->
-                    <a-tooltip class="header-item" title="退出" placement="bottom">
-                        <a @click="logout">
-                            <a-icon type="logout" />
+                    <span>天行健管理有限公司</span>
+                    <a-dropdown>
+                        <a class="ant-dropdown-link" href="#">
+                            <img src="../assets/logo.png" alt="" width="40px">
                         </a>
-                    </a-tooltip>
+                        <a-menu slot="overlay">
+                            <a-menu-item>
+                                <a href="javascript:;" @click="copInfo">
+                                    <a-icon type="user" />　企业信息　</a>
+                            </a-menu-item>
+                            <a-menu-item>
+                                <a href="javascript:;" @click="logout">
+                                    <a-icon type="logout" />　退出登录　</a>
+                            </a-menu-item>
+                        </a-menu>
+                    </a-dropdown>
+                    <!-- <a @click="logout">
+                            <a-icon type="logout" />
+                        </a> -->
                     <!-- <header-notice class="header-item" />
                     <header-avatar class="header-item" /> -->
                 </div>
+                <div :class="['global-header-left', theme]"> 　后台管理系统V1.0 </div>
             </div>
         </a-layout-header>
         <a-layout-content style="margin: 0 16px">
             <a-breadcrumb style="margin: 16px 0">
-                <a-breadcrumb-item :key="item.path" v-for="(item, index) in breadcrumb">
-                    <span v-if="index === 0"><a href="#/home">{{item.name}}</a></span>
-                    <router-link v-else :to="item.path">
+                <a-breadcrumb-item :key="item.path" v-for="item in breadcrumb">
+                    <!-- <span v-if="index === 0"><a href="#/dashboard">{{item.name}}</a></span> -->
+                    <span>
                         {{item.name}}
-                    </router-link>
+                    </span>
                 </a-breadcrumb-item>
             </a-breadcrumb>
             <!-- <a-breadcrumb style="margin: 16px 0">
@@ -77,7 +92,7 @@ export default {
             systemName: 'admin',
             breadcrumb: [],
             menus: [],
-            defaultKey: []
+            defaultKey: ['1']
         }
     },
     methods: {
@@ -90,6 +105,7 @@ export default {
                 cancelText: '取消',
                 onOk() {
                     // console.log(this)
+                    _this.$store.commit('USER', null)
                     _this.$router.push('/login')
                     // return new Promise((resolve, reject) => {
                     //         console.log(resolve, reject)
@@ -99,38 +115,56 @@ export default {
                 },
                 onCancel() {}
             })
+        },
+        copInfo() {
+            this.$router.push('/corporate/mycorporate')
+        },
+        getBreadcrumb() {
+            this.breadcrumb = this.$route.matched
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            const nav = vm.$router.options.routes.filter((i) => {
-                return i.hidden !== true
-            })
-            var arr = []
-            nav.map(i => {
-                if (i.leaf) {
-                    var ob = {}
-                    ob.key = i.key
-                    ob.path = i.path
-                    arr.push(ob)
-                } else if (!i.leaf) {
-                    i.children.map(x => {
-                        var obs = {}
-                        obs.key = x.key
-                        obs.path = x.path
-                        arr.push(obs)
-                    })
-                }
-                return arr
-            })
+            if (sessionStorage.getItem('tx_ua') && sessionStorage.getItem('tx_tk')) {
+                vm.$store.dispatch('setUser', sessionStorage.getItem('tx_ua'))
+            } else {
+                vm.$store.dispatch('setUser', null)
+                vm.$router.push('/login')
+            }
+            // const nav = vm.$router.options.routes.filter((i) => {
+            //     return i.hidden !== true
+            // })
+            // var arr = []
+            // nav.map(i => {
+            //     if (i.leaf) {
+            //         var ob = {}
+            //         ob.key = i.key
+            //         ob.path = i.path
+            //         arr.push(ob)
+            //     } else if (!i.leaf) {
+            //         i.children.map(x => {
+            //             var obs = {}
+            //             obs.key = x.key
+            //             obs.path = x.path
+            //             arr.push(obs)
+            //         })
+            //     }
+            //     return arr
+            // })
             // vm.defaultKey.push(arr.filter(i => {
             //     return i.path === to.path
             // })[0].key)
             // console.log(vm.defaultKey)
         })
     },
+    watch: {
+        $route() {
+            this.getBreadcrumb()
+        }
+    },
+    create() {},
     mounted() {
-        this.breadcrumb = this.$route.matched
+        this.getBreadcrumb()
         this.menus = this.$router.options.routes.filter((i) => {
             return (i.hidden !== true)
         })

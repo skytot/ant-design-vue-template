@@ -25,7 +25,7 @@
                                 </a-input>
                             </a-form-item>
                         </a-col>
-                        <a-col :span="8" style="padding-left: 4px">
+                        <a-col :span="8" style="padding-left: 6px">
                             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEUAAAAeCAIAAAD1pkRKAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAH
 MklEQVRYhc1YfVBTVxb/vXyHAAESBMKXEhbE+o12UVmxVttdaena6rTVtVadbad1HLZdbR2rrltb
 1kptl3UcUDt0uk7t2KwUcXXLFCyoU9mCLrZslUBEokIw5jsheSR52T9e+nwkIUSFbn+TP84959zz
@@ -74,7 +74,7 @@ jVvTZaM7RQAegHKVekxi/RzwP/Lnw8pNXlNjAAAAAElFTkSuQmCC
                                 </a-form-item>
                             </a-col>
                             <a-col :span="8" style="padding-left: 4px">
-                                <a-button style="width: 100%" class="captcha-button" size="large">获取验证码</a-button>
+                                <a-button style="width: 100%" class="captcha-button" size="large" @click="getCode" :disabled="codeStatus">{{codeMsg}}</a-button>
                             </a-col>
                         </a-row>
                     </a-form-item>
@@ -100,7 +100,9 @@ export default {
         return {
             logging: false,
             error: '',
-            rememberMe: true
+            rememberMe: true,
+            codeMsg: '获取验证码',
+            codeStatus: false
         }
     },
     computed: {
@@ -109,6 +111,22 @@ export default {
         }
     },
     methods: {
+        getCode() {
+            this.codeStatus = true
+            const str = '重发 '
+            let s = 10
+            this.codeMsg = '重发 10s'
+            const t = setInterval(() => {
+                if (s > 1) {
+                    s--
+                    this.codeMsg = str + s + 's'
+                } else {
+                    clearInterval(t)
+                    this.codeMsg = '获取验证码'
+                    this.codeStatus = false
+                }
+            }, 1000)
+        },
         onSubmit(e) {
             e.preventDefault()
             this.form.validateFields((err, values) => {
