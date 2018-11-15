@@ -190,7 +190,7 @@ const routes = [
         path: '/articleAdmin',
         component: Home,
         name: '文章管理',
-        redirect: '/articleAdmin/index',
+        redirect: '/articleAdmin/article',
         iconCls: 'icon icon-nav-home',
         leaf: true,
         key: '7',

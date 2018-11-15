@@ -26,7 +26,8 @@ import {
     Table,
     Divider,
     Popconfirm,
-    Cascader
+    Cascader,
+    Upload
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import routes from "./router/routes";
@@ -56,6 +57,7 @@ Vue.use(Table);
 Vue.use(Divider);
 Vue.use(Popconfirm);
 Vue.use(Cascader);
+Vue.use(Upload);
 Vue.prototype.$message = message;
 Vue.prototype.$info = Modal.info;
 Vue.prototype.$success = Modal.success;

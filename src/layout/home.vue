@@ -1,13 +1,13 @@
 <template>
 <a-layout id="components-layout-demo-side" style="min-height: 100vh">
-    <a-layout-sider collapsible v-model="collapsed">
+    <a-layout-sider collapsible :inlineCollapsed="collapsed">
         <div class="logo" />
         <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline">
             <a-menu-item :key="item.key" v-for="item in menus" v-if="item.leaf">
                 <router-link :to="item.path" :data-keys="item.key">
-                    <a-icon :type="item.meta.icon" />{{item.meta.title}}</router-link>
+                    <a-icon :type="item.meta.icon" /> <span>{{item.meta.title}}</span></router-link>
             </a-menu-item>
-            <a-sub-menu :key="item.key" v-for="item in menus" v-if="!item.leaf">
+            <!-- <a-sub-menu :key="item.key" v-for="item in menus" v-if="!item.leaf">
                 <span slot="title">
                     <a-icon :type="item.meta.icon" /><span>{{item.name}}</span></span>
                 <a-menu-item :key="itm.Key" v-for="itm in item.children">
@@ -15,7 +15,7 @@
                         {{itm.name}}
                     </router-link>
                 </a-menu-item>
-            </a-sub-menu>
+            </a-sub-menu> -->
         </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -91,7 +91,7 @@ export default {
             theme: 'light',
             systemName: 'admin',
             breadcrumb: [],
-            menus: [],
+            menus: []
         }
     },
     computed: {
@@ -101,27 +101,31 @@ export default {
             const nav = this.$router.options.routes.filter((i) => {
                 return i.hidden !== true
             })
-            nav.map(i => {
-                if (i.leaf) {
-                    var ob = {}
-                    ob.key = i.key
-                    ob.path = i.path
-                    arr.push(ob)
-                }
-                // } else if (!i.leaf) {
-                //     i.children.map(x => {
-                //         var obs = {}
-                //         obs.key = x.key
-                //         obs.path = x.path
-                //         arr.push(obs)
-                //     })
-                // }
-                return arr
-            })
-            const v = [arr.filter(i => {
-                return this.$route.path.indexOf(i.path) !== -1
-            })[0].key]
-            return v
+            if (this.$route.path.indexOf('corporate') === -1){
+                nav.map(i => {
+                    if (i.leaf) {
+                        var ob = {}
+                        ob.key = i.key
+                        ob.path = i.path
+                        arr.push(ob)
+                    }
+                    // } else if (!i.leaf) {
+                    //     i.children.map(x => {
+                    //         var obs = {}
+                    //         obs.key = x.key
+                    //         obs.path = x.path
+                    //         arr.push(obs)
+                    //     })
+                    // }
+                    return arr
+                })
+                const v = [arr.filter(i => {
+                    return this.$route.path.indexOf(i.path) !== -1
+                })[0].key]
+                return v
+            }else{
+                return ['1']
+            }
         }
     },
     methods: {

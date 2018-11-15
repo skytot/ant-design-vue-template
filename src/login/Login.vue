@@ -70,7 +70,8 @@ export default {
             logging: false,
             error: '',
             rememberMe: true,
-            codeMsg: '获取验证码'
+            codeMsg: '获取验证码',
+            form:{}
         }
     },
     computed: {

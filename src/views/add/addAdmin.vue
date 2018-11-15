@@ -32,7 +32,7 @@
             <span>所在地区： </span>
             <br/>
             <a-input-group compact>
-                <a-cascader style="width: 100%" :options="options" placeholder="Select Address" />
+                <a-cascader style="width: 100%" :loadData="loadData" :options="options" placeholder="选择地区" @change="selChange" :defaultValue="['1']" />
             </a-input-group>
             <br/>
             <span>详细地址： </span>
@@ -87,11 +87,11 @@ export default {
             title: '添加地址',
             visible: false,
             options: [{
-                value: 'zhejiang',
+                value: '1',
                 label: 'Zhejiang',
                 isLeaf: false,
       }, {
-                value: 'jiangsu',
+                value: '2',
                 label: 'Jiangsu',
                 isLeaf: false,
       }]
@@ -118,21 +118,29 @@ export default {
         onChange(value) {
             console.log(value);
         },
+        selChange(value,){
+            console.log(value);
+        },
         loadData(selectedOptions) {
             const targetOption = selectedOptions[selectedOptions.length - 1];
+            console.log(selectedOptions)
             targetOption.loading = true;
             // load options lazily
             setTimeout(() => {
                 targetOption.loading = false;
                 targetOption.children = [{
                     label: `${targetOption.label} Dynamic 1`,
-                    value: 'dynamic1',
+                    value: '11',
+                    children:[{
+                        label: `${targetOption.label} Dynamic 11`,
+                        value: '111',
+                    }]
         }, {
                     label: `${targetOption.label} Dynamic 2`,
-                    value: 'dynamic2',
+                    value: '22',
         }];
                 this.options = [...this.options]
-            }, 1000);
+            }, 200);
         }
     },
     watch: {},
