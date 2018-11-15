@@ -2,7 +2,7 @@
 <a-layout id="components-layout-demo-side" style="min-height: 100vh">
     <a-layout-sider collapsible v-model="collapsed">
         <div class="logo" />
-        <a-menu theme="dark" :defaultSelectedKeys="['1']" mode="inline">
+        <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline">
             <a-menu-item :key="item.key" v-for="item in menus" v-if="item.leaf">
                 <router-link :to="item.path" :data-keys="item.key">
                     <a-icon :type="item.meta.icon" />{{item.meta.title}}</router-link>
@@ -92,7 +92,36 @@ export default {
             systemName: 'admin',
             breadcrumb: [],
             menus: [],
-            defaultKey: ['1']
+        }
+    },
+    computed: {
+        // 计算属性的 getter
+        defaultKey: function() {
+            var arr = []
+            const nav = this.$router.options.routes.filter((i) => {
+                return i.hidden !== true
+            })
+            nav.map(i => {
+                if (i.leaf) {
+                    var ob = {}
+                    ob.key = i.key
+                    ob.path = i.path
+                    arr.push(ob)
+                }
+                // } else if (!i.leaf) {
+                //     i.children.map(x => {
+                //         var obs = {}
+                //         obs.key = x.key
+                //         obs.path = x.path
+                //         arr.push(obs)
+                //     })
+                // }
+                return arr
+            })
+            const v = [arr.filter(i => {
+                return this.$route.path.indexOf(i.path) !== -1
+            })[0].key]
+            return v
         }
     },
     methods: {
@@ -131,30 +160,6 @@ export default {
                 vm.$store.dispatch('setUser', null)
                 vm.$router.push('/login')
             }
-            // const nav = vm.$router.options.routes.filter((i) => {
-            //     return i.hidden !== true
-            // })
-            // var arr = []
-            // nav.map(i => {
-            //     if (i.leaf) {
-            //         var ob = {}
-            //         ob.key = i.key
-            //         ob.path = i.path
-            //         arr.push(ob)
-            //     } else if (!i.leaf) {
-            //         i.children.map(x => {
-            //             var obs = {}
-            //             obs.key = x.key
-            //             obs.path = x.path
-            //             arr.push(obs)
-            //         })
-            //     }
-            //     return arr
-            // })
-            // vm.defaultKey.push(arr.filter(i => {
-            //     return i.path === to.path
-            // })[0].key)
-            // console.log(vm.defaultKey)
         })
     },
     watch: {
@@ -252,5 +257,8 @@ export default {
             }
         }
     }
+}
+.pointer {
+    cursor: pointer;
 }
 </style>

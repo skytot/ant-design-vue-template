@@ -1,21 +1,6 @@
 <template>
 <section>
     <div class="demo">
-        <!-- <div>
-            <a-row>
-                <a-col :span="6"></a-col>
-                <a-col :span="6"></a-col>
-                <a-col :span="6"></a-col>
-                <a-col :span="6" style="text-align:right">
-                    <a-button type="primary" @click="addCop">新增企业</a-button>
-                </a-col>
-            </a-row>
-        </div> -->
-        <!-- <div class="ta-box center" v-if="copList.length == 0">
-            <img src="../../assets/no_img.jpg" alt="" class="center">
-            <span class='dpb '>暂无企业信息，请点击新增 </span>
-        </div>
-        <div class="" v-else></div> -->
         <a-tabs type="card">
             <a-tab-pane tab="基本信息" key="1">
                 <a-card :loading="loading" title="">
@@ -30,9 +15,16 @@
                 </a-card>
             </a-tab-pane>
             <a-tab-pane tab="资质认证" key="2">
-                <p>Content of Tab Pane 2</p>
-                <p>Content of Tab Pane 2</p>
-                <p>Content of Tab Pane 2</p>
+                <a-card :loading="loading" title="">
+                    <a-button type="primary" slot="extra" @click="addCop">修改信息</a-button>
+                    <a-list itemLayout="horizontal" :dataSource="data2" size="small" :split="false">
+                        <a-list-item slot="renderItem" slot-scope="item, index">
+                            <a-list-item-meta :description="item.title">
+                                <div slot="title">{{item.name}}</div>
+                            </a-list-item-meta>
+                        </a-list-item>
+                    </a-list>
+                </a-card>
             </a-tab-pane>
         </a-tabs>
     </div>
@@ -84,7 +76,7 @@ const formItemLayout = {
     wrapperCol: {
         span: 8,
         offset: 20
-    },
+    }
 }
 const formTailLayout = {
     labelCol: {
@@ -93,37 +85,45 @@ const formTailLayout = {
     wrapperCol: {
         span: 8,
         offset: 20
-    },
+    }
 }
 export default {
     data() {
         return {
-            data: [
-                {
+            data: [{
                     name: '企业名称',
-                    title: 'Ant Design Title 1',
-              },
-                {
+                    title: 'Ant Design Title 1'
+              }, {
                     name: '法人名称',
-                    title: 'Ant Design Title 2',
-              },
-                {
+                    title: 'Ant Design Title 2'
+              }, {
                     name: '手　　机',
-                    title: '15805555555',
-              },
-                {
+                    title: '15805555555'
+              }, {
                     name: '加盟电话',
-                    title: '0591-11111111',
-              },
-                {
+                    title: '0591-11111111'
+              }, {
                     name: '地　　址',
-                    title: '福建省福州市鼓楼区心啊实现完全下去下午去星期五向前向前',
-            },
-                {
+                    title: '福建省福州市鼓楼区心啊实现完全下去下午去星期五向前向前'
+            }, {
                     name: '备　　注',
-                    title: 'Ant Design Title 4',
-          },
+                    title: 'Ant Design Title 4'
+                }
 
+            ],
+            data2: [{
+                    name: '营业执照',
+                    title: 'Ant Design Title 1'
+                    }, {
+                    name: '食品生产许可证',
+                    title: 'Ant Design Title 1'
+                    }, {
+                    name: '食品流通许可证',
+                    title: 'Ant Design Title 1'
+                  }, {
+                    name: '商标注册证',
+                    title: 'Ant Design Title 1'
+                }
             ],
             loading: false,
             copList: [],
@@ -131,7 +131,7 @@ export default {
             copForm: {},
             checkNick: false,
             formItemLayout,
-            formTailLayout,
+            formTailLayout
         }
     },
     methods: {

@@ -24,6 +24,7 @@ module.exports = {
                 "ObjectExpression": 'first'
             }
         ],
+        "no-irregular-whitespace": 'off',
         "space-before-function-paren": [
             0, "always"
         ],
