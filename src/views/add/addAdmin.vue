@@ -25,7 +25,6 @@
                             <a-icon class="pointer" type="delete" /></a>
                     </a-popconfirm>
                 </a-tooltip>
-                </a>
             </span>
         </a-table>
         <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
@@ -45,39 +44,37 @@
 </section>
 </template>
 <script>
-import {
-    login
-} from '../../api/api'
+import {} from '../../api/api'
 const columns = [{
     title: '所在地区',
     dataIndex: 'add',
-    key: '1',
+    key: '1'
 }, {
     title: '地址名称',
     dataIndex: 'address',
-    key: '2',
+    key: '2'
 }, {
     title: '状态',
     dataIndex: 'status',
-    key: '3',
+    key: '3'
 }, {
     title: '操作',
     key: '4',
     scopedSlots: {
         customRender: 'action'
-    },
-}];
+    }
+}]
 const data = [{
     key: '1',
     add: '福建',
     status: '已激活',
-    address: 'New York No. 1 Lake Park',
+    address: 'New York No. 1 Lake Park'
 }, {
     key: '2',
     add: '福建',
     status: '已激活',
-    address: 'London No. 1 Lake Park',
-}];
+    address: 'London No. 1 Lake Park'
+}]
 export default {
     data() {
         return {
@@ -89,11 +86,11 @@ export default {
             options: [{
                 value: '1',
                 label: 'Zhejiang',
-                isLeaf: false,
+                isLeaf: false
       }, {
                 value: '2',
                 label: 'Jiangsu',
-                isLeaf: false,
+                isLeaf: false
       }]
         }
     },
@@ -106,41 +103,41 @@ export default {
         },
         add() {
             this.title = '添加地址'
-            this.visible = true;
+            this.visible = true
         },
         edit() {
             this.title = '编辑地址'
-            this.visible = true;
+            this.visible = true
         },
         hideModal() {
-            this.visible = false;
+            this.visible = false
         },
         onChange(value) {
-            console.log(value);
+            console.log(value)
         },
-        selChange(value,){
-            console.log(value);
+        selChange(value) {
+            console.log(value)
         },
         loadData(selectedOptions) {
-            const targetOption = selectedOptions[selectedOptions.length - 1];
+            const targetOption = selectedOptions[selectedOptions.length - 1]
             console.log(selectedOptions)
-            targetOption.loading = true;
+            targetOption.loading = true
             // load options lazily
             setTimeout(() => {
-                targetOption.loading = false;
+                targetOption.loading = false
                 targetOption.children = [{
                     label: `${targetOption.label} Dynamic 1`,
                     value: '11',
-                    children:[{
+                    children: [{
                         label: `${targetOption.label} Dynamic 11`,
-                        value: '111',
+                        value: '111'
                     }]
         }, {
                     label: `${targetOption.label} Dynamic 2`,
-                    value: '22',
-        }];
+                    value: '22'
+        }]
                 this.options = [...this.options]
-            }, 200);
+            }, 200)
         }
     },
     watch: {},

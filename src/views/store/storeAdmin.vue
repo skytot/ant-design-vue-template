@@ -25,7 +25,6 @@
                             <a-icon class="pointer" type="delete" /></a>
                     </a-popconfirm>
                 </a-tooltip>
-                </a>
             </span>
         </a-table>
         <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
@@ -45,112 +44,110 @@
 </section>
 </template>
 <script>
-import {
-    login
-} from '../../api/api'
+import {} from '../../api/api'
 const columns = [{
     title: '门店名称',
     dataIndex: 'add',
-    key: '1',
+    key: '1'
 }, {
     title: '联系人',
     dataIndex: 'address',
-    key: '2',
+    key: '2'
 }, {
     title: '性别',
     dataIndex: 'status',
-    key: '3',
+    key: '3'
 }, {
     title: '出生日期',
     key: '4',
     dataIndex: 'date',
     scopedSlots: {
         customRender: 'date'
-    },
+    }
 }, {
     title: '联系电话',
     key: '5',
     dataIndex: 'tel',
     scopedSlots: {
         customRender: 'tel'
-    },
+    }
 }, {
     title: '从业经历年限',
     key: '6',
     dataIndex: 'time',
     scopedSlots: {
         customRender: 'time'
-    },
+    }
 }, {
     title: '计划投入资金',
     key: '7',
     dataIndex: 'money',
     scopedSlots: {
         customRender: 'money'
-    },
+    }
 }, {
     title: '店铺类型',
     key: '8',
     dataIndex: 'shop',
     scopedSlots: {
         customRender: 'shop'
-    },
+    }
 }, {
     title: '从业经历年限',
     key: '9',
     dataIndex: 'action',
     scopedSlots: {
         customRender: 'action'
-    },
+    }
 }, {
     title: '加盟面积',
     key: '10',
     dataIndex: 'join',
     scopedSlots: {
         customRender: 'join'
-    },
+    }
 }, {
     title: '经营方式',
     key: '11',
     dataIndex: 'bussiness',
     scopedSlots: {
         customRender: 'bussiness'
-    },
+    }
 }, {
     title: '开业日期',
     key: '12',
     dataIndex: 'open',
     scopedSlots: {
         customRender: 'open'
-    },
+    }
 }, {
     title: '类型',
     key: '13',
     dataIndex: 'type',
     scopedSlots: {
         customRender: 'type'
-    },
+    }
 }, {
     title: '状态',
     key: '14',
     dataIndex: 'status',
     scopedSlots: {
         customRender: 'statu'
-    },
+    }
 }, {
     title: '编辑时间',
     key: '15',
     dataIndex: 'edit',
     scopedSlots: {
         customRender: 'edit'
-    },
+    }
 }, {
     title: '操作',
     key: '16',
     scopedSlots: {
         customRender: 'act'
-    },
-}];
+    }
+}]
 const data = [{
     key: '1',
     add: '福建',
@@ -162,7 +159,7 @@ const data = [{
     add: '福建',
     status: '已激活',
     address: 'London No. 1 Lake Park'
-}];
+}]
 export default {
     data() {
         return {
@@ -174,11 +171,11 @@ export default {
             options: [{
                 value: 'zhejiang',
                 label: 'Zhejiang',
-                isLeaf: false,
+                isLeaf: false
       }, {
                 value: 'jiangsu',
                 label: 'Jiangsu',
-                isLeaf: false,
+                isLeaf: false
       }]
         }
     },
@@ -191,33 +188,33 @@ export default {
         },
         add() {
             this.title = '添加门店'
-            this.visible = true;
+            this.visible = true
         },
         edit() {
             this.title = '编辑门店'
-            this.visible = true;
+            this.visible = true
         },
         hideModal() {
-            this.visible = false;
+            this.visible = false
         },
         onChange(value) {
-            console.log(value);
+            console.log(value)
         },
         loadData(selectedOptions) {
-            const targetOption = selectedOptions[selectedOptions.length - 1];
-            targetOption.loading = true;
+            const targetOption = selectedOptions[selectedOptions.length - 1]
+            targetOption.loading = true
             // load options lazily
             setTimeout(() => {
-                targetOption.loading = false;
+                targetOption.loading = false
                 targetOption.children = [{
                     label: `${targetOption.label} Dynamic 1`,
-                    value: 'dynamic1',
+                    value: 'dynamic1'
         }, {
                     label: `${targetOption.label} Dynamic 2`,
-                    value: 'dynamic2',
-        }];
+                    value: 'dynamic2'
+        }]
                 this.options = [...this.options]
-            }, 1000);
+            }, 1000)
         }
     },
     watch: {},

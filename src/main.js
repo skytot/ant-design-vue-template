@@ -27,7 +27,10 @@ import {
     Divider,
     Popconfirm,
     Cascader,
-    Upload
+    Upload,
+    Steps,
+    DatePicker,
+    Select
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import routes from "./router/routes";
@@ -58,6 +61,9 @@ Vue.use(Divider);
 Vue.use(Popconfirm);
 Vue.use(Cascader);
 Vue.use(Upload);
+Vue.use(Steps);
+Vue.use(DatePicker);
+Vue.use(Select);
 Vue.prototype.$message = message;
 Vue.prototype.$info = Modal.info;
 Vue.prototype.$success = Modal.success;

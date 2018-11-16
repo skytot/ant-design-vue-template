@@ -101,7 +101,7 @@ export default {
             const nav = this.$router.options.routes.filter((i) => {
                 return i.hidden !== true
             })
-            if (this.$route.path.indexOf('corporate') === -1){
+            if (this.$route.path.indexOf('corporate') === -1) {
                 nav.map(i => {
                     if (i.leaf) {
                         var ob = {}
@@ -123,7 +123,7 @@ export default {
                     return this.$route.path.indexOf(i.path) !== -1
                 })[0].key]
                 return v
-            }else{
+            } else {
                 return ['1']
             }
         }
