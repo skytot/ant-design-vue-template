@@ -78,3 +78,9 @@ export const enterprises = params => {
         .post(`${HOST}/enterprises`, JSON.stringify(params))
         .then(res => res.data);
 };
+// 区域
+export const location = params => {
+    return instance
+        .get(`${HOST}/location/`+params)
+        .then(res => res.data);
+};

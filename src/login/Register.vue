@@ -86,7 +86,7 @@ export default {
                             this.$message.success('验证码发送成功')
                             this.codeToken = res.data.token
                         } else {
-                            this.$message.error(res.data.msg)
+                            this.$message.error(res.msg)
                         }
                     })
                 this.codeStatus = true
@@ -113,7 +113,7 @@ export default {
                 if (!err) {
                     this.logging = true
                     smsCheck({
-                            token: 'ac068efb08c04680a7455457de3a8725',
+                            token: this.codeToken,
                             code: this.form.getFieldValue('code')
                         })
                         .then((res) => {
@@ -126,6 +126,9 @@ export default {
                                     .then((res) => {
                                         if (res.status == 1) {
                                             this.$message.success(res.msg);
+                                            sessionStorage.setItem('tx_tk', res.data.token)
+                                            //this.$store.dispatch('setUser', '{name:"admin"}')
+                                            this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/resinfo')
                                         } else {
                                             this.$message.error(res.msg)
