@@ -113,7 +113,7 @@ export default {
                                         this.logging = false
                                         if (res.status === 1) {
                                             sessionStorage.setItem('tx_tk', res.data.token)
-                                            //this.$store.dispatch('setUser', '{name:"admin"}')
+                                            // this.$store.dispatch('setUser', '{name:"admin"}')
                                             this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/dashboard')
                                         } else {

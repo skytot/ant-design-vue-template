@@ -144,7 +144,7 @@ export default {
             visible: false,
             visible2: false,
             copForm: {
-                cname: '',
+                cname: ''
             },
             checkNick: false,
             formItemLayout,

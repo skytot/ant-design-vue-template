@@ -75,7 +75,7 @@ export default {
     },
     methods: {
         getCode() {
-            const tel = this.form.getFieldValue('tel');
+            const tel = this.form.getFieldValue('tel')
             const reg = /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/
             if (reg.test(tel)) {
                 smscaptcha({
@@ -117,17 +117,17 @@ export default {
                             code: this.form.getFieldValue('code')
                         })
                         .then((res) => {
-                            if (res.status == 1) {
+                            if (res.status === 1) {
                                 this.logging = false
                                 register({
                                         username: this.form.getFieldValue('tel'),
                                         password: this.form.getFieldValue('password')
                                     })
                                     .then((res) => {
-                                        if (res.status == 1) {
-                                            this.$message.success(res.msg);
+                                        if (res.status === 1) {
+                                            this.$message.success(res.msg)
                                             sessionStorage.setItem('tx_tk', res.data.token)
-                                            //this.$store.dispatch('setUser', '{name:"admin"}')
+                                            // this.$store.dispatch('setUser', '{name:"admin"}')
                                             this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/resinfo')
                                         } else {

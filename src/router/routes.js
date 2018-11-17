@@ -1,53 +1,53 @@
 /* eslint func-call-spacing: ['error', 'always'] */
 // *******vue路由********
 // ***首页模板****
-const Home = () => import("../layout/Home.vue");
+const Home = () => import ('../layout/Home.vue')
 // ***首页****
-const Index = () => import("../views/home/index.vue");
+const Index = () => import ('../views/home/index.vue')
 // ***404****
-const NotFound = () => import("../layout/404.vue");
+const NotFound = () => import ('../layout/404.vue')
 // ***登录页****
-const Login = () => import("../login/Login.vue");
+const Login = () => import ('../login/Login.vue')
 // ***注册页****
-const Register = () => import("../login/Register.vue");
+const Register = () => import ('../login/Register.vue')
 // ***注册信息页****
-const resinfo = () => import("../register/index.vue");
+const resinfo = () => import ('../register/index.vue')
 // const Index2 = () => import ('../views/test/index2.vue')
 // const Index3 = () => import ('../views/test/index3.vue')
 // 企业信息
-const corporate = () => import("../views/corporate/corporate.vue");
-const corporateInfo = () => import("../views/corporate/corporateInfo.vue");
+const corporate = () => import ('../views/corporate/corporate.vue')
+const corporateInfo = () => import ('../views/corporate/corporateInfo.vue')
 // 地址管理
-const addAdmin = () => import("../views/add/addAdmin.vue");
+const addAdmin = () => import ('../views/add/addAdmin.vue')
 // 门店管理
-const storeAdmin = () => import("../views/store/storeAdmin.vue");
+const storeAdmin = () => import ('../views/store/storeAdmin.vue')
 // 类目管理
-const sortAdmin = () => import("../views/sort/sortAdmin.vue");
+const sortAdmin = () => import ('../views/sort/sortAdmin.vue')
 // 文章管理
-const articleAdmin = () => import("../views/article/articleAdmin.vue");
+const articleAdmin = () => import ('../views/article/articleAdmin.vue')
 // 首页管理
-const indexAdmin = () => import("../views/index/indexAdmin.vue");
+const indexAdmin = () => import ('../views/index/indexAdmin.vue')
 
 const routes = [
     {
-        path: "/dashboard",
+        path: '/dashboard',
         component: Home,
-        name: "控制台",
-        redirect: "/dashboard/index",
-        iconCls: "icon icon-nav-home",
+        name: '控制台',
+        redirect: '/dashboard/index',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "1",
+        key: '1',
         meta: {
             leaf: true,
-            title: "首页",
-            icon: "home",
-            permission: ["base"]
+            title: '首页',
+            icon: 'home',
+            permission: ['base']
         },
         children: [
             {
-                path: "/dashboard/index",
+                path: '/dashboard/index',
                 component: Index,
-                name: "首页"
+                name: '首页'
             }
         ]
     },
@@ -79,183 +79,183 @@ const routes = [
     //     ]
     // },
     {
-        path: "/corporate",
+        path: '/corporate',
         component: Home,
-        name: "企业",
-        redirect: "/corporate/mycorporate",
-        iconCls: "icon icon-nav-home",
+        name: '企业',
+        redirect: '/corporate/mycorporate',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
         hidden: true,
-        key: "2",
+        key: '2',
         meta: {
             leaf: true,
-            title: "企业信息",
-            icon: "pie-chart",
-            permission: ["base"]
+            title: '企业信息',
+            icon: 'pie-chart',
+            permission: ['base']
         },
         children: [
             {
-                path: "/corporate/mycorporate",
+                path: '/corporate/mycorporate',
                 component: corporate,
-                name: "我的企业"
+                name: '我的企业'
             },
             {
-                path: "/corporate/mycorporateInfo",
+                path: '/corporate/mycorporateInfo',
                 component: corporateInfo,
-                name: "企业信息"
+                name: '企业信息'
             }
         ]
     },
     {
-        path: "/addAdmin",
+        path: '/addAdmin',
         component: Home,
-        name: "地址管理",
-        redirect: "/addAdmin/add",
-        iconCls: "icon icon-nav-home",
+        name: '地址管理',
+        redirect: '/addAdmin/add',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "3",
+        key: '3',
         meta: {
             leaf: true,
-            title: "地址管理",
-            icon: "schedule",
-            permission: ["base"]
+            title: '地址管理',
+            icon: 'schedule',
+            permission: ['base']
         },
         children: [
             {
-                path: "/addAdmin/add",
+                path: '/addAdmin/add',
                 component: addAdmin,
-                name: "地址信息"
+                name: '地址信息'
             }
         ]
     },
     {
-        path: "/storeAdmin",
+        path: '/storeAdmin',
         component: Home,
-        name: "门店管理",
-        redirect: "/storeAdmin/store",
-        iconCls: "icon icon-nav-home",
+        name: '门店管理',
+        redirect: '/storeAdmin/store',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "4",
+        key: '4',
         meta: {
             leaf: true,
-            title: "门店管理",
-            icon: "shop",
-            permission: ["base"]
+            title: '门店管理',
+            icon: 'shop',
+            permission: ['base']
         },
         children: [
             {
-                path: "store",
+                path: 'store',
                 component: storeAdmin,
-                name: "门店信息"
+                name: '门店信息'
             }
         ]
     },
     {
-        path: "/sortAdmin",
+        path: '/sortAdmin',
         component: Home,
-        name: "类目管理",
-        redirect: "/sortAdmin/sort",
-        iconCls: "icon icon-nav-home",
+        name: '类目管理',
+        redirect: '/sortAdmin/sort',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "5",
+        key: '5',
         meta: {
             leaf: true,
-            title: "类目管理",
-            icon: "profile",
-            permission: ["base"]
+            title: '类目管理',
+            icon: 'profile',
+            permission: ['base']
         },
         children: [
             {
-                path: "sort",
+                path: 'sort',
                 component: sortAdmin,
-                name: "类目列表"
+                name: '类目列表'
             }
         ]
     },
     {
-        path: "/indexAdmin",
+        path: '/indexAdmin',
         component: Home,
-        name: "首页管理",
-        redirect: "/indexAdmin/index",
-        iconCls: "icon icon-nav-home",
+        name: '首页管理',
+        redirect: '/indexAdmin/index',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "6",
+        key: '6',
         meta: {
             leaf: true,
-            title: "首页管理",
-            icon: "desktop",
-            permission: ["base"]
+            title: '首页管理',
+            icon: 'desktop',
+            permission: ['base']
         },
         children: [
             {
-                path: "index",
+                path: 'index',
                 component: indexAdmin,
-                name: "首页信息"
+                name: '首页信息'
             }
         ]
     },
     {
-        path: "/articleAdmin",
+        path: '/articleAdmin',
         component: Home,
-        name: "文章管理",
-        redirect: "/articleAdmin/article",
-        iconCls: "icon icon-nav-home",
+        name: '文章管理',
+        redirect: '/articleAdmin/article',
+        iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: "7",
+        key: '7',
         meta: {
             leaf: true,
-            title: "文章管理",
-            icon: "switcher",
-            permission: ["base"]
+            title: '文章管理',
+            icon: 'switcher',
+            permission: ['base']
         },
         children: [
             {
-                path: "article",
+                path: 'article',
                 component: articleAdmin,
-                name: "文章列表"
+                name: '文章列表'
             }
         ]
     },
     {
-        path: "/login",
+        path: '/login',
         component: Login,
-        name: "",
-        meta: "base",
+        name: '',
+        meta: 'base',
         leaf: true,
         hidden: true
     },
     {
-        path: "/resinfo",
+        path: '/resinfo',
         component: resinfo,
-        name: "",
-        meta: "base",
+        name: '',
+        meta: 'base',
         leaf: true,
         hidden: true
     },
     {
-        path: "/Register",
+        path: '/Register',
         component: Register,
-        name: "",
+        name: '',
         leaf: true,
-        meta: "base",
+        meta: 'base',
         hidden: true
     },
     {
-        path: "/404",
+        path: '/404',
         component: NotFound,
-        name: "",
+        name: '',
         leaf: true,
-        meta: "base",
+        meta: 'base',
         hidden: true
     },
     {
-        path: "/",
+        path: '/',
         hidden: true,
         leaf: true,
-        meta: "base",
+        meta: 'base',
         redirect: {
-            path: "/dashboard"
+            path: '/dashboard'
         }
     }
-];
-export default routes;
+]
+export default routes
