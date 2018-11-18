@@ -87,3 +87,15 @@ export const location = params => {
         .get(`${HOST}/location/` + params)
         .then(res => res.data)
 }
+// 基本信息
+export const baseInfo = params => {
+    return instance
+        .get(`${HOST}/enterprises/` + params)
+        .then(res => res.data)
+}
+// 登录信息
+export const loginInfo = params => {
+    return instance
+        .get(`${HOST}/official/mananger/index/` + params)
+        .then(res => res.data)
+}

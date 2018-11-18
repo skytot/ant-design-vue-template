@@ -69,7 +69,7 @@
 </section>
 </template>
 <script>
-import {} from '../../api/api'
+import {baseInfo} from '../../api/api'
 const formItemLayout = {
     labelCol: {
         span: 4,
@@ -152,7 +152,11 @@ export default {
         }
     },
     methods: {
-        getData() {},
+        getData() {
+            baseInfo({enterpriseId:1}).then((res)=>{
+
+            })
+        },
         showModal() {
             this.visible = true
         },

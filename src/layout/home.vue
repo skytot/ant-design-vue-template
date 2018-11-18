@@ -31,10 +31,10 @@
                 </div>
                 <div :class="['global-header-right', theme]">
                     <!-- <header-search class="header-item" /> -->
-                    <span>天行健管理有限公司</span>
+                    <span>{{cop}}</span>
                     <a-dropdown>
                         <a class="ant-dropdown-link" href="#">
-                            <img src="../assets/logo.png" alt="" width="40px">
+                            <img :src="copImg" alt="" width="40px">
                         </a>
                         <a-menu slot="overlay">
                             <a-menu-item>
@@ -82,6 +82,9 @@
 </a-layout>
 </template>
 <script>
+import {
+    loginInfo
+} from '../api/api'
 export default {
     data() {
         return {
@@ -91,7 +94,9 @@ export default {
             theme: 'light',
             systemName: 'admin',
             breadcrumb: [],
-            menus: []
+            menus: [],
+            cop:'',
+            copImg:''
         }
     },
     computed: {
@@ -126,7 +131,7 @@ export default {
             } else {
                 return ['1']
             }
-        }
+        },
     },
     methods: {
         logout() {
@@ -154,7 +159,19 @@ export default {
         },
         getBreadcrumb() {
             this.breadcrumb = this.$route.matched
-        }
+        },
+        login() {
+
+        loginInfo(sessionStorage.getItem('tx_tk')).then((res)=>{
+            if(res.status ===1){
+                sessionStorage.setItem('tx_eid',res.data.enterpriseId)
+                sessionStorage.setItem('tx_url',res.data.url)
+                sessionStorage.setItem('tx_name',res.data.username)
+            }else{
+                this.$message.error('获取基本信息失败，请重新登录')
+            }
+        })
+        },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -173,10 +190,14 @@ export default {
     },
     create() {},
     mounted() {
+        if(!sessionStorage.getItem('tx_eid')){
+            this.login()
+        }
         this.getBreadcrumb()
         this.menus = this.$router.options.routes.filter((i) => {
             return (i.hidden !== true)
         })
+
     }
 }
 </script>

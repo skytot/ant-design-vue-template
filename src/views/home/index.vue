@@ -53,9 +53,7 @@
 </section>
 </template>
 <script>
-import {
-    login
-} from '../../api/api'
+
 export default {
     data() {
         return {
@@ -80,95 +78,12 @@ export default {
         }
     },
     methods: {
-        test() {
-            login({
-                    token: '8234e894a04abc486088b7c5156acb35b1a3cd445b950c5e04f8a'
-                })
-                .then((res) => {
-                    console.log(res)
-                })
-                .catch((err) => {
-                    console.warn(err)
-                })
-            // this.$http.get('https://a1.cnblogs.com/group/C1-C2-T2')
-            //     .then((response) => {
-            //         // get body data
-            //         this.someData = response.body;
-            //     }, (response) => {
-            //         // error callback
-            //     });
-        },
-        addCop() {
-            this.copDialog = true
-        },
-        submitCop() {},
-        submitUpload() {
-            this.$refs.upload.submit()
-        },
-        uploadSuccess1(res, file) {
-            this.imageUrl1 = URL.createObjectURL(file.raw)
-            this.copForm.bLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload1(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess2(res, file) {
-            this.imageUrl2 = URL.createObjectURL(file.raw)
-            this.copForm.sLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload2(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess3(res, file) {
-            this.imageUrl3 = URL.createObjectURL(file.raw)
-            this.copForm.lLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload3(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess4(res, file) {
-            this.imageUrl4 = URL.createObjectURL(file.raw)
-            this.copForm.tLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload4(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        }
+
+
     },
     watch: {},
     mounted() {
-        // this.test()
+
     }
 }
 </script>
