@@ -121,7 +121,8 @@ export default {
                                         }
                                     })
                             } else {
-                                this.$message.error(res.data.msg)
+                                this.logging = false
+                                this.$message.error(res.msg)
                             }
                         })
                     // if (this.form.getFieldValue('name') === 'admin' && this.form.getFieldValue('password') === '888888') {

@@ -8,7 +8,14 @@
                     <a-list itemLayout="horizontal" :dataSource="data" size="small" :split="false">
                         <a-list-item slot="renderItem" slot-scope="item, index">
                             <a-list-item-meta :description="item.title">
-                                <div slot="title">{{item.name}}</div>
+                                <a-avatar name="file" v-if="index===0" slot="avatar" :src="url" />
+                                <div slot="title" v-if="index===0">
+                                    <a-upload :action="upHost+ Number(enterpriseId)" @change="handleChange1" :beforeUpload="beforeUpload1">
+                                        <a-button>
+                                            <a-icon type="upload" /> 上传头像 </a-button>
+                                    </a-upload>
+                                </div>
+                                <div slot="title" v-else>{{item.name}}</div>
                             </a-list-item-meta>
                         </a-list-item>
                     </a-list>
@@ -19,10 +26,10 @@
                     <a-button type="primary" slot="extra" @click="addCop2">修改信息</a-button>
                     <a-list itemLayout="horizontal" :dataSource="data2" size="large" :split="false">
                         <a-list-item slot="renderItem" slot-scope="item, index" key="index">
-                            <img slot="extra" width="250" alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />
                             <a-list-item-meta>
                                 <div slot="title">{{item.name}}</div>
                             </a-list-item-meta>
+                            <img slot="extra" width="250" alt="logo" :src="item.url" />
                         </a-list-item>
                     </a-list>
                 </a-card>
@@ -32,23 +39,26 @@
     <div>
         <a-modal title="修改企业信息" v-model="visible" @ok="submitForm" okText="确认" cancelText="取消" :maskClosable="false">
             <a-form layout="horizontal" :autoFormCreate="(form)=>{this.copForm = form}">
-                <a-form-item label="企业名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="cname" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:25,validateTrigger: ['blur','change']}]}">
-                    <a-input placeholder="请输入企业名称" />
+                <a-form-item label="企业名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:25,validateTrigger: ['blur','change']}]}">
+                    <a-input placeholder="请输入企业名称" v-model="copForms.name" />
                 </a-form-item>
-                <a-form-item label="法人名称：" fieldDecoratorId="name" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:6,validateTrigger: ['blur','change']}]}">
-                    <a-input v-model="copForm.fname" placeholder="请输入法人名称"></a-input>
+                <a-form-item label="法人名称：" fieldDecoratorId="legalname" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:6,validateTrigger: ['blur','change']}]}">
+                    <a-input v-model="copForms.legalname" placeholder="请输入法人名称"></a-input>
                 </a-form-item>
                 <a-form-item label="手　　机：" fieldDecoratorId="tel" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern: /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
-                    <a-input v-model="copForm.tel" placeholder="请输入手机"></a-input>
+                    <a-input v-model="copForms.tel" placeholder="请输入手机"></a-input>
                 </a-form-item>
-                <a-form-item label="加盟电话：" fieldDecoratorId="tels" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的加盟电话', whitespace: true,min:8,max:13}]}">
-                    <a-input v-model="copForm.tels" placeholder="请输入加盟电话"></a-input>
+                <a-form-item label="加盟电话：" fieldDecoratorId="code" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的加盟电话', whitespace: true,min:8,max:13}]}">
+                    <a-input v-model="copForms.code" placeholder="请输入加盟电话"></a-input>
                 </a-form-item>
-                <a-form-item label="公司地址：" fieldDecoratorId="add" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请选择地址'}]}">
+                <!-- <a-form-item label="公司地址：" fieldDecoratorId="add" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请选择地址'}]}">
                     <a-cascader style="width: 100%" :options="options" placeholder="选择地区" />
+                </a-form-item> -->
+                <a-form-item label="成立日期" fieldDecoratorId="founddate" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                    <a-date-picker style="width: 100%" @change="onChange" />
                 </a-form-item>
-                <a-form-item label="备　　注" fieldDecoratorId="info" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
-                    <a-input v-model="copForm.time" placeholder="备注"></a-input>
+                <a-form-item label="备　　注" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                    <a-input v-model="copForms.description" placeholder="备注"></a-input>
                 </a-form-item>
             </a-form>
         </a-modal>
@@ -69,7 +79,12 @@
 </section>
 </template>
 <script>
-import {baseInfo} from '../../api/api'
+import {
+    baseInfo,
+    enterprisesUpdata,
+    upHost,
+    getImgs
+} from '../../api/api'
 const formItemLayout = {
     labelCol: {
         span: 4,
@@ -94,39 +109,51 @@ export default {
     data() {
         return {
             data: [{
+                    name: '头像',
+                    cname: 'avator',
+                    title: '',
+                    url: ''
+              }, {
                     name: '企业名称',
                     cname: 'cname',
-                    title: 'Ant Design Title 1'
-              }, {
+                    title: ''
+                }, {
                     name: '法人名称',
-                    title: 'Ant Design Title 2'
+                    title: ''
               }, {
                     name: '手　　机',
-                    title: '15805555555'
+                    title: ''
               }, {
                     name: '加盟电话',
-                    title: '0591-11111111'
+                    title: ''
               }, {
                     name: '地　　址',
-                    title: '福建省福州市鼓楼区心啊实现完全下去下午去星期五向前向前'
+                    title: ''
             }, {
+                    name: '成立日期',
+                    title: ''
+                }, {
                     name: '备　　注',
-                    title: 'Ant Design Title 4'
+                    title: ''
                 }
 
             ],
             data2: [{
                     name: '营业执照',
-                    title: 'Ant Design Title 1'
+                    title: 'Ant Design Title 1',
+                    url: ''
                     }, {
                     name: '食品生产许可证',
-                    title: 'Ant Design Title 1'
+                    title: 'Ant Design Title 1',
+                    url: ''
                     }, {
                     name: '食品流通许可证',
-                    title: 'Ant Design Title 1'
+                    title: 'Ant Design Title 1',
+                    url: ''
                   }, {
                     name: '商标注册证',
-                    title: 'Ant Design Title 1'
+                    title: 'Ant Design Title 1',
+                    url: ''
                 }
             ],
             options: [{
@@ -139,23 +166,67 @@ export default {
                 isLeaf: false
             }],
             loading: false,
+            upHost: upHost,
+            enterpriseId: '',
             imageUrl: '',
+            url: '',
+            dateFormat: '',
             copList: [],
             visible: false,
             visible2: false,
-            copForm: {
-                cname: ''
+            copForm: {},
+            copForms: {
+                name: 'sss'
             },
             checkNick: false,
+            time: '',
             formItemLayout,
             formTailLayout
         }
     },
     methods: {
         getData() {
-            baseInfo({enterpriseId:1}).then((res)=>{
-
-            })
+            baseInfo(this.enterpriseId)
+                .then((res) => {
+                    if (res.status === 1) {
+                        this.data[0].url = 'static/img/user.jpg'
+                        this.url = res.data.url || 'static/img/user.jpg'
+                        this.data[1].title = res.data.name
+                        this.data[2].title = res.data.legalname
+                        this.data[3].title = res.data.tel
+                        this.data[4].title = res.data.code
+                        this.data[5].title = res.data.name
+                        this.data[6].title = res.data.founddate
+                        this.data[7].title = res.data.description
+                        this.copForms = res.data
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            getImgs(this.enterpriseId)
+                .then((res) => {})
+        },
+        beforeUpload1(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片格式!')
+            }
+            const isLt5M = file.size / 1024 / 1024 < 5
+            if (!isLt5M) {
+                this.$message.error('请勿上传超过5MB!')
+            }
+            return isJPG && isLt5M
+        },
+        handleChange1(info) {
+            if (info.file.status === 'uploading') {
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+            }
         },
         showModal() {
             this.visible = true
@@ -163,13 +234,49 @@ export default {
         submitForm() {
             this.copForm.validateFields((err, values) => {
                 if (!err) {
-                    console.log('Received values of form: ', values)
+                    values.enterpriseId = Number(this.enterpriseId)
+                    if (this.time) {
+                        values.founddate = this.time
+                    } else {
+                        values.founddate = this.copForms.founddate
+                    }
+                    enterprisesUpdata(values)
+                        .then((res) => {
+                            if (res.status === 1) {
+                                this.getData()
+                                this.visible = false;
+                                this.$message.success(res.msg)
+                            } else {
+                                this.$message.error(res.msg)
+                            }
+                        })
                 }
             })
         },
+        onChange(date, dateString) {
+            this.time = dateString
+        },
         confirm() {},
+        changeImg() {},
         addCop() {
             this.visible = true
+            this.$nextTick((_) => {
+                this.copForm.getFieldDecorator('name', {
+                    initialValue: this.copForms.name
+                })
+                this.copForm.getFieldDecorator('legalname', {
+                    initialValue: this.copForms.legalname
+                })
+                this.copForm.getFieldDecorator('tel', {
+                    initialValue: this.copForms.tel
+                })
+                this.copForm.getFieldDecorator('code', {
+                    initialValue: this.copForms.code
+                })
+                this.copForm.getFieldDecorator('description', {
+                    initialValue: this.copForms.description
+                })
+            })
         },
         addCop2() {
             this.visible2 = true
@@ -201,6 +308,7 @@ export default {
     },
     watch: {},
     mounted() {
+        this.enterpriseId = sessionStorage.getItem('tx_eid')
         this.getData()
     }
 }

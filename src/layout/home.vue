@@ -95,8 +95,8 @@ export default {
             systemName: 'admin',
             breadcrumb: [],
             menus: [],
-            cop:'',
-            copImg:''
+            cop: '福鼎润泽茶业有限公司',
+            copImg: ''
         }
     },
     computed: {
@@ -131,7 +131,7 @@ export default {
             } else {
                 return ['1']
             }
-        },
+        }
     },
     methods: {
         logout() {
@@ -161,17 +161,25 @@ export default {
             this.breadcrumb = this.$route.matched
         },
         login() {
-
-        loginInfo(sessionStorage.getItem('tx_tk')).then((res)=>{
-            if(res.status ===1){
-                sessionStorage.setItem('tx_eid',res.data.enterpriseId)
-                sessionStorage.setItem('tx_url',res.data.url)
-                sessionStorage.setItem('tx_name',res.data.username)
-            }else{
-                this.$message.error('获取基本信息失败，请重新登录')
-            }
-        })
-        },
+            loginInfo(sessionStorage.getItem('tx_tk'))
+                .then((res) => {
+                    if (res.status === 1) {
+                        this.$store.dispatch('setUser', res.data.enterpriseId)
+                        sessionStorage.setItem('tx_eid', res.data.enterpriseId)
+                        sessionStorage.setItem('tx_name', res.data.name)
+                        this.systemName = res.data.name
+                        this.cop = res.data.name
+                        this.copImg = res.data.url || 'static/img/user.jpg'
+                        if (res.data.url) {
+                            sessionStorage.setItem('tx_url', res.data.url)
+                        } else {
+                            sessionStorage.setItem('tx_url', 'static/img/user.jpg')
+                        }
+                    } else {
+                        this.$message.error('获取基本信息失败，请重新登录')
+                    }
+                })
+        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -190,14 +198,15 @@ export default {
     },
     create() {},
     mounted() {
-        if(!sessionStorage.getItem('tx_eid')){
+        if (!sessionStorage.getItem('tx_eid')) {
             this.login()
+        } else {
+            this.copImg = sessionStorage.getItem('tx_url')
         }
         this.getBreadcrumb()
         this.menus = this.$router.options.routes.filter((i) => {
             return (i.hidden !== true)
         })
-
     }
 }
 </script>
