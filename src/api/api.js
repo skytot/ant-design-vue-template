@@ -136,3 +136,15 @@ export const addss = params => {
         .put(`${HOST}/official/address`, JSON.stringify(params))
         .then(res => res.data);
 };
+// 门店信息
+export const stores = params => {
+    return instance
+        .get(`${HOST}/official/stores` +'/'+ params.enterpriseId+'/'+params.pageSize+'/'+params.pageId)
+        .then(res => res.data);
+};
+// 新加门店http://gangzhuhao.s1.natapp.cc/official/store
+export const addStore = params => {
+    return instance
+        .post(`${HOST}/official/store`, JSON.stringify(params))
+        .then(res => res.data);
+};

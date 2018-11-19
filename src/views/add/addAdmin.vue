@@ -30,7 +30,7 @@
         <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
             <span>所在地区： </span>
             <br/>
-            <a-input-group compact>
+            <a-input-group >
                 <a-cascader :options="options" @change="change1" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择省份" :defaultValue='defaultValue1' changeOnSelect />
                 <a-cascader :options="option2" @change="change2" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择市区" :defaultValue='defaultValue2' changeOnSelect />
                 <a-cascader :options="option3" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" :defaultValue='defaultValue3' changeOnSelect />
@@ -408,48 +408,54 @@ export default {
                     this.option2 = res.data.map(i => {
                         const n = {}
                         n.label = i.name
-                        n.value = i.locationId
+                        n.value = i.locationId+''
                         return n
                     })
-                    console.log(d)
-                    this.defaultValue2 = [i.locationId2 + '']
-                    location(this.defaultValue2.toString())
-                        .then((res) => {
-                            this.option3 = res.data.map(i => {
-                                const n = {}
-                                n.label = i.name
-                                n.value = i.locationId
-                                return n
-                            })
-                            this.defaultValue3 = [i.locationId3 + '']
+                this.defaultValue2 = [i.locationId2 + '']
+                location(this.defaultValue2.toString())
+                    .then((res) => {
+                        this.option3 = res.data.map(i => {
+                            const n = {}
+                            n.label = i.name
+                            n.value = i.locationId+''
+                            return n
                         })
+                    this.defaultValue3 = [i.locationId3 + '']
+                    })
                 })
+
         },
         change1(value) {
             this.secondPro = value[0]
             const _this = this
-            location(value.toString())
-                .then((res) => {
-                    _this.option2 = res.data.map(i => {
-                        const n = {}
-                        n.label = i.name
-                        n.value = i.locationId
-                        return n
+            if(this.secondPro){
+                location(value.toString())
+                    .then((res) => {
+                        _this.option2 = res.data.map(i => {
+                            const n = {}
+                            n.label = i.name
+                            n.value = i.locationId+''
+                            return n
+                        })
                     })
-                })
+            }
         },
         change2(value) {
             this.secondCity = value[0]
-            const _this = this
-            location(value.toString())
-                .then((res) => {
-                    _this.option3 = res.data.map(i => {
-                        const n = {}
-                        n.label = i.name
-                        n.value = i.locationId
-                        return n
+
+            if(this.secondCity){
+                const _this = this
+                location(value.toString())
+                    .then((res) => {
+                        _this.option3 = res.data.map(i => {
+                            const n = {}
+                            n.label = i.name
+                            n.value = i.locationId+''
+                            return n
+                        })
                     })
-                })
+            }
+
         },
         change3(value) {
             this.secondTown = value[0]
