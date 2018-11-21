@@ -1,177 +1,264 @@
 <template>
 <section>
-    <div class="deme">
-        <img src="../../assets/logo.png"> 二级页1 </div>
-    <!-- <el-dialog title="新增企业" :visible.sync="copDialog" width="600px" center :close-on-click-modal="false" top="30px">
-        <el-form :label-position="labelPosition" label-width="170px" :model="copForm">
-            <el-form-item label="公司名称：" required>
-                <el-input v-model="copForm.cname" placeholder="请输入公司名称"></el-input>
-            </el-form-item>
-            <el-form-item label="法人名称：" required>
-                <el-input v-model="copForm.fname" placeholder="请输入法人名称"></el-input>
-            </el-form-item>
-            <el-form-item label="加盟电话：" required>
-                <el-input v-model="copForm.tel" placeholder="请输入加盟电话"></el-input>
-            </el-form-item>
-            <el-form-item label="公司简介：" required>
-                <el-input type="textarea" :rows="4" placeholder="请输入公司简介,最多200字" v-model="copForm.info">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="成立日期：" required>
-                <el-input v-model="copForm.time" placeholder="请输入公司成立日期"></el-input>
-            </el-form-item>
-            <el-form-item label="营业执照上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess1" :before-upload="beforeUpload1">
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="食品生产许可证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess2" :before-upload="beforeUpload2">
-                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="食品流通许可证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess3" :before-upload="beforeUpload3">
-                    <img v-if="imageUrl3" :src="imageUrl3" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="商标注册证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess4" :before-upload="beforeUpload4">
-                    <img v-if="imageUrl4" :src="imageUrl4" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="copDialog = false">取 消</el-button>
-            <el-button type="primary" @click="submitCop">确 定</el-button>
-        </span>
-    </el-dialog> -->
+    <div class="card-container">
+        <a-tabs type="card">
+            <a-tab-pane tab="菜单管理" key="1">
+                <!-- <div :style="{ marginBottom: '16px' }">
+                    <a-button @click="add" type="primary" icon="plus">添加门店</a-button>
+                </div> -->
+                <a-row>
+                    <a-col :span="6">
+                        <a-tree showLine @select="onSelect" :defaultExpandAll="true">
+                            <a-tree-node key="0-0">
+                                <span slot="title" style="color: #1890ff">菜单列表</span>
+                                <a-tree-node :title="item.name" :key="item.id+''" v-for="(item,index) in data">
+                                    <a-tree-node :title="itm.name" :key="itm.id+''" v-for="(itm,index) in item.webMenu" />
+                                </a-tree-node>
+                            </a-tree-node>
+                        </a-tree>
+                    </a-col>
+                    <a-col :span="18">
+                        <div>
+                            <div style="padding:7px">内容管理</div>
+                            <div v-show="mid !=0">
+                                <div>
+                                    <div v-for="itm in dataContent" style="width:100%;height:200px;margin:10px" class="data-content"><img :src="'http://'+itm.url" alt="" style="height:200px"><i class="anticon anticon-delete" @click="del(itm,1)"></i></div>
+                                </div>
+                                <div>
+                                    <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost+mid" @change="handleChange1" :beforeUpload="beforeUpload1">
+                                        <div>
+                                            <a-icon :type="loading1 ? 'loading' : 'plus'" />
+                                            <div class="ant-upload-text">上传内容图</div>
+                                        </div>
+                                    </a-upload>
+                                </div>
+                            </div>
+                        </div>
+                    </a-col>
+                </a-row>
+            </a-tab-pane>
+            <a-tab-pane tab="轮播图管理" key="2">
+                <div class="gutter-example">
+                    <div style="margin:15px 0">轮播图列表</div>
+                    <div v-if="dataImg.length===0" style="height:150px;text-align:center;line-height:150px;"> 轮播图列表为空，请上传图片 </div>
+                    <a-row :gutter="16" v-else>
+                        <a-col class="gutter-row" :span="4" v-for="itm in dataImg" :key="itm.imgsId" style="overflow:hidden">
+                            <div class="gutter-box data-content"><img :src="'http://'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
+                        </a-col>
+                    </a-row>
+                    <div>
+                        <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="imgHost+enterpriseId" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false">
+                            <div>
+                                <a-icon :type="loading ? 'loading' : 'plus'" />
+                                <div class="ant-upload-text">上传轮播图</div>
+                            </div>
+                        </a-upload>
+                    </div>
+                </div>
+            </a-tab-pane>
+        </a-tabs>
+    </div>
 </section>
 </template>
 <script>
 import {
-    login
+    menu,
+    broadcastAdd,
+    broadcast,
+    menuContent,
+    menusAdd
 } from '../../api/api'
 export default {
     data() {
         return {
-            msg: 'vue-template',
-            copDialog: false,
-            labelPosition: 'right',
-            copForm: {
-                cname: '',
-                fname: '',
-                info: '',
-                tel: '',
-                time: '',
-                bLicense: '',
-                sLicense: '',
-                lLicense: '',
-                tLicense: ''
-            },
-            imageUrl1: '',
-            imageUrl2: '',
-            imageUrl3: '',
-            imageUrl4: ''
+            data: [],
+            dataImg: [],
+            title: '',
+            dataContent: '',
+            mid: 0,
+            loading: false,
+            loading1: false,
+            visible: false,
+            imgHost: broadcastAdd,
+            menuHost: menusAdd,
+            enterpriseId: sessionStorage.getItem('tx_eid')
         }
     },
     methods: {
-        test() {
-            login({
-                    token: '8234e894a04abc486088b7c5156acb35b1a3cd445b950c5e04f8a'
-                })
+        getData() {
+            menu()
                 .then((res) => {
-                    console.log(res)
+                    this.data = res.data
                 })
-                .catch((err) => {
-                    console.warn(err)
+            broadcast(this.enterpriseId)
+                .then((res) => {
+                    this.dataImg = res.data
                 })
-            // this.$http.get('https://a1.cnblogs.com/group/C1-C2-T2')
-            //     .then((response) => {
-            //         // get body data
-            //         this.someData = response.body;
-            //     }, (response) => {
-            //         // error callback
-            //     });
         },
-        addCop() {
-            this.copDialog = true
+        onSelect(selectedKeys, info) {
+            if (info.node.$children.length == 0 && info.node.$parent.eventKey !== '0-0') {
+                this.getContent(selectedKeys)
+            } else {
+                this.mid = 0
+            }
         },
-        submitCop() {},
-        submitUpload() {
-            this.$refs.upload.submit()
+        getContent(selectedKeys) {
+            menuContent(selectedKeys[0])
+                .then((res) => {
+                    this.mid = Number(selectedKeys)
+                    if (res.status === 1) {
+                        this.dataContent = res.data
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
         },
-        uploadSuccess1(res, file) {
-            this.imageUrl1 = URL.createObjectURL(file.raw)
-            this.copForm.bLicense = URL.createObjectURL(file.raw)
+        beforeUpload(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片!')
+            }
+            const isLt2M = file.size / 1024 / 1024 < 5
+            if (!isLt2M) {
+                this.$message.error('图片不能大于 5MB!')
+            }
+            const MAX = this.dataImg.length >= 6
+            if (MAX) {
+                this.$message.error('图片最多上传6张!')
+            }
+            return isJPG && isLt2M && !MAX
         },
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
             if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
+                this.$message.error('只支持 JPG 图片!')
             }
+            const isLt2M = file.size / 1024 / 1024 < 5
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
+                this.$message.error('图片不能大于 5MB!')
             }
-            return isJPG && isLt2M
+            const MAX = this.dataContent.length > 10
+            if (MAX) {
+                this.$message.error('图片最多上传6张!')
+            }
+            return isJPG && isLt2M && !MAX
         },
-        uploadSuccess2(res, file) {
-            this.imageUrl2 = URL.createObjectURL(file.raw)
-            this.copForm.sLicense = URL.createObjectURL(file.raw)
+        handleChange(info) {
+            if (info.file.status === 'uploading') {
+                this.loading = true
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.loading = false
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+                this.loading = false
+            }
         },
-        beforeUpload2(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
+        handleChange1(info) {
+            if (info.file.status === 'uploading') {
+                this.loading1 = true
+                return
             }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.getContent(this.mid.toString()
+                    .split(","))
+                this.loading1 = false
             }
-            return isJPG && isLt2M
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+                this.loading1 = false
+            }
         },
-        uploadSuccess3(res, file) {
-            this.imageUrl3 = URL.createObjectURL(file.raw)
-            this.copForm.lLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload3(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess4(res, file) {
-            this.imageUrl4 = URL.createObjectURL(file.raw)
-            this.copForm.tLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload4(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
+        del(i, index) {
+            this.$confirm({
+                title: '确定删除该内容?',
+                content: '',
+                okText: '确认',
+                cancelText: '取消',
+                onOk() {
+                    if (index === 1) {} else {}
+                },
+                onCancel() {}
+            })
         }
     },
     watch: {},
     mounted() {
+        this.getData()
         // this.test()
     }
 }
 </script>
 <style>
+.card-container {
+    background: #F5F5F5;
+    overflow: hidden;
+    padding: 24px;
+}
 
+.card-container>.ant-tabs-card>.ant-tabs-content {
+    min-height: 500px;
+    margin-top: -16px;
+}
+
+.card-container>.ant-tabs-card>.ant-tabs-content>.ant-tabs-tabpane {
+    background: #fff;
+    padding: 16px;
+}
+
+.card-container>.ant-tabs-card>.ant-tabs-bar {
+    border-color: #fff;
+}
+
+.card-container>.ant-tabs-card>.ant-tabs-bar .ant-tabs-tab {
+    border-color: transparent;
+    background: transparent;
+}
+
+.card-container>.ant-tabs-card>.ant-tabs-bar .ant-tabs-tab-active {
+    border-color: #fff;
+    background: #fff;
+}
+
+.avatar-uploader>.ant-upload {
+    width: 323px;
+    height: 200px;
+    margin: 10px;
+}
+
+.ant-upload-select-picture-card i {
+    font-size: 32px;
+    color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+}
+
+.data-content {
+    position: relative;
+    background-color: #f5f5f5;
+}
+
+.data-content i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    content: "";
+    display: none;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.data-content:hover i {
+    display: block
+}
 </style>

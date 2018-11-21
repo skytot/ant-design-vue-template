@@ -30,7 +30,8 @@ import {
     Upload,
     Steps,
     DatePicker,
-    Select
+    Select,
+    Tree
 } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import routes from './router/routes'
@@ -64,6 +65,7 @@ Vue.use(Upload)
 Vue.use(Steps)
 Vue.use(DatePicker)
 Vue.use(Select)
+Vue.use(Tree)
 Vue.prototype.$message = message
 Vue.prototype.$info = Modal.info
 Vue.prototype.$success = Modal.success

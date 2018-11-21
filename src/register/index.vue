@@ -131,7 +131,7 @@ export default {
                     value: '430000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 140000,
                     'name': '山西省',
@@ -139,7 +139,7 @@ export default {
                     value: '140000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 340000,
                     'name': '安徽省',
@@ -147,7 +147,7 @@ export default {
                     value: '340000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 520000,
                     'name': '贵州省',
@@ -155,7 +155,7 @@ export default {
                     value: '520000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 350000,
                     'name': '福建省',
@@ -163,7 +163,7 @@ export default {
                     value: '350000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 310000,
                     'name': '上海市',
@@ -171,7 +171,7 @@ export default {
                     value: '310000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 540000,
                     'name': '西藏自治区',
@@ -179,7 +179,7 @@ export default {
                     value: '540000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 460000,
                     'name': '海南省',
@@ -187,7 +187,7 @@ export default {
                     value: '460000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 630000,
                     'name': '青海省',
@@ -195,7 +195,7 @@ export default {
                     value: '630000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 130000,
                     'name': '河北省',
@@ -203,7 +203,7 @@ export default {
                     value: '130000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 110000,
                     'name': '北京市',
@@ -211,7 +211,7 @@ export default {
                     value: '110000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 120000,
                     'name': '天津市',
@@ -219,7 +219,7 @@ export default {
                     value: '120000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 220000,
                     'name': '吉林省',
@@ -227,7 +227,7 @@ export default {
                     value: '220000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 650000,
                     'name': '新疆维吾尔自治区',
@@ -235,7 +235,7 @@ export default {
                     value: '650000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 610000,
                     'name': '陕西省',
@@ -243,7 +243,7 @@ export default {
                     value: '610000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 230000,
                     'name': '黑龙江省',
@@ -251,7 +251,7 @@ export default {
                     value: '230000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 330000,
                     'name': '浙江省',
@@ -259,7 +259,7 @@ export default {
                     value: '330000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 510000,
                     'name': '四川省',
@@ -267,7 +267,7 @@ export default {
                     value: '510000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 150000,
                     'name': '内蒙古自治区',
@@ -275,7 +275,7 @@ export default {
                     value: '150000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 640000,
                     'name': '宁夏回族自治区',
@@ -283,7 +283,7 @@ export default {
                     value: '640000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 210000,
                     'name': '辽宁省',
@@ -291,7 +291,7 @@ export default {
                     value: '210000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 500000,
                     'name': '重庆市',
@@ -299,7 +299,7 @@ export default {
                     value: '500000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 360000,
                     'name': '江西省',
@@ -307,7 +307,7 @@ export default {
                     value: '360000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 450000,
                     'name': '广西壮族自治区',
@@ -315,7 +315,7 @@ export default {
                     value: '450000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 370000,
                     'name': '山东省',
@@ -323,7 +323,7 @@ export default {
                     value: '370000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 440000,
                     'name': '广东省',
@@ -331,7 +331,7 @@ export default {
                     value: '440000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 620000,
                     'name': '甘肃省',
@@ -339,7 +339,7 @@ export default {
                     value: '620000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 410000,
                     'name': '河南省',
@@ -347,7 +347,7 @@ export default {
                     value: '410000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 320000,
                     'name': '江苏省',
@@ -355,7 +355,7 @@ export default {
                     value: '320000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 530000,
                     'name': '云南省',
@@ -363,7 +363,7 @@ export default {
                     value: '530000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 820000,
                     'name': '澳门特别行政区',
@@ -371,7 +371,7 @@ export default {
                     value: '820000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 420000,
                     'name': '湖北省',
@@ -379,7 +379,7 @@ export default {
                     value: '420000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 810000,
                     'name': '香港特别行政区',
@@ -387,7 +387,7 @@ export default {
                     value: '810000',
                     'category': 1,
                     'parentId': 100000
-    },
+                },
                 {
                     'locationId': 710000,
                     'name': '台湾省',
@@ -395,17 +395,16 @@ export default {
                     value: '710000',
                     'category': 1,
                     'parentId': 100000
-    }
-],
+                }],
             option2: [],
             option3: [],
             option4: [{
                 value: 'zhejiang',
                 label: 'Zhejiang'
-      }, {
+            }, {
                 value: 'jiangsu',
                 label: 'Jiangsu'
-    }],
+            }],
             current: 1,
             copForm: {},
             value1: '',
@@ -415,10 +414,10 @@ export default {
             steps: [{
                 title: '填写基础信息',
                 content: ''
-                }, {
+        }, {
                 title: '提交资质认证',
                 content: ''
-                }, {
+        }, {
                 title: '完成注册',
                 content: ''
             }],

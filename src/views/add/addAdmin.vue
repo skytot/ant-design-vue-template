@@ -30,7 +30,7 @@
         <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
             <span>所在地区： </span>
             <br/>
-            <a-input-group >
+            <a-input-group>
                 <a-cascader :options="options" @change="change1" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择省份" :defaultValue='defaultValue1' changeOnSelect />
                 <a-cascader :options="option2" @change="change2" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择市区" :defaultValue='defaultValue2' changeOnSelect />
                 <a-cascader :options="option3" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" :defaultValue='defaultValue3' changeOnSelect />
@@ -49,9 +49,8 @@
 import {
     address,
     location,
-    store,
     adds,
-    addss,
+    addss
 } from '../../api/api'
 const columns = [{
     title: '所在地区',
@@ -72,7 +71,6 @@ const columns = [{
         customRender: 'action'
     }
 }]
-const data = []
 export default {
     data() {
         return {
@@ -364,7 +362,7 @@ export default {
             adds: '',
             aid: 0,
             option2: [],
-            option3: [],
+            option3: []
         }
     },
     methods: {
@@ -376,7 +374,7 @@ export default {
                         this.data.map((i, index) => {
                             i.key = index + 1 + ''
                             i.value = (i.name1 + i.name2 + i.name3)
-                            i.address = i.name;
+                            i.address = i.name
                             i.status = '已启用'
                             return i
                         })
@@ -394,7 +392,7 @@ export default {
         },
         add() {
             this.title = '添加地址'
-            this.visible = true;
+            this.visible = true
             this.adds = ''
         },
         edit(i) {
@@ -408,33 +406,32 @@ export default {
                     this.option2 = res.data.map(i => {
                         const n = {}
                         n.label = i.name
-                        n.value = i.locationId+''
+                        n.value = i.locationId + ''
                         return n
                     })
-                this.defaultValue2 = [i.locationId2 + '']
-                location(this.defaultValue2.toString())
-                    .then((res) => {
-                        this.option3 = res.data.map(i => {
-                            const n = {}
-                            n.label = i.name
-                            n.value = i.locationId+''
-                            return n
+                    this.defaultValue2 = [i.locationId2 + '']
+                    location(this.defaultValue2.toString())
+                        .then((res) => {
+                            this.option3 = res.data.map(i => {
+                                const n = {}
+                                n.label = i.name
+                                n.value = i.locationId + ''
+                                return n
+                            })
+                            this.defaultValue3 = [i.locationId3 + '']
                         })
-                    this.defaultValue3 = [i.locationId3 + '']
-                    })
                 })
-
         },
         change1(value) {
             this.secondPro = value[0]
             const _this = this
-            if(this.secondPro){
+            if (this.secondPro) {
                 location(value.toString())
                     .then((res) => {
                         _this.option2 = res.data.map(i => {
                             const n = {}
                             n.label = i.name
-                            n.value = i.locationId+''
+                            n.value = i.locationId + ''
                             return n
                         })
                     })
@@ -442,33 +439,30 @@ export default {
         },
         change2(value) {
             this.secondCity = value[0]
-
-            if(this.secondCity){
+            if (this.secondCity) {
                 const _this = this
                 location(value.toString())
                     .then((res) => {
                         _this.option3 = res.data.map(i => {
                             const n = {}
                             n.label = i.name
-                            n.value = i.locationId+''
+                            n.value = i.locationId + ''
                             return n
                         })
                     })
             }
-
         },
         change3(value) {
             this.secondTown = value[0]
         },
         hideModal() {
-            const pro = this.secondPro
             const city = this.secondCity
             const town = this.secondTown
             const add = this.adds
             if (city === '' || town === '' || add === '') {
                 this.$message.error('请填写正确的详细地址信息')
             } else {
-                if (this.title == '添加地址') {
+                if (this.title === '添加地址') {
                     adds({
                             enterpriseId: sessionStorage.getItem('tx_eid'),
                             name: add,
@@ -477,7 +471,7 @@ export default {
                         .then((res) => {
                             if (res.status === 1) {
                                 this.$message.success(res.msg)
-                                this.visible = false;
+                                this.visible = false
                                 this.getData()
                             } else {
                                 this.$message.error(res.msg)
@@ -492,7 +486,7 @@ export default {
                         .then((res) => {
                             if (res.status === 1) {
                                 this.$message.success(res.msg)
-                                this.visible = false;
+                                this.visible = false
                                 this.getData()
                             } else {
                                 this.$message.error(res.msg)

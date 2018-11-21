@@ -244,7 +244,7 @@ export default {
                         .then((res) => {
                             if (res.status === 1) {
                                 this.getData()
-                                this.visible = false;
+                                this.visible = false
                                 this.$message.success(res.msg)
                             } else {
                                 this.$message.error(res.msg)
