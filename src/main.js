@@ -76,6 +76,10 @@ const router = new VueRouter({routes})
 router.beforeEach((to, from, next) => {
     if (to.path === '/') {
         next('/dashboard')
+    } else if (to.path === '/login') {
+        sessionStorage.removeItem('tx_tk')
+        sessionStorage.removeItem('tx_eid')
+        next()
     } else {
         next()
     }

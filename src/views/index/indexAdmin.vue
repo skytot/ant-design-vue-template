@@ -11,8 +11,8 @@
                         <a-tree showLine @select="onSelect" :defaultExpandAll="true">
                             <a-tree-node key="0-0">
                                 <span slot="title" style="color: #1890ff">菜单列表</span>
-                                <a-tree-node :title="item.name" :key="item.id+''" v-for="(item,index) in data">
-                                    <a-tree-node :title="itm.name" :key="itm.id+''" v-for="(itm,index) in item.webMenu" />
+                                <a-tree-node :title="item.name" :key="item.id+''" v-for="item in data">
+                                    <a-tree-node :title="itm.name" :key="itm.id+''" v-for="itm in item.webMenu" />
                                 </a-tree-node>
                             </a-tree-node>
                         </a-tree>
@@ -22,9 +22,9 @@
                             <div style="padding:7px">内容管理</div>
                             <div v-show="mid !=0">
                                 <div>
-                                    <div v-for="itm in dataContent" style="width:100%;height:200px;margin:10px" class="data-content"><img :src="'http://'+itm.url" alt="" style="height:200px"><i class="anticon anticon-delete" @click="del(itm,1)"></i></div>
+                                    <div v-for="itm in dataContent" style="width:100%;height:200px;margin:10px" class="data-content" :key="itm.id"><img :src="'//'+itm.url" alt="" style="height:200px"><i class="anticon anticon-delete" @click="del(itm,1)"></i></div>
                                 </div>
-                                <div>
+                                <div v-show="dataContent.length<10">
                                     <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost+mid" @change="handleChange1" :beforeUpload="beforeUpload1">
                                         <div>
                                             <a-icon :type="loading1 ? 'loading' : 'plus'" />
@@ -40,13 +40,12 @@
             <a-tab-pane tab="轮播图管理" key="2">
                 <div class="gutter-example">
                     <div style="margin:15px 0">轮播图列表</div>
-                    <div v-if="dataImg.length===0" style="height:150px;text-align:center;line-height:150px;"> 轮播图列表为空，请上传图片 </div>
-                    <a-row :gutter="16" v-else>
+                    <a-row :gutter="16" >
                         <a-col class="gutter-row" :span="4" v-for="itm in dataImg" :key="itm.imgsId" style="overflow:hidden">
-                            <div class="gutter-box data-content"><img :src="'http://'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
+                            <div class="gutter-box data-content"><img :src="'//'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
                         </a-col>
                     </a-row>
-                    <div>
+                    <div v-show="dataImg.length<6">
                         <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="imgHost+enterpriseId" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false">
                             <div>
                                 <a-icon :type="loading ? 'loading' : 'plus'" />
@@ -66,7 +65,8 @@ import {
     broadcastAdd,
     broadcast,
     menuContent,
-    menusAdd
+    menusAdd,
+    delImg
 } from '../../api/api'
 export default {
     data() {
@@ -96,7 +96,7 @@ export default {
                 })
         },
         onSelect(selectedKeys, info) {
-            if (info.node.$children.length == 0 && info.node.$parent.eventKey !== '0-0') {
+            if (info.node.$children.length === 0 && info.node.$parent.eventKey !== '0-0') {
                 this.getContent(selectedKeys)
             } else {
                 this.mid = 0
@@ -150,6 +150,7 @@ export default {
             }
             if (info.file.status === 'done') {
                 this.$message.success(info.file.response.msg)
+                this.getData()
                 this.loading = false
             }
             if (info.file.status === 'error') {
@@ -165,7 +166,7 @@ export default {
             if (info.file.status === 'done') {
                 this.$message.success(info.file.response.msg)
                 this.getContent(this.mid.toString()
-                    .split(","))
+                    .split(','))
                 this.loading1 = false
             }
             if (info.file.status === 'error') {
@@ -174,13 +175,31 @@ export default {
             }
         },
         del(i, index) {
+            const _this = this
             this.$confirm({
                 title: '确定删除该内容?',
                 content: '',
                 okText: '确认',
                 cancelText: '取消',
                 onOk() {
-                    if (index === 1) {} else {}
+                    delImg(i.imgsId).then((res)=>{
+                        if(index===1){
+                            if (res.status ===1) {
+                                _this.$message.success(res.msg)
+                                _this.getContent(_this.mid.toString()
+                                    .split(','))
+                            } else {
+                                _this.$message.error(res.msg)
+                            }
+                        }else{
+                            if (res.status ===1) {
+                                _this.$message.success(res.msg)
+                                _this.getData()
+                             } else {
+                                _this.$message.error(res.msg)
+                            }
+                        }
+                    })
                 },
                 onCancel() {}
             })

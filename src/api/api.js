@@ -155,3 +155,7 @@ export const broadcastUp = params => {
 export const menuContent = params => {
     return instance.get(`${HOST}/official/menu/` + params).then(res => res.data)
 }
+// 删除图片http://gangzhuhao.s1.natapp.cc/imgs/{imgsId}
+export const delImg = params => {
+    return instance.delete(`${HOST}/imgs/` + params).then(res => res.data)
+}
