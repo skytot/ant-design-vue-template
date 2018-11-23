@@ -25,6 +25,7 @@ const storeAdmin = () => import ('../views/store/storeAdmin.vue')
 const sortAdmin = () => import ('../views/sort/sortAdmin.vue')
 // 文章管理
 const articleAdmin = () => import ('../views/article/articleAdmin.vue')
+const articleEdit = () => import ('../views/article/articleEdit.vue')
 // 首页管理
 const indexAdmin = () => import ('../views/index/indexAdmin.vue')
 
@@ -98,15 +99,13 @@ const routes = [
                 path: '/corporate/mycorporate',
                 component: corporate,
                 name: '我的企业'
-            },
-            {
+            }, {
                 path: '/corporate/mycorporateInfo',
                 component: corporateInfo,
                 name: '企业信息'
             }
         ]
-    },
-    {
+    }, {
         path: '/addAdmin',
         component: Home,
         name: '地址管理',
@@ -127,8 +126,7 @@ const routes = [
                 name: '地址信息'
             }
         ]
-    },
-    {
+    }, {
         path: '/storeAdmin',
         component: Home,
         name: '门店管理',
@@ -149,8 +147,7 @@ const routes = [
                 name: '门店信息'
             }
         ]
-    },
-    {
+    }, {
         path: '/sortAdmin',
         component: Home,
         name: '类目管理',
@@ -171,8 +168,7 @@ const routes = [
                 name: '类目列表'
             }
         ]
-    },
-    {
+    }, {
         path: '/indexAdmin',
         component: Home,
         name: '首页管理',
@@ -193,8 +189,7 @@ const routes = [
                 name: '首页信息'
             }
         ]
-    },
-    {
+    }, {
         path: '/articleAdmin',
         component: Home,
         name: '文章管理',
@@ -213,42 +208,41 @@ const routes = [
                 path: 'article',
                 component: articleAdmin,
                 name: '文章列表'
+            }, {
+                path: 'articleEdit',
+                component: articleEdit,
+                name: '文章编辑'
             }
         ]
-    },
-    {
+    }, {
         path: '/login',
         component: Login,
         name: '',
         meta: 'base',
         leaf: true,
         hidden: true
-    },
-    {
+    }, {
         path: '/resinfo',
         component: resinfo,
         name: '',
         meta: 'base',
         leaf: true,
         hidden: true
-    },
-    {
+    }, {
         path: '/Register',
         component: Register,
         name: '',
         leaf: true,
         meta: 'base',
         hidden: true
-    },
-    {
+    }, {
         path: '/404',
         component: NotFound,
         name: '',
         leaf: true,
         meta: 'base',
         hidden: true
-    },
-    {
+    }, {
         path: '/',
         hidden: true,
         leaf: true,

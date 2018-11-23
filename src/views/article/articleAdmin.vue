@@ -1,177 +1,164 @@
 <template>
 <section>
     <div class="deme">
-        <img src="../../assets/logo.png"> 二级页1 </div>
-    <!-- <el-dialog title="新增企业" :visible.sync="copDialog" width="600px" center :close-on-click-modal="false" top="30px">
-        <el-form :label-position="labelPosition" label-width="170px" :model="copForm">
-            <el-form-item label="公司名称：" required>
-                <el-input v-model="copForm.cname" placeholder="请输入公司名称"></el-input>
-            </el-form-item>
-            <el-form-item label="法人名称：" required>
-                <el-input v-model="copForm.fname" placeholder="请输入法人名称"></el-input>
-            </el-form-item>
-            <el-form-item label="加盟电话：" required>
-                <el-input v-model="copForm.tel" placeholder="请输入加盟电话"></el-input>
-            </el-form-item>
-            <el-form-item label="公司简介：" required>
-                <el-input type="textarea" :rows="4" placeholder="请输入公司简介,最多200字" v-model="copForm.info">
-                </el-input>
-            </el-form-item>
-            <el-form-item label="成立日期：" required>
-                <el-input v-model="copForm.time" placeholder="请输入公司成立日期"></el-input>
-            </el-form-item>
-            <el-form-item label="营业执照上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess1" :before-upload="beforeUpload1">
-                    <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="食品生产许可证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess2" :before-upload="beforeUpload2">
-                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="食品流通许可证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess3" :before-upload="beforeUpload3">
-                    <img v-if="imageUrl3" :src="imageUrl3" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="商标注册证上传：" required>
-                <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="uploadSuccess4" :before-upload="beforeUpload4">
-                    <img v-if="imageUrl4" :src="imageUrl4" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="copDialog = false">取 消</el-button>
-            <el-button type="primary" @click="submitCop">确 定</el-button>
-        </span>
-    </el-dialog> -->
+        <div class="tool">
+            <div style="float:right">
+                <a-button type="primary" slot="extra" @click="add">写文章</a-button>
+            </div>
+            <div class="tool-item">
+                <span class="left">文章类目</span>
+                <a-radio-group defaultValue="0" buttonStyle="solid" @change="menuChange1">
+                    <a-radio-button value="0">全部</a-radio-button>
+                    <a-radio-button :value="itm.categoryId" v-for="itm in cList" :key="itm.categoryId">{{itm.name}}</a-radio-button>
+                </a-radio-group>
+            </div>
+            <div class="tool-item">
+                <span class="left">文章状态</span>
+                <a-radio-group defaultValue="0" buttonStyle="solid" @change="menuChange2">
+                    <a-radio-button value="0">全部</a-radio-button>
+                    <a-radio-button value="2">发布</a-radio-button>
+                    <a-radio-button value="1">草稿</a-radio-button>
+                </a-radio-group>
+            </div>
+        </div>
+        <a-divider />
+        <a-list itemLayout="vertical" size="large" :pagination="pagination" :dataSource="listData">
+            <!-- <div slot="footer"><b>ant design vue</b> footer part</div> -->
+            <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
+                <template slot="actions" v-for="{type, text} in actions">
+                    <span :key="type" @click="tool(type,index)">
+                        <a-icon :type="type" />
+                        {{text}}
+                    </span>
+                </template>
+                <a-list-item-meta :description="item.description">
+                    <a slot="title" :href="item.href">{{item.name}}</a>
+                    <a-avatar slot="avatar" :src="item.avatar" />
+                </a-list-item-meta>
+                {{item.edittime}}
+            </a-list-item>
+        </a-list>
+    </div>
 </section>
 </template>
 <script>
+import axios from 'axios'
 import {
-    login
+    article
 } from '../../api/api'
+// const listData = []
+// for (let i = 0; i < 13; i++) {
+//     listData.push({
+//         href: 'https://vuecomponent.github.io/ant-design-vue/',
+//         title: `ant design vue part ${i}`,
+//         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+//         description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//         content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
+//     })
+// }
 export default {
     data() {
         return {
-            msg: 'vue-template',
-            copDialog: false,
-            labelPosition: 'right',
-            copForm: {
-                cname: '',
-                fname: '',
-                info: '',
-                tel: '',
-                time: '',
-                bLicense: '',
-                sLicense: '',
-                lLicense: '',
-                tLicense: ''
+            pagination: {
+                onChange: (page) => {
+                    console.log(page)
+                },
+                pageSize: 10
             },
-            imageUrl1: '',
-            imageUrl2: '',
-            imageUrl3: '',
-            imageUrl4: ''
+            actions: [{
+                    type: 'edit',
+                    text: '编辑'
+                },
+                {
+                    type: 'delete',
+                    text: '删除'
+                }
+            ],
+            cList: [],
+            listData: [],
+            enterpriseId: sessionStorage.getItem('tx_eid'),
+            pageId: 1,
+            menuId: 0,
+            status: 0
         }
     },
     methods: {
-        test() {
-            login({
-                    token: '8234e894a04abc486088b7c5156acb35b1a3cd445b950c5e04f8a'
+        getData() {
+            axios({
+                    method: 'get',
+                    url: article + '/' + this.enterpriseId + '/' + 10 + '/' + this.pageId,
+                    headers: {
+                        'status': Number(this.status),
+                        'categoryId': Number(this.menuId)
+                    }
                 })
                 .then((res) => {
-                    console.log(res)
+                    this.cList = res.data.data.category
+                    this.listData = res.data.data.article.data
                 })
-                .catch((err) => {
-                    console.warn(err)
+            // article({
+            //         enterpriseId: this.enterpriseId,
+            //         pageSize: 10,
+            //         pageId: this.pageId
+            //     })
+            //     .then((res) => {
+            //         this.cList = res.data.category
+            //     })
+        },
+        menuChange1(e) {
+            this.status = e.target.value
+            this.getData()
+            //
+        },
+        menuChange2(e) {
+            this.menuId = e.target.value
+            this.getData()
+        },
+        add() {
+            this.$router.push({
+                path: 'articleEdit',
+                query: {
+                    status: 0
+                }
+            })
+        },
+        tool(i, e) {
+            if (i === 'edit') {
+                this.$router.push({
+                    path: 'articleEdit',
+                    query: {
+                        status: this.listData[e].articleId
+                    }
                 })
-            // this.$http.get('https://a1.cnblogs.com/group/C1-C2-T2')
-            //     .then((response) => {
-            //         // get body data
-            //         this.someData = response.body;
-            //     }, (response) => {
-            //         // error callback
-            //     });
-        },
-        addCop() {
-            this.copDialog = true
-        },
-        submitCop() {},
-        submitUpload() {
-            this.$refs.upload.submit()
-        },
-        uploadSuccess1(res, file) {
-            this.imageUrl1 = URL.createObjectURL(file.raw)
-            this.copForm.bLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload1(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
+            } else {
+                this.$confirm({
+                    title: '确定删除该文章?',
+                    content: '',
+                    onOk() {
+                        console.log('确定')
+                    },
+                    onCancel() {
+                        console.log('取消')
+                    },
+                    class: 'test'
+                })
             }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess2(res, file) {
-            this.imageUrl2 = URL.createObjectURL(file.raw)
-            this.copForm.sLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload2(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess3(res, file) {
-            this.imageUrl3 = URL.createObjectURL(file.raw)
-            this.copForm.lLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload3(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
-        },
-        uploadSuccess4(res, file) {
-            this.imageUrl4 = URL.createObjectURL(file.raw)
-            this.copForm.tLicense = URL.createObjectURL(file.raw)
-        },
-        beforeUpload4(file) {
-            const isJPG = file.type === 'image/jpeg'
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!')
-            }
-            if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!')
-            }
-            return isJPG && isLt2M
         }
     },
     watch: {},
     mounted() {
-        // this.test()
+        this.getData()
     }
 }
 </script>
 <style>
+.tool {}
 
+.tool-item {
+    margin: 10px 0
+}
+
+.tool-item .left {
+    padding-right: 10px
+}
 </style>

@@ -5,6 +5,7 @@
             <a-tab-pane tab="门店管理" key="1">
                 <div :style="{ marginBottom: '16px' }">
                     <a-button @click="add" type="primary" icon="plus">添加门店</a-button>
+                    <a-input-search placeholder="输入门店名称搜索" style="width: 200px;float:right" @search="onSearch" enterButton />
                 </div>
                 <a-table :columns="columns" :dataSource="data" :loading="loading" :pagination="pagination" @change="handleTableChange">
                     <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
@@ -551,7 +552,7 @@ export default {
             time: '',
             time1: '',
             pageId: 1,
-            pageId1: 1
+            pageId1: 1,
         }
     },
     methods: {
@@ -585,6 +586,9 @@ export default {
                         this.pagination = pagination
                     }
                 })
+        },
+        onSearch(i) {
+            console.log(i)
         },
         handleTableChange(pagination, filters, sorter) {
             this.pageId = pagination.current
@@ -636,6 +640,7 @@ export default {
         },
         edit(i) {
             this.defaultTime = i.opendate
+            console.log(i)
             this.visible = true
             this.title = '编辑门店'
             this.$nextTick(() => {

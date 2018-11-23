@@ -40,7 +40,7 @@
             <a-tab-pane tab="轮播图管理" key="2">
                 <div class="gutter-example">
                     <div style="margin:15px 0">轮播图列表</div>
-                    <a-row :gutter="16" >
+                    <a-row :gutter="16">
                         <a-col class="gutter-row" :span="4" v-for="itm in dataImg" :key="itm.imgsId" style="overflow:hidden">
                             <div class="gutter-box data-content"><img :src="'//'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
                         </a-col>
@@ -182,24 +182,25 @@ export default {
                 okText: '确认',
                 cancelText: '取消',
                 onOk() {
-                    delImg(i.imgsId).then((res)=>{
-                        if(index===1){
-                            if (res.status ===1) {
-                                _this.$message.success(res.msg)
-                                _this.getContent(_this.mid.toString()
-                                    .split(','))
+                    delImg(i.imgsId)
+                        .then((res) => {
+                            if (index === 1) {
+                                if (res.status === 1) {
+                                    _this.$message.success(res.msg)
+                                    _this.getContent(_this.mid.toString()
+                                        .split(','))
+                                } else {
+                                    _this.$message.error(res.msg)
+                                }
                             } else {
-                                _this.$message.error(res.msg)
+                                if (res.status === 1) {
+                                    _this.$message.success(res.msg)
+                                    _this.getData()
+                                } else {
+                                    _this.$message.error(res.msg)
+                                }
                             }
-                        }else{
-                            if (res.status ===1) {
-                                _this.$message.success(res.msg)
-                                _this.getData()
-                             } else {
-                                _this.$message.error(res.msg)
-                            }
-                        }
-                    })
+                        })
                 },
                 onCancel() {}
             })

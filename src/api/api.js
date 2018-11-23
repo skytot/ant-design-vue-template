@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
-const HOST = '//gangzhuhao.s1.natapp.cc'
+const HOST = '//wechat123.natapp1.cc'
 // const token =
 //     getCookie('token') ||
 //     sessionStorage.getItem('token') ||
@@ -31,10 +31,13 @@ export const upHost = `${HOST}/imgs/enterprise/`
 export const broadcastAdd = `${HOST}/imgs/enterprise/broadcast/`
 // 菜单图上传
 export const menusAdd = `${HOST}/imgs/menu/`
+// 文章图上传
+export const imgHost = `${HOST}/imgs/article`
 
 //  头像修改
 // export const upImgHost = `${HOST}/imgs/enterprise/`
-
+// 文章列表查询http://gangzhuhao.s1.natapp.cc/official/article/{enterpriseId}/{pageSize}/{pageId}
+export const article = `${HOST}/official/article`
 // get
 
 export const archivesResult = params => {
@@ -158,4 +161,9 @@ export const menuContent = params => {
 // 删除图片http://gangzhuhao.s1.natapp.cc/imgs/{imgsId}
 export const delImg = params => {
     return instance.delete(`${HOST}/imgs/` + params).then(res => res.data)
+}
+
+// 文章新加http://wechat123.natapp1.cc/official/article
+export const articleAdd = params => {
+    return instance.post(`${HOST}/official/article`, JSON.stringify(params)).then(res => res.data)
 }
