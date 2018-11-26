@@ -8,9 +8,9 @@
                     <a-list itemLayout="horizontal" :dataSource="data" size="small" :split="false">
                         <a-list-item slot="renderItem" slot-scope="item, index">
                             <a-list-item-meta :description="item.title">
-                                <a-avatar name="file" v-if="index===0" slot="avatar" :src="url" />
+                                <a-avatar name="file" v-if="index===0" slot="avatar" :src="url"  />
                                 <div slot="title" v-if="index===0">
-                                    <a-upload :action="upHost+ Number(enterpriseId)" @change="handleChange1" :beforeUpload="beforeUpload1">
+                                    <a-upload :action="upHost+ Number(enterpriseId)" @change="handleChange1" :showUploadList="false"  :beforeUpload="beforeUpload1">
                                         <a-button>
                                             <a-icon type="upload" /> 上传头像 </a-button>
                                     </a-upload>
@@ -189,7 +189,7 @@ export default {
             baseInfo(this.enterpriseId)
                 .then((res) => {
                     if (res.status === 1) {
-                        this.data[0].url = 'static/img/user.jpg'
+                        this.data[0].url = typeof res.data.url ==='undefined'?'static/img/user.jpg':res.data.url
                         this.url = res.data.url || 'static/img/user.jpg'
                         this.data[1].title = res.data.name
                         this.data[2].title = res.data.legalname
@@ -223,6 +223,7 @@ export default {
             }
             if (info.file.status === 'done') {
                 this.$message.success(info.file.response.msg)
+                this.getData()
             }
             if (info.file.status === 'error') {
                 this.$message.error(info.file.response.msg)

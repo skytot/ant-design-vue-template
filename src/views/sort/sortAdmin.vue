@@ -1,7 +1,7 @@
 <template>
 <section>
     <div>
-        <div :style="{ marginBottom: '16px' }">
+        <div :style="{ marginBottom: '16px' }" v-if="data.length<4">
             <a-button @click="add" type="primary" icon="plus">添加类目</a-button>
         </div>
         <a-table :columns="columns" :dataSource="data">

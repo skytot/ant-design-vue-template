@@ -33,7 +33,7 @@
             <a-input-group>
                 <a-cascader :options="options" :value="secondPro" @change="change1" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择省份" changeOnSelect />
                 <a-cascader :options="option2" :value="secondCity" @change="change2" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择市区" changeOnSelect />
-                <a-cascader :options="option3" :value="secondTown" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" changeOnSelect />
+                <a-cascader :options="option3" :value="secondTown" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" changeOnSelect v-show="selVisible" />
             </a-input-group>
             <br/>
             <span>详细地址： </span>
@@ -353,13 +353,14 @@ export default {
                     'parentId': 100000
     }
 ],
-            secondCity: [''],
-            secondPro: [''],
-            secondTown: [''],
+            secondCity: [],
+            secondPro: [],
+            secondTown: [],
             adds: '',
             aid: 0,
             option2: [],
-            option3: []
+            option3: [],
+            selVisible:true
         }
     },
     methods: {
@@ -415,38 +416,50 @@ export default {
                                 n.value = i.locationId + ''
                                 return n
                             })
+                            if(this.option3.length ===0){
+                                this.selVisible = false
+                                this.secondTown = this.secondCity
+                            }else{
+                                this.selVisible = true
+                            }
                             this.secondTown = [i.locationId3 + '']
                         })
                 })
         },
         change1(value) {
             this.secondPro = value
-            this.secondTown = ['']
-            const _this = this
-            if (this.secondPro) {
-                location(value.toString())
-                    .then((res) => {
-                        _this.option2 = res.data.map(i => {
-                            const n = {}
-                            n.label = i.name
-                            n.value = i.locationId + ''
-                            return n
+            this.secondTown = []
+            this.secondCity = []
+            if(value.length !==0){
+                    location(value.toString())
+                        .then((res) => {
+                            this.option2 = res.data.map(i => {
+                                const n = {}
+                                n.label = i.name
+                                n.value = i.locationId + ''
+                                return n
+                            })
                         })
-                    })
             }
         },
         change2(value) {
             this.secondCity = value
-            if (this.secondCity) {
-                const _this = this
+            this.secondTown = []
+            if(value.length !==0){
                 location(value.toString())
                     .then((res) => {
-                        _this.option3 = res.data.map(i => {
+                        this.option3 = res.data.map(i => {
                             const n = {}
                             n.label = i.name
                             n.value = i.locationId + ''
                             return n
                         })
+                        if(this.option3.length ===0){
+                            this.selVisible = false
+                            this.secondTown = this.secondCity
+                        }else{
+                            this.selVisible = true
+                        }
                     })
             }
         },
