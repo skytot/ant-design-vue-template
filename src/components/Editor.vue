@@ -13,17 +13,21 @@ export default {
     name: 'editorElem',
     data() {
         return {
-            editorContent: ''
+            editorContent: '',
+            editor: {}
         }
     },
     props: ['html'], // 接收父组件的方法
     mounted() {
-        var editor = new E(this.$refs.editorElem) // 创建富文本实例
-        editor.customConfig.onchange = (html) => {
+        this.editor = new E(this.$refs.editorElem) // 创建富文本实例
+        this.editor.customConfig.onchange = (html) => {
             this.editorContent = html
         }
-        editor.customConfig.uploadImgServer = imgHost
-        editor.customConfig.menus = [ // 菜单配置
+        this.editor.customConfig.onblur = (html) => {
+            this.$emit('getcontent', this.editorContent)
+        }
+        this.editor.customConfig.uploadImgServer = imgHost + '/' + sessionStorage.getItem('tx_eid')
+        this.editor.customConfig.menus = [ // 菜单配置
               'head',
               'list', // 列表
               'justify', // 对齐方式
@@ -36,12 +40,12 @@ export default {
               'undo', // 撤销
               'redo' // 重复
             ]
-        editor.hideLinkImg = true
-        editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
-        editor.customConfig.uploadImgMaxLength = 10
-        editor.customConfig.uploadFileName = 'file'
-        editor.customConfig.showLinkImg = false
-        editor.customConfig.uploadImgHooks = {
+        this.editor.hideLinkImg = true
+        this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+        this.editor.customConfig.uploadImgMaxLength = 10
+        this.editor.customConfig.uploadFileName = 'file'
+        this.editor.customConfig.showLinkImg = false
+        this.editor.customConfig.uploadImgHooks = {
             before: function(xhr, editor, files) {
                 // 图片上传之前触发
                 // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
@@ -83,7 +87,12 @@ export default {
                 // result 必须是一个 JSON 格式字符串！！！否则报错
             }
         }
-        editor.create()
+        this.editor.create()
+    },
+    watch: {
+        html: function(news, old) {
+            this.editor.cmd.do('insertHTML', news)
+        }
     }
 }
 </script>

@@ -4,7 +4,7 @@
         <div class="tool">
             <div class="tool-item">
                 <span class="lefts">文章类目</span>
-                <a-radio-group defaultValue="0" buttonStyle="solid" @change="menuChange1">
+                <a-radio-group :value="def" buttonStyle="solid" @change="menuChange1" :disabled="disabled">
                     <a-radio-button :value="itm.categoryId" v-for="itm in cList" :key="itm.categoryId">{{itm.name}}</a-radio-button>
                 </a-radio-group>
             </div>
@@ -29,7 +29,9 @@
 <script>
 import {
     category,
-    articleAdd
+    articleAdd,
+    detail,
+    articleUp
 } from '../../api/api'
 import Editor from '../../components/Editor'
 export default {
@@ -39,49 +41,88 @@ export default {
             title: '',
             type: 0,
             cList: [],
-            content: '<p>4555</p>',
+            content: '',
             cid: 1,
-            aid: 0
+            aid: 0,
+            def: 0,
+            dId: 0,
+            disabled: false
         }
     },
     components: {
         Editor
     },
     methods: {
-        getData() {},
-        getCategory() {
-            category(this.enterpriseId)
+        getData() {
+            detail(this.aid)
                 .then((res) => {
-                    this.cList = res.data
+                    this.title = res.data.name
+                    this.content = res.data.content
+                    this.def = this.cList.filter((i) => {
+                        return i.name === res.data.categoryname
+                    })[0].categoryId
+                    this.type = this.def
+                    this.dId = res.data.detailId
+                    this.disabled = true
                 })
+        },
+        getCategory() {
+            const _this = this
+            return new Promise(function(resolve, reject) {
+                category(_this.enterpriseId)
+                    .then((res) => {
+                        _this.cList = res.data
+                        resolve('1')
+                    })
+            })
         },
         getContent(data) {
             this.content = data.toString()
-            console.log(this.content)
         },
         menuChange1(val) {
             this.type = val.target.value
+            this.def = val.target.value
         },
         push(i) {
             if (i === 1) {
                 if (this.title.length === 0) {
                     this.$message.error('请输入文章标题')
                 } else {
-                    articleAdd({
-                            categoryId: this.cid,
-                            status: 2,
-                            name: this.title,
-                            content: this.content,
-                            enterpriseId: this.enterpriseId
-                        })
-                        .then((res) => {
-                            if (res.status === 1) {
-                                this.$message.success(res.msg)
-                                this.$router.push('/articleAdmin')
-                            } else {
-                                this.$message.error(res.msg)
-                            }
-                        })
+                    if (this.aid === 0) {
+                        articleAdd({
+                                categoryId: this.cid,
+                                status: 1,
+                                name: this.title,
+                                content: this.content,
+                                enterpriseId: this.enterpriseId
+                            })
+                            .then((res) => {
+                                if (res.status === 1) {
+                                    this.$message.success(res.msg)
+                                    this.$router.push('/articleAdmin')
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                    } else {
+                        articleUp({
+                                // categoryId: this.cid,
+                                status: 1,
+                                articleId: this.aid,
+                                detailId: this.dId,
+                                name: this.title,
+                                content: this.content,
+                                enterpriseId: this.enterpriseId
+                            })
+                            .then((res) => {
+                                if (res.status === 1) {
+                                    this.$message.success(res.msg)
+                                    this.$router.push('/articleAdmin')
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                    }
                 }
             } else {
                 if (this.title.length === 0) {
@@ -91,32 +132,54 @@ export default {
                 } else if (this.content.length === 0) {
                     this.$message.error('请输入文章内容')
                 } else {
-                    articleAdd({
-                            categoryId: this.cid,
-                            status: 2,
-                            name: this.title,
-                            content: this.content,
-                            enterpriseId: this.enterpriseId
-                        })
-                        .then((res) => {
-                            if (res.status === 1) {
-                                this.$message.success(res.msg)
-                                this.$router.push('/articleAdmin')
-                            } else {
-                                this.$message.error(res.msg)
-                            }
-                        })
+                    if (this.aid === 0) {
+                        articleAdd({
+                                categoryId: this.cid,
+                                status: 2,
+                                name: this.title,
+                                content: this.content,
+                                enterpriseId: this.enterpriseId
+                            })
+                            .then((res) => {
+                                if (res.status === 1) {
+                                    this.$message.success(res.msg)
+                                    this.$router.push('/articleAdmin')
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                    } else {
+                        articleUp({
+                                // categoryId: this.cid,
+                                status: 2,
+                                detailId: this.dId,
+                                articleId: this.aid,
+                                name: this.title,
+                                content: this.content,
+                                enterpriseId: this.enterpriseId
+                            })
+                            .then((res) => {
+                                if (res.status === 1) {
+                                    this.$message.success(res.msg)
+                                    this.$router.push('/articleAdmin')
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                    }
                 }
             }
         }
     },
     watch: {},
     mounted() {
-        if (this.$route.query.status !== 0) {
-            this.aid = this.$route.query.status
-            this.getData()
-        }
         this.getCategory()
+            .then(() => {
+                if (this.$route.query.status !== 0) {
+                    this.aid = this.$route.query.status
+                    this.getData()
+                }
+            })
     }
 }
 </script>

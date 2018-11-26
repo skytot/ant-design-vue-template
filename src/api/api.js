@@ -33,6 +33,8 @@ export const broadcastAdd = `${HOST}/imgs/enterprise/broadcast/`
 export const menusAdd = `${HOST}/imgs/menu/`
 // 文章图上传
 export const imgHost = `${HOST}/imgs/article`
+// 门店图上传
+export const imgHost1 = `${HOST}/imgs/store/`
 
 //  头像修改
 // export const upImgHost = `${HOST}/imgs/enterprise/`
@@ -115,7 +117,7 @@ export const addss = params => {
 }
 // 门店信息
 export const stores = params => {
-    return instance.get(`${HOST}/official/stores` + '/' + params.enterpriseId + '/' + params.pageSize + '/' + params.pageId).then(res => res.data)
+    return instance.get(`${HOST}/official/stores` + '/' + params.enterpriseId + '/' + params.category + '/' + params.pageSize + '/' + params.pageId).then(res => res.data)
 }
 // 新加门店http://gangzhuhao.s1.natapp.cc/official/store
 export const addStore = params => {
@@ -162,8 +164,36 @@ export const menuContent = params => {
 export const delImg = params => {
     return instance.delete(`${HOST}/imgs/` + params).then(res => res.data)
 }
+// 删除文章 http://wechat123.natapp1.cc/official/article/:articleId
+export const delArt = params => {
+    return instance.delete(`${HOST}/official/article/` + params).then(res => res.data)
+}
 
 // 文章新加http://wechat123.natapp1.cc/official/article
 export const articleAdd = params => {
     return instance.post(`${HOST}/official/article`, JSON.stringify(params)).then(res => res.data)
+}
+// 文章查询 http://wechat123.natapp1.cc/official/article/detail/:articleId
+export const detail = params => {
+    return instance.get(`${HOST}/official/article/detail/` + params).then(res => res.data)
+}
+// 文章新加http://wechat123.natapp1.cc/official/article
+export const articleUp = params => {
+    return instance.put(`${HOST}/official/article`, JSON.stringify(params)).then(res => res.data)
+}
+// 代理商修改http://gangzhuhao.s1.natapp.cc/official/agent
+export const agent = params => {
+    return instance.put(`${HOST}/official/agent`, JSON.stringify(params)).then(res => res.data)
+}
+// 门店地址查询 http://gangzhuhao.s1.natapp.cc/official/address/store/:storeId
+export const getAddress = params => {
+    return instance.get(`${HOST}/official/address/store/` + params).then(res => res.data)
+}
+// 门店图片查询 http://wechat123.natapp1.cc/imgs/stores/:storeId
+export const storeImg = params => {
+    return instance.get(`${HOST}/imgs/stores/` + params).then(res => res.data)
+}
+// 门店地址更新 http://gangzhuhao.s1.natapp.cc/official/address
+export const addressUp = params => {
+    return instance.put(`${HOST}/official/address`, JSON.stringify(params)).then(res => res.data)
 }

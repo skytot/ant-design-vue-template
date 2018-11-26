@@ -31,9 +31,9 @@
             <span>所在地区： </span>
             <br/>
             <a-input-group>
-                <a-cascader :options="options" @change="change1" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择省份" :defaultValue='defaultValue1' changeOnSelect />
-                <a-cascader :options="option2" @change="change2" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择市区" :defaultValue='defaultValue2' changeOnSelect />
-                <a-cascader :options="option3" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" :defaultValue='defaultValue3' changeOnSelect />
+                <a-cascader :options="options" :value="secondPro" @change="change1" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择省份" changeOnSelect />
+                <a-cascader :options="option2" :value="secondCity" @change="change2" style="width: 120px;margin-right:10px;overflow:visible" placeholder="选择市区" changeOnSelect />
+                <a-cascader :options="option3" :value="secondTown" @change="change3" style="width: 120px;overflow:visible" placeholder="选择县域" changeOnSelect />
             </a-input-group>
             <br/>
             <span>详细地址： </span>
@@ -79,9 +79,6 @@ export default {
             total: 2,
             title: '添加地址',
             visible: false,
-            defaultValue1: [],
-            defaultValue2: [],
-            defaultValue3: [],
             options: [
                 {
                     'locationId': 430000,
@@ -356,9 +353,9 @@ export default {
                     'parentId': 100000
     }
 ],
-            secondCity: '',
-            secondPro: '',
-            secondTown: '',
+            secondCity: [''],
+            secondPro: [''],
+            secondTown: [''],
             adds: '',
             aid: 0,
             option2: [],
@@ -400,8 +397,8 @@ export default {
             this.visible = true
             this.adds = i.name
             this.aid = i.addressId
-            this.defaultValue1 = [i.locationId1 + '']
-            location(this.defaultValue1.toString())
+            this.secondPro = [i.locationId1 + '']
+            location(this.secondPro)
                 .then((res) => {
                     this.option2 = res.data.map(i => {
                         const n = {}
@@ -409,8 +406,8 @@ export default {
                         n.value = i.locationId + ''
                         return n
                     })
-                    this.defaultValue2 = [i.locationId2 + '']
-                    location(this.defaultValue2.toString())
+                    this.secondCity = [i.locationId2 + '']
+                    location(this.secondCity)
                         .then((res) => {
                             this.option3 = res.data.map(i => {
                                 const n = {}
@@ -418,12 +415,13 @@ export default {
                                 n.value = i.locationId + ''
                                 return n
                             })
-                            this.defaultValue3 = [i.locationId3 + '']
+                            this.secondTown = [i.locationId3 + '']
                         })
                 })
         },
         change1(value) {
-            this.secondPro = value[0]
+            this.secondPro = value
+            this.secondTown = ['']
             const _this = this
             if (this.secondPro) {
                 location(value.toString())
@@ -438,7 +436,7 @@ export default {
             }
         },
         change2(value) {
-            this.secondCity = value[0]
+            this.secondCity = value
             if (this.secondCity) {
                 const _this = this
                 location(value.toString())
@@ -453,11 +451,11 @@ export default {
             }
         },
         change3(value) {
-            this.secondTown = value[0]
+            this.secondTown = value
         },
         hideModal() {
-            const city = this.secondCity
-            const town = this.secondTown
+            const city = this.secondCity[0]
+            const town = this.secondTown[0]
             const add = this.adds
             if (city === '' || town === '' || add === '') {
                 this.$message.error('请填写正确的详细地址信息')

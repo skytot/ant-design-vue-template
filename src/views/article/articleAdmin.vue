@@ -22,7 +22,7 @@
             </div>
         </div>
         <a-divider />
-        <a-list itemLayout="vertical" size="large" :pagination="pagination" :dataSource="listData">
+        <a-list itemLayout="vertical" size="large" :pagination="pagination" :dataSource="listData" :loading="loading">
             <!-- <div slot="footer"><b>ant design vue</b> footer part</div> -->
             <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
                 <template slot="actions" v-for="{type, text} in actions">
@@ -31,6 +31,8 @@
                         {{text}}
                     </span>
                 </template>
+                <span v-if="item.status ===2">已发布　</span>
+                <span v-else>草稿箱　</span>
                 <a-list-item-meta :description="item.description">
                     <a slot="title" :href="item.href">{{item.name}}</a>
                     <a-avatar slot="avatar" :src="item.avatar" />
@@ -44,7 +46,8 @@
 <script>
 import axios from 'axios'
 import {
-    article
+    article,
+    delArt
 } from '../../api/api'
 // const listData = []
 // for (let i = 0; i < 13; i++) {
@@ -61,7 +64,8 @@ export default {
         return {
             pagination: {
                 onChange: (page) => {
-                    console.log(page)
+                    this.pageId = page
+                    this.getData()
                 },
                 pageSize: 10
             },
@@ -75,6 +79,7 @@ export default {
                 }
             ],
             cList: [],
+            loading: false,
             listData: [],
             enterpriseId: sessionStorage.getItem('tx_eid'),
             pageId: 1,
@@ -88,13 +93,14 @@ export default {
                     method: 'get',
                     url: article + '/' + this.enterpriseId + '/' + 10 + '/' + this.pageId,
                     headers: {
-                        'status': Number(this.status),
-                        'categoryId': Number(this.menuId)
+                        'status': Number(this.menuId),
+                        'categoryId': Number(this.status)
                     }
                 })
                 .then((res) => {
                     this.cList = res.data.data.category
                     this.listData = res.data.data.article.data
+                    this.loading = false
                 })
             // article({
             //         enterpriseId: this.enterpriseId,
@@ -131,11 +137,22 @@ export default {
                     }
                 })
             } else {
+                const _this = this
                 this.$confirm({
                     title: '确定删除该文章?',
                     content: '',
+                    okText: '确定',
+                    cancelText: '取消',
                     onOk() {
-                        console.log('确定')
+                        delArt(_this.listData[e].articleId)
+                            .then((res) => {
+                                if (res.status === 1) {
+                                    _this.$message.success(res.msg)
+                                    _this.getData()
+                                } else {
+                                    _this.$message.error(res.msg)
+                                }
+                            })
                     },
                     onCancel() {
                         console.log('取消')
@@ -147,6 +164,7 @@ export default {
     },
     watch: {},
     mounted() {
+        this.loading = true
         this.getData()
     }
 }
