@@ -51,13 +51,13 @@
                         <a-form-item label="手　　机" fieldDecoratorId="tel" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern:/^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
                             <a-input v-model="copForm.tel" placeholder="请输入手机号码"></a-input>
                         </a-form-item>
-                        <a-form-item label="开业日期"  required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                        <a-form-item label="开业日期" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                             <a-date-picker :value='defaultTime' :format="dateFormat" @change="onChange" placeholder="请选择时间" :allowClear="false" />
                         </a-form-item>
                         <a-form-item label="门店地址" fieldDecoratorId="address" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" v-if="title==='添加门店'">
                             <a-cascader :options="options" @change="change1" style="width: 100px;margin-right:6px" placeholder="选择省份" changeOnSelect />
                             <a-cascader :options="option2" @change="change2" style="width: 100px;margin-right:6px" placeholder="选择市区" changeOnSelect />
-                            <a-cascader :options="option3" @change="change3" style="width: 100px" placeholder="选择县域" changeOnSelect  v-show="selVisibles"/>
+                            <a-cascader :options="option3" @change="change3" style="width: 100px" placeholder="选择县域" changeOnSelect v-show="selVisibles" />
                             <a-input v-model="adds" placeholder="详细地址"></a-input>
                         </a-form-item>
                     </a-form>
@@ -72,7 +72,7 @@
                             <a-form-item label="门店地址" fieldDecoratorId="address" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                                 <a-cascader :options="option4" :value="secondPro1" @change="change4" style="width: 100px;margin-right:6px" placeholder="选择省份" changeOnSelect />
                                 <a-cascader :options="option5" :value="secondCity1" @change="change5" style="width: 100px;margin-right:6px" placeholder="选择市区" changeOnSelect />
-                                <a-cascader :options="option6" :value="secondTown1" @change="change6" style="width: 100px" placeholder="选择县域" changeOnSelect  v-show="selVisible"/>
+                                <a-cascader :options="option6" :value="secondTown1" @change="change6" style="width: 100px" placeholder="选择县域" changeOnSelect v-show="selVisible" />
                                 <a-input v-model="adds1" placeholder="详细地址"></a-input>
                             </a-form-item>
                         </a-form>
@@ -106,7 +106,7 @@
                                 <a-radio :value="1">女</a-radio>
                             </a-radio-group>
                         </a-form-item>
-                        <a-form-item label="出生日期"  required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                        <a-form-item label="出生日期" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                             <a-date-picker :value='defaultTime1' :format="dateFormat" @change="onChange1" placeholder="请选择出生日期" :allowClear="false" />
                         </a-form-item>
                         <a-form-item label="联系电话" fieldDecoratorId="tel" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern:/^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
@@ -119,7 +119,7 @@
                                 <a-radio :value="3">精品店</a-radio>
                             </a-radio-group>
                         </a-form-item>
-                        <a-form-item label="开业日期"  required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                        <a-form-item label="开业日期" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                             <a-date-picker :value='defaultTime2' :format="dateFormat" @change="onChange2" placeholder="请选择时间" :allowClear="false" />
                         </a-form-item>
                     </a-form>
@@ -887,8 +887,8 @@ export default {
             sid: 0,
             img: '',
             aid: 0,
-            selVisible:true,
-            selVisibles:true
+            selVisible: true,
+            selVisibles: true
         }
     },
     methods: {
@@ -963,7 +963,7 @@ export default {
             this.secondPro = value[0]
             this.secondTown = ['']
             this.secondCity = ['']
-            if(value.length!==0){
+            if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
                         this.option2 = res.data.map(i => {
@@ -974,12 +974,11 @@ export default {
                         })
                     })
             }
-
         },
         change2(value) {
             this.secondCity = value[0]
             this.secondTown = ['']
-            if(value.length!==0){
+            if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
                         this.option3 = res.data.map(i => {
@@ -988,15 +987,14 @@ export default {
                             n.value = i.locationId + ''
                             return n
                         })
-                        if(this.option3.length ===0){
+                        if (this.option3.length === 0) {
                             this.selVisibles = false
                             this.secondTown1 = this.secondCity1
-                        }else{
+                        } else {
                             this.selVisibles = true
                         }
                     })
             }
-
         },
         change3(value) {
             this.secondTown = value[0]
@@ -1005,7 +1003,7 @@ export default {
             this.secondPro1 = value
             this.secondTown1 = ['']
             this.secondCity1 = ['']
-            if(value.length!==0){
+            if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
                         this.option5 = res.data.map(i => {
@@ -1016,12 +1014,11 @@ export default {
                         })
                     })
             }
-
         },
         change5(value) {
             this.secondCity1 = value
             this.secondTown1 = ['']
-            if(value.length!==0){
+            if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
                         this.option6 = res.data.map(i => {
@@ -1030,15 +1027,14 @@ export default {
                             n.value = i.locationId + ''
                             return n
                         })
-                        if(this.option6.length ===0){
+                        if (this.option6.length === 0) {
                             this.selVisible = false
                             this.secondTown1 = this.secondCity1
-                        }else{
+                        } else {
                             this.selVisible = true
                         }
                     })
             }
-
         },
         change6(value) {
             this.secondTown1 = value
@@ -1075,7 +1071,7 @@ export default {
         },
         add() {
             this.title = '添加门店'
-            this.defaultTime = this.moment('2018-01-01',this.dateFormat)
+            this.defaultTime = this.moment('2018-01-01', this.dateFormat)
             this.visible = true
         },
         upImg() {},
@@ -1099,7 +1095,7 @@ export default {
         },
         edit(i) {
             this.sid = i.storeId
-            this.defaultTime = this.moment(i.opendate,this.dateFormat)
+            this.defaultTime = this.moment(i.opendate, this.dateFormat)
             this.time = i.opendate
             this.visible = true
             this.title = '编辑门店'
@@ -1117,8 +1113,8 @@ export default {
         },
         edit1(i) {
             this.sid = i.storeId
-            this.defaultTime1 = this.moment(i.birthday,this.dateFormat)
-            this.defaultTime2 = this.moment(i.opendate,this.dateFormat)
+            this.defaultTime1 = this.moment(i.birthday, this.dateFormat)
+            this.defaultTime2 = this.moment(i.opendate, this.dateFormat)
             this.time1 = i.birthday
             this.time2 = i.opendate
             this.visible1 = true

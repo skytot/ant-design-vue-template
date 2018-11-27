@@ -149,7 +149,7 @@ export const categoryPut = params => {
 }
 // 轮播图查询
 export const broadcast = params => {
-    return instance.get(`${HOST}/official/broadcast/` + params).then(res => res.data)
+    return instance.get(`${HOST}/imgs/broadcast/` + params).then(res => res.data)
 }
 
 // 轮播图修改接口
@@ -158,7 +158,7 @@ export const broadcastUp = params => {
 }
 // 菜单详情查询
 export const menuContent = params => {
-    return instance.get(`${HOST}/official/menu/` + params).then(res => res.data)
+    return instance.get(`${HOST}/imgs/menu/` + params).then(res => res.data)
 }
 // 删除图片http://gangzhuhao.s1.natapp.cc/imgs/{imgsId}
 export const delImg = params => {

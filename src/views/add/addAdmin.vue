@@ -360,7 +360,7 @@ export default {
             aid: 0,
             option2: [],
             option3: [],
-            selVisible:true
+            selVisible: true
         }
     },
     methods: {
@@ -371,7 +371,7 @@ export default {
                         this.data = res.data
                         this.data.map((i, index) => {
                             i.key = index + 1 + ''
-                            i.value = (i.name1 + i.name2 + i.name3)
+                            i.value = i.name1 + i.name2 + (typeof i.name3 === 'undefined' ? '' : i.name3)
                             i.address = i.name
                             i.status = '已启用'
                             return i
@@ -416,10 +416,10 @@ export default {
                                 n.value = i.locationId + ''
                                 return n
                             })
-                            if(this.option3.length ===0){
+                            if (this.option3.length === 0) {
                                 this.selVisible = false
                                 this.secondTown = this.secondCity
-                            }else{
+                            } else {
                                 this.selVisible = true
                             }
                             this.secondTown = [i.locationId3 + '']
@@ -430,22 +430,22 @@ export default {
             this.secondPro = value
             this.secondTown = []
             this.secondCity = []
-            if(value.length !==0){
-                    location(value.toString())
-                        .then((res) => {
-                            this.option2 = res.data.map(i => {
-                                const n = {}
-                                n.label = i.name
-                                n.value = i.locationId + ''
-                                return n
-                            })
+            if (value.length !== 0) {
+                location(value.toString())
+                    .then((res) => {
+                        this.option2 = res.data.map(i => {
+                            const n = {}
+                            n.label = i.name
+                            n.value = i.locationId + ''
+                            return n
                         })
+                    })
             }
         },
         change2(value) {
             this.secondCity = value
             this.secondTown = []
-            if(value.length !==0){
+            if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
                         this.option3 = res.data.map(i => {
@@ -454,10 +454,10 @@ export default {
                             n.value = i.locationId + ''
                             return n
                         })
-                        if(this.option3.length ===0){
+                        if (this.option3.length === 0) {
                             this.selVisible = false
                             this.secondTown = this.secondCity
-                        }else{
+                        } else {
                             this.selVisible = true
                         }
                     })
