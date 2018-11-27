@@ -25,7 +25,7 @@
                                     <div v-for="itm in dataContent" style="width:100%;height:200px;margin:10px" class="data-content" :key="itm.id"><img :src="'//'+itm.url" alt="" style="height:200px"><i class="anticon anticon-delete" @click="del(itm,1)"></i></div>
                                 </div>
                                 <div v-show="dataContent.length<10">
-                                    <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost+mid" @change="handleChange1" :beforeUpload="beforeUpload1">
+                                    <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost" @change="handleChange1" :beforeUpload="beforeUpload1" :data="postData1">
                                         <div>
                                             <a-icon :type="loading1 ? 'loading' : 'plus'" />
                                             <div class="ant-upload-text">上传内容图</div>
@@ -46,7 +46,7 @@
                         </a-col>
                     </a-row>
                     <div v-show="dataImg.length<6">
-                        <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="imgHost+enterpriseId" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false">
+                        <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="menuHost" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false" :data="postData">
                             <div>
                                 <a-icon :type="loading ? 'loading' : 'plus'" />
                                 <div class="ant-upload-text">上传轮播图</div>
@@ -66,6 +66,7 @@ import {
     broadcast,
     menuContent,
     menusAdd,
+    upHost,
     delImg
 } from '../../api/api'
 export default {
@@ -80,8 +81,10 @@ export default {
             loading1: false,
             visible: false,
             imgHost: broadcastAdd,
-            menuHost: menusAdd,
-            enterpriseId: sessionStorage.getItem('tx_eid')
+            menuHost: upHost,
+            enterpriseId: sessionStorage.getItem('tx_eid'),
+            postData:{},
+            postData1:{},
         }
     },
     methods: {
@@ -126,6 +129,10 @@ export default {
             if (MAX) {
                 this.$message.error('图片最多上传6张!')
             }
+            this.postData.data = JSON.stringify({
+                enterpriseId:this.enterpriseId,
+                id:this.enterpriseId
+            })
             return isJPG && isLt2M && !MAX
         },
         beforeUpload1(file) {
@@ -141,6 +148,10 @@ export default {
             if (MAX) {
                 this.$message.error('图片最多上传6张!')
             }
+            this.postData1.data = JSON.stringify({
+                menuId:this.mid,
+                id:this.mid
+            })
             return isJPG && isLt2M && !MAX
         },
         handleChange(info) {

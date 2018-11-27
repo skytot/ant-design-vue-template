@@ -26,7 +26,10 @@ export default {
         this.editor.customConfig.onblur = (html) => {
             this.$emit('getcontent', this.editorContent)
         }
-        this.editor.customConfig.uploadImgServer = imgHost + '/' + sessionStorage.getItem('tx_eid')
+        this.editor.customConfig.uploadImgServer = imgHost +'/article/'+ '' + sessionStorage.getItem('tx_eid')
+        this.editor.customConfig.uploadImgParams = {
+    data: {enterpriseId:sessionStorage.getItem('tx_eid')}
+}
         this.editor.customConfig.menus = [ // 菜单配置
               'head',
               'list', // 列表

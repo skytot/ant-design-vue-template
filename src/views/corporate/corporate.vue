@@ -10,7 +10,7 @@
                             <a-list-item-meta :description="item.title">
                                 <a-avatar name="file" v-if="index===0" slot="avatar" :src="url" />
                                 <div slot="title" v-if="index===0">
-                                    <a-upload :action="upHost+ Number(enterpriseId)" @change="handleChange1" :showUploadList="false" :beforeUpload="beforeUpload1" :data="postData">
+                                    <a-upload :action="upHost" @change="handleChange1" :showUploadList="false" :beforeUpload="beforeUpload1" :data="postData">
                                         <a-button>
                                             <a-icon type="upload" /> 上传头像 </a-button>
                                     </a-upload>
@@ -182,7 +182,8 @@ export default {
             time: '',
             formItemLayout,
             formTailLayout,
-            postData: {}
+            postData: {},
+            imgsId:0,
         }
     },
     methods: {
@@ -190,8 +191,8 @@ export default {
             baseInfo(this.enterpriseId)
                 .then((res) => {
                     if (res.status === 1) {
-                        this.data[0].url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' : res.data.url
-                        this.url = res.data.url || 'static/img/user.jpg'
+                        this.data[0].url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' :'//'+ res.data.url
+                        this.url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' :'//'+ res.data.url
                         this.data[1].title = res.data.name
                         this.data[2].title = res.data.legalname
                         this.data[3].title = res.data.tel
@@ -200,6 +201,7 @@ export default {
                         this.data[6].title = res.data.founddate
                         this.data[7].title = res.data.description
                         this.copForms = res.data
+                        typeof res.data.imgsId === 'undefined'?'':this.imgsId = res.data.imgsId
                     } else {
                         this.$message.error(res.msg)
                     }
@@ -216,10 +218,20 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
-            this.postData.data = JSON.stringify({
-                imgsId: this.enterpriseId,
-                enterpriseId: this.enterpriseId
-            })
+            if(this.imgsId){
+                this.postData.data = JSON.stringify({
+                    imgsId: this.imgsId,
+                    id: this.enterpriseId,
+                })
+            }else{
+                this.postData.data = JSON.stringify({
+                    id: this.enterpriseId,
+                    enterpriseId: this.enterpriseId,
+                    category:1,
+                    subcategory :11
+                })
+            }
+
             return isJPG && isLt5M
         },
         handleChange1(info) {

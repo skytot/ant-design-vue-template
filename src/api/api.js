@@ -26,7 +26,7 @@ instance.interceptors.response.use(response => {
 })
 const base = process.env.API_ROOT
 // 上传
-export const upHost = `${HOST}/imgs/enterprise/`
+export const upHost = `${HOST}/imgs`
 // 轮播图新加
 export const broadcastAdd = `${HOST}/imgs/enterprise/broadcast/`
 // 菜单图上传
@@ -34,7 +34,7 @@ export const menusAdd = `${HOST}/imgs/menu/`
 // 文章图上传
 export const imgHost = `${HOST}/imgs/article`
 // 门店图上传
-export const imgHost1 = `${HOST}/imgs/store/`
+export const imgHost1 = `${HOST}/imgs/`
 
 //  头像修改
 // export const upImgHost = `${HOST}/imgs/enterprise/`

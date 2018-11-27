@@ -17,12 +17,12 @@
                             <a-icon class="pointer" @click="edit(text)" type="edit" />
                         </a-tooltip>
                         <a-divider type="vertical" />
-                        <a-upload name="file" :showUploadList="false" :action="host+text.storeId" :beforeUpload="beforeUpload" @change="handleChange" v-if="text.status ===1">
+                        <a-upload name="file" :showUploadList="false" :action="host" :beforeUpload="beforeUpload" @change="handleChange" v-if="text.status ===1" :data="postData">
                             <a-tooltip :arrowPointAtCenter="true">
                                 <template slot="title">
                                     <span>上传门店图片</span>
                                 </template>
-                                <a-icon class="pointer" @click="upImg" type="upload" />
+                                <a-icon class="pointer" @click="upImg(text.storeId)" type="upload" />
                             </a-tooltip>
                         </a-upload>
                         <a-tooltip :arrowPointAtCenter="true" v-if="text.status ===2">
@@ -888,7 +888,8 @@ export default {
             img: '',
             aid: 0,
             selVisible: true,
-            selVisibles: true
+            selVisibles: true,
+            postData:{}
         }
     },
     methods: {
@@ -1048,7 +1049,11 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
-            return isJPG && isLt5M
+            this.postData.data = JSON.stringify({
+                id:this.sid,
+                storeId:this.sid
+            })
+            return isJPG&&isLt5M
         },
         handleChange(info) {
             if (info.file.status === 'uploading') {
@@ -1074,7 +1079,9 @@ export default {
             this.defaultTime = this.moment('2018-01-01', this.dateFormat)
             this.visible = true
         },
-        upImg() {},
+        upImg(i) {
+            this.sid = i
+        },
         repImg(i) {
             storeImg(i.storeId)
                 .then((res) => {
