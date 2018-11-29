@@ -16,7 +16,7 @@
                             </template>
                             <a-icon class="pointer" @click="edit(text)" type="edit" />
                         </a-tooltip>
-                        <a-divider type="vertical" />
+                        <!-- <a-divider type="vertical" />
                         <a-upload name="file" :showUploadList="false" :action="host" :beforeUpload="beforeUpload" @change="handleChange" v-if="text.status ===1" :data="postData">
                             <a-tooltip :arrowPointAtCenter="true">
                                 <template slot="title">
@@ -30,7 +30,7 @@
                                 <span>编辑门店图片</span>
                             </template>
                             <a-icon class="pointer" @click="repImg(text)" type="picture" />
-                        </a-tooltip>
+                        </a-tooltip> -->
                         <a-divider type="vertical" />
                         <a-tooltip :arrowPointAtCenter="true">
                             <template slot="title">
@@ -873,7 +873,7 @@ export default {
             adds1: '',
             copForm: {},
             copForm1: {},
-            defaultTime: '',
+            defaultTime: {},
             defaultTime1: '',
             defaultTime2: '',
             dateFormat: 'YYYY-MM-DD',
@@ -889,7 +889,7 @@ export default {
             aid: 0,
             selVisible: true,
             selVisibles: true,
-            postData:{}
+            postData: {}
         }
     },
     methods: {
@@ -953,17 +953,20 @@ export default {
         },
         onChange(data, dateString) {
             this.time = dateString
+            this.defaultTime = data
         },
         onChange1(data, dateString) {
             this.time1 = dateString
+            this.defaultTime1 = data
         },
         onChange2(data, dateString) {
             this.time2 = dateString
+            this.defaultTime2 = data
         },
         change1(value) {
             this.secondPro = value[0]
-            this.secondTown = ['']
-            this.secondCity = ['']
+            this.secondTown = []
+            this.secondCity = []
             if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
@@ -978,7 +981,7 @@ export default {
         },
         change2(value) {
             this.secondCity = value[0]
-            this.secondTown = ['']
+            this.secondTown = []
             if (value.length !== 0) {
                 location(value.toString())
                     .then((res) => {
@@ -1050,10 +1053,10 @@ export default {
                 this.$message.error('请勿上传超过5MB!')
             }
             this.postData.data = JSON.stringify({
-                id:this.sid,
-                storeId:this.sid
+                id: this.sid,
+                storeId: this.sid
             })
-            return isJPG&&isLt5M
+            return isJPG && isLt5M
         },
         handleChange(info) {
             if (info.file.status === 'uploading') {
@@ -1077,6 +1080,7 @@ export default {
         add() {
             this.title = '添加门店'
             this.defaultTime = this.moment('2018-01-01', this.dateFormat)
+            this.time = '2018-01-01'
             this.visible = true
         },
         upImg(i) {

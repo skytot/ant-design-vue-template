@@ -81,6 +81,8 @@ router.beforeEach((to, from, next) => {
     } else if (to.path === '/login') {
         sessionStorage.removeItem('tx_tk')
         sessionStorage.removeItem('tx_eid')
+        sessionStorage.removeItem('tx_url')
+        sessionStorage.removeItem('tx_name')
         next()
     } else {
         next()

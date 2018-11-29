@@ -53,6 +53,7 @@
 </div>
 </template>
 <script>
+import MD5 from 'md5'
 import {
     smscaptcha,
     register,
@@ -91,8 +92,8 @@ export default {
                     })
                 this.codeStatus = true
                 const str = '重发 '
-                let s = 10
-                this.codeMsg = '重发 10s'
+                let s = 60
+                this.codeMsg = '重发 60s'
                 const t = setInterval(() => {
                     if (s > 1) {
                         s--
@@ -121,13 +122,12 @@ export default {
                                 this.logging = false
                                 register({
                                         username: this.form.getFieldValue('tel'),
-                                        password: this.form.getFieldValue('password')
+                                        password: MD5(this.form.getFieldValue('password'))
                                     })
                                     .then((res) => {
                                         if (res.status === 1) {
                                             this.$message.success(res.msg)
                                             sessionStorage.setItem('tx_tk', res.data.token)
-                                            // this.$store.dispatch('setUser', '{name:"admin"}')
                                             this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/resinfo')
                                         } else {
@@ -135,6 +135,7 @@ export default {
                                         }
                                     })
                             } else {
+                                this.logging = false
                                 this.$message.error('验证码错误，请重试')
                             }
                         })

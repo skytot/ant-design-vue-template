@@ -65,7 +65,6 @@ import {
     broadcastAdd,
     broadcast,
     menuContent,
-    menusAdd,
     upHost,
     delImg
 } from '../../api/api'
@@ -83,8 +82,8 @@ export default {
             imgHost: broadcastAdd,
             menuHost: upHost,
             enterpriseId: sessionStorage.getItem('tx_eid'),
-            postData:{},
-            postData1:{},
+            postData: {},
+            postData1: {}
         }
     },
     methods: {
@@ -130,8 +129,10 @@ export default {
                 this.$message.error('图片最多上传6张!')
             }
             this.postData.data = JSON.stringify({
-                enterpriseId:this.enterpriseId,
-                id:this.enterpriseId
+                enterpriseId: this.enterpriseId,
+                id: this.enterpriseId,
+                category: 1,
+                subcategory: 16
             })
             return isJPG && isLt2M && !MAX
         },
@@ -149,8 +150,9 @@ export default {
                 this.$message.error('图片最多上传6张!')
             }
             this.postData1.data = JSON.stringify({
-                menuId:this.mid,
-                id:this.mid
+                menuId: this.mid,
+                id: this.mid,
+                category: 4
             })
             return isJPG && isLt2M && !MAX
         },

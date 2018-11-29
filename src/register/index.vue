@@ -14,31 +14,28 @@
                 <a-form-item label="法人名称：" fieldDecoratorId="legalname" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:6,validateTrigger: ['blur','change']}]}">
                     <a-input v-model="copForm.fname" placeholder="请输入法人名称"></a-input>
                 </a-form-item>
-                <!-- <a-form-item label="手　　机：" fieldDecoratorId="tel" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern: /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
-                    <a-input v-model="copForm.tel" placeholder="请输入手机"></a-input>
-                </a-form-item> -->
                 <a-form-item label="加盟电话：" fieldDecoratorId="code" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的加盟电话', whitespace: true,min:8,max:13}]}">
                     <a-input v-model="copForm.tels" placeholder="请输入加盟电话"></a-input>
                 </a-form-item>
-                <a-form-item label="成立日期" fieldDecoratorId="founddate" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请选择成立日期'}]}">
-                    <a-date-picker style="width: 100%" @change="onChange" />
+                <a-form-item label="成立日期" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请选择成立日期'}]}">
+                    <a-date-picker style="width: 100%" @change="onChange" placeholder="请选择成立时间" />
                 </a-form-item>
                 <a-form-item label="公司地址：" fieldDecoratorId="addressname" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
-                    <a-cascader :options="options" @change="change1" style="width: 150px;margin-right:10px" placeholder="选择省份" changeOnSelect />
-                    <a-cascader :options="option2" @change="change2" style="width: 150px;margin-right:10px" placeholder="选择市区" changeOnSelect />
-                    <a-cascader :options="option3" @change="change3" style="width: 150px;margin-right:10px" placeholder="选择县域" changeOnSelect />
+                    <a-cascader :options="options" @change="change1" :value="secondPro" style="width: 150px;margin-right:10px" placeholder="选择省份" changeOnSelect />
+                    <a-cascader :options="option2" @change="change2" :value="secondCity" style="width: 150px;margin-right:10px" placeholder="选择市区" changeOnSelect />
+                    <a-cascader :options="option3" @change="change3" :value="secondTown" style="width: 150px;margin-right:10px" placeholder="选择县域" changeOnSelect v-show="selVisibles" />
                     <a-input v-model="add" placeholder="详细地址"></a-input>
                 </a-form-item>
-                <a-form-item label="备　　注" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
-                    <a-textarea placeholder="备注" :autosize="{ minRows: 4, maxRows: 6 }" />
+                <a-form-item label="公司简介" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                    <a-textarea placeholder="公司简介" :autosize="{ minRows: 4, maxRows: 6 }" />
                 </a-form-item>
             </a-form>
         </div>
         <div class="steps-content step2" style="width:800px; margin: 50px auto" v-else-if="current === 1">
             <a-form layout="horizontal" :autoFormCreate="(form)=>{this.copForm = form}">
                 <a-form-item label="营业执照：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="yy">
-                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost+enterpriseId+'/12'" :beforeUpload="beforeUpload1" @change="handleChange1">
-                        <img v-if="imageUrl1" :src="imageUrl1" alt="avatar" />
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload1" @change="handleChange1" :data="postData1">
+                        <img v-if="imageUrl1" :src="imageUrl1" alt="avatar" style="height:200px" />
                         <div v-else>
                             <a-icon :type="loading1 ? 'loading' : 'plus'" />
                             <div class="ant-upload-text">Upload</div>
@@ -46,8 +43,8 @@
                     </a-upload>
                 </a-form-item>
                 <a-form-item label="食品生产许可证" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="sc">
-                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost+enterpriseId+'/14'" :beforeUpload="beforeUpload2" @change="handleChange2">
-                        <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" />
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload2" @change="handleChange2" :data="postData2">
+                        <img v-if="imageUrl2" :src="imageUrl2" alt="avatar" style="height:200px" />
                         <div v-else>
                             <a-icon :type="loading2 ? 'loading' : 'plus'" />
                             <div class="ant-upload-text">Upload</div>
@@ -55,8 +52,8 @@
                     </a-upload>
                 </a-form-item>
                 <a-form-item label="食品流通许可证" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="sp">
-                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost+enterpriseId+'/13'" :beforeUpload="beforeUpload3" @change="handleChange3">
-                        <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" />
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload3" @change="handleChange3" :data="postData3">
+                        <img v-if="imageUrl3" :src="imageUrl3" alt="avatar" style="height:200px" />
                         <div v-else>
                             <a-icon :type="loading3 ? 'loading' : 'plus'" />
                             <div class="ant-upload-text">Upload</div>
@@ -64,8 +61,8 @@
                     </a-upload>
                 </a-form-item>
                 <a-form-item label="商标注册证" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="sb">
-                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost+enterpriseId+'/15'" :beforeUpload="beforeUpload4" @change="handleChange4">
-                        <img v-if="imageUrl4" :src="imageUrl4" alt="avatar" />
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload4" @change="handleChange4" :data="postData4">
+                        <img v-if="imageUrl4" :src="imageUrl4" alt="avatar" style="height:200px" />
                         <div v-else>
                             <a-icon :type="loading4 ? 'loading' : 'plus'" />
                             <div class="ant-upload-text">Upload</div>
@@ -115,7 +112,7 @@ export default {
     data() {
         return {
             upHost: upHost,
-            enterpriseId: '1',
+            enterpriseId: 0,
             dateFormat: 'YYYY-MM-DD',
             provinceData: [],
             cityData: [],
@@ -405,12 +402,12 @@ export default {
                 value: 'jiangsu',
                 label: 'Jiangsu'
             }],
-            current: 1,
+            current: 0,
             copForm: {},
             value1: '',
-            secondCity: '',
-            secondPro: '',
-            secondTown: '',
+            secondCity: [],
+            secondPro: [],
+            secondTown: [],
             steps: [{
                 title: '填写基础信息',
                 content: ''
@@ -434,7 +431,12 @@ export default {
             imgStatus1: 0,
             imgStatus2: 0,
             imgStatus3: 0,
-            imgStatus4: 0
+            imgStatus4: 0,
+            selVisibles: false,
+            postData1: {},
+            postData2: {},
+            postData3: {},
+            postData4: {}
         }
     },
     computed: {
@@ -443,19 +445,15 @@ export default {
         }
     },
     methods: {
-        loadData(val) {
-            // location(val).then((res)=>{
-            //     this.options = res.data.map(i=>
-            //         {const n = {};n.label = i.name;n.value = i.locationId;n.isLeaf = false
-            //             return n})
-            // })
-        },
+        loadData(val) {},
         onChange(date, dateString) {
             this.time = dateString
         },
         change1(value) {
-            this.secondPro = value[0]
-            location(value.toString())
+            this.secondPro = value
+            this.secondTown = []
+            this.secondCity = []
+            location(String(value))
                 .then((res) => {
                     this.option2 = res.data.map(i => {
                         const n = {}
@@ -466,8 +464,9 @@ export default {
                 })
         },
         change2(value) {
-            this.secondCity = value[0]
-            location(value.toString())
+            this.secondCity = value
+            this.secondTown = []
+            location(String(value))
                 .then((res) => {
                     this.option3 = res.data.map(i => {
                         const n = {}
@@ -475,10 +474,16 @@ export default {
                         n.value = i.locationId
                         return n
                     })
+                    if (this.option3.length === 0) {
+                        this.selVisibles = false
+                        this.secondTown = this.secondCity
+                    } else {
+                        this.selVisibles = true
+                    }
                 })
         },
         change3(value) {
-            this.secondTown = value[0]
+            this.secondTown = value
         },
         handleChange1(info) {
             if (info.file.status === 'uploading') {
@@ -488,6 +493,7 @@ export default {
             if (info.file.status === 'done') {
                 this.loading1 = false
                 this.$message.success(info.file.response.msg)
+                this.imageUrl1 = '//' + info.file.response.data.url
                 this.imgStatus1 = 1
             }
             if (info.file.status === 'error') {
@@ -504,6 +510,12 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
+            this.postData1.data = JSON.stringify({
+                enterpriseId: this.enterpriseId,
+                category: 1,
+                subcategory: 12,
+                id: this.enterpriseId
+            })
             return isJPG && isLt5M
         },
         handleChange2(info) {
@@ -514,6 +526,7 @@ export default {
             if (info.file.status === 'done') {
                 this.loading2 = false
                 this.$message.success(info.file.response.msg)
+                this.imageUrl2 = '//' + info.file.response.data.url
                 this.imgStatus2 = 1
             }
             if (info.file.status === 'error') {
@@ -530,6 +543,12 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
+            this.postData2.data = JSON.stringify({
+                enterpriseId: this.enterpriseId,
+                category: 1,
+                subcategory: 14,
+                id: this.enterpriseId
+            })
             return isJPG && isLt5M
         },
         handleChange3(info) {
@@ -540,6 +559,7 @@ export default {
             if (info.file.status === 'done') {
                 this.loading3 = false
                 this.$message.success(info.file.response.msg)
+                this.imageUrl3 = '//' + info.file.response.data.url
                 this.imgStatus3 = 1
             }
             if (info.file.status === 'error') {
@@ -556,6 +576,12 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
+            this.postData3.data = JSON.stringify({
+                enterpriseId: this.enterpriseId,
+                category: 1,
+                subcategory: 13,
+                id: this.enterpriseId
+            })
             return isJPG && isLt5M
         },
         handleChange4(info) {
@@ -566,6 +592,7 @@ export default {
             if (info.file.status === 'done') {
                 this.loading4 = false
                 this.$message.success(info.file.response.msg)
+                this.imageUrl4 = '//' + info.file.response.data.url
                 this.imgStatus4 = 1
             }
             if (info.file.status === 'error') {
@@ -582,15 +609,21 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
+            this.postData4.data = JSON.stringify({
+                enterpriseId: this.enterpriseId,
+                category: 1,
+                subcategory: 15,
+                id: this.enterpriseId
+            })
             return isJPG && isLt5M
         },
         next() {
             if (this.current === 0) {
                 this.copForm.validateFields((err, values) => {
                     if (!err) {
-                        const pro = this.secondPro
-                        const city = this.secondCity
-                        const town = this.secondTown
+                        const pro = this.secondPro[0]
+                        const city = this.secondCity[0]
+                        const town = this.secondTown[0]
                         const add = this.add
                         if (pro === '' || city === '' || town === '' || add === '') {
                             this.$message.error('请填写详细地址信息')
@@ -627,7 +660,9 @@ export default {
         }
     },
     mounted() {
-        console.log(upHost)
+        if (typeof this.$route.query.status !== 'undefined') {
+            this.current = 1
+        }
     }
 }
 </script>

@@ -51,24 +51,48 @@
                 <a-form-item label="加盟电话：" fieldDecoratorId="code" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的加盟电话', whitespace: true,min:8,max:13}]}">
                     <a-input v-model="copForms.code" placeholder="请输入加盟电话"></a-input>
                 </a-form-item>
-                <!-- <a-form-item label="公司地址：" fieldDecoratorId="add" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请选择地址'}]}">
-                    <a-cascader style="width: 100%" :options="options" placeholder="选择地区" />
-                </a-form-item> -->
-                <a-form-item label="成立日期" fieldDecoratorId="founddate" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
-                    <a-date-picker style="width: 100%" @change="onChange" />
+                <a-form-item label="成立日期" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                    <a-date-picker style="width: 100%" @change="onChange" :value="defaultTime" />
                 </a-form-item>
                 <a-form-item label="备　　注" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                     <a-input v-model="copForms.description" placeholder="备注"></a-input>
                 </a-form-item>
             </a-form>
         </a-modal>
-        <a-modal title="修改企业资质认证" v-model="visible2" @ok="submitForm" okText="确认" cancelText="取消" :maskClosable="false">
+        <a-modal title="修改企业资质认证" v-model="visible2" :footer="null" :maskClosable="false">
             <a-form layout="horizontal">
-                <a-form-item label="营业执照：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="cname">
-                    <a-upload name="avatar" listType="picture-card" class="avatar-uploader" :showUploadList="false" action="//jsonplaceholder.typicode.com/posts/" :beforeUpload="beforeUpload" @change="handleChange">
-                        <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+                <a-form-item label="营业执照：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required>
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload" @change="handleChange" :data="postData1">
+                        <img v-if="image1" :src="image1" alt="file" />
                         <div v-else>
-                            <a-icon :type="loading ? 'loading' : 'plus'" />
+                            <a-icon :type="loading1 ? 'loading' : 'plus'" />
+                            <div class="ant-upload-text">Upload</div>
+                        </div>
+                    </a-upload>
+                </a-form-item>
+                <a-form-item label="食品生产许可证：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required>
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload2" @change="handleChange2" :data="postData2">
+                        <img v-if="image2" :src="image2" alt="avatar" />
+                        <div v-else>
+                            <a-icon :type="loading2 ? 'loading' : 'plus'" />
+                            <div class="ant-upload-text">Upload</div>
+                        </div>
+                    </a-upload>
+                </a-form-item>
+                <a-form-item label="食品流通许可证：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required>
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload3" @change="handleChange3" :data="postData3">
+                        <img v-if="image3" :src="image3" alt="avatar" />
+                        <div v-else>
+                            <a-icon :type="loading3 ? 'loading' : 'plus'" />
+                            <div class="ant-upload-text">Upload</div>
+                        </div>
+                    </a-upload>
+                </a-form-item>
+                <a-form-item label="商标注册证：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required>
+                    <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload4" @change="handleChange4" :data="postData4">
+                        <img v-if="image4" :src="image4" alt="avatar" />
+                        <div v-else>
+                            <a-icon :type="loading4 ? 'loading' : 'plus'" />
                             <div class="ant-upload-text">Upload</div>
                         </div>
                     </a-upload>
@@ -79,6 +103,7 @@
 </section>
 </template>
 <script>
+import moment from 'moment'
 import {
     baseInfo,
     enterprisesUpdata,
@@ -87,7 +112,7 @@ import {
 } from '../../api/api'
 const formItemLayout = {
     labelCol: {
-        span: 4,
+        span: 6,
         offset: 1
     },
     wrapperCol: {
@@ -97,7 +122,7 @@ const formItemLayout = {
 }
 const formTailLayout = {
     labelCol: {
-        span: 4,
+        span: 6,
         offset: 1
     },
     wrapperCol: {
@@ -170,7 +195,6 @@ export default {
             enterpriseId: '',
             imageUrl: '',
             url: '',
-            dateFormat: '',
             copList: [],
             visible: false,
             visible2: false,
@@ -183,16 +207,35 @@ export default {
             formItemLayout,
             formTailLayout,
             postData: {},
-            imgsId:0,
+            imgsId: 0,
+            loading1: false,
+            loading2: false,
+            loading3: false,
+            loading4: false,
+            postData1: {},
+            postData2: {},
+            postData3: {},
+            postData4: {},
+            image1: '',
+            image2: '',
+            image3: '',
+            image4: '',
+            imgid1: 0,
+            imgid2: 0,
+            imgid3: 0,
+            imgid4: 0,
+            dateFormat: 'YYYY-MM-DD',
+            defaultTime: {}
         }
     },
     methods: {
+        moment,
         getData() {
             baseInfo(this.enterpriseId)
                 .then((res) => {
                     if (res.status === 1) {
-                        this.data[0].url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' :'//'+ res.data.url
-                        this.url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' :'//'+ res.data.url
+                        this.data[0].url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' : '//' + res.data.url
+                        this.url = typeof res.data.url === 'undefined' ? 'static/img/user.jpg' : '//' + res.data.url
                         this.data[1].title = res.data.name
                         this.data[2].title = res.data.legalname
                         this.data[3].title = res.data.tel
@@ -201,13 +244,44 @@ export default {
                         this.data[6].title = res.data.founddate
                         this.data[7].title = res.data.description
                         this.copForms = res.data
-                        typeof res.data.imgsId === 'undefined'?'':this.imgsId = res.data.imgsId
+                        if (typeof res.data.imgsId !== 'undefined') {
+                            this.imgsId = res.data.imgsId
+                            sessionStorage.setItem('tx_url', '//' + res.data.url)
+                        } else {
+                            this.imgsId = 0
+                        }
                     } else {
                         this.$message.error(res.msg)
                     }
                 })
             getImgs(this.enterpriseId)
-                .then((res) => {})
+                .then((res) => {
+                    if (res.status === 1) {
+                        this.data2[0].url = '//' + res.data[0].url
+                        this.data2[1].url = '//' + res.data[1].url
+                        this.data2[2].url = '//' + res.data[2].url
+                        this.data2[3].url = '//' + res.data[3].url
+                        this.imgid1 = res.data[0].imgsId
+                        this.imgid2 = res.data[1].imgsId
+                        this.imgid3 = res.data[2].imgsId
+                        this.imgid4 = res.data[3].imgsId
+                    }
+                })
+        },
+        getImg() {
+            getImgs(this.enterpriseId)
+                .then((res) => {
+                    if (res.status === 1) {
+                        this.data2[0].url = '//' + res.data[0].url
+                        this.data2[1].url = '//' + res.data[1].url
+                        this.data2[2].url = '//' + res.data[2].url
+                        this.data2[3].url = '//' + res.data[3].url
+                        this.imgid1 = res.data[0].imgsId
+                        this.imgid2 = res.data[1].imgsId
+                        this.imgid3 = res.data[2].imgsId
+                        this.imgid4 = res.data[3].imgsId
+                    }
+                })
         },
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
@@ -218,20 +292,19 @@ export default {
             if (!isLt5M) {
                 this.$message.error('请勿上传超过5MB!')
             }
-            if(this.imgsId){
+            if (this.imgsId) {
                 this.postData.data = JSON.stringify({
                     imgsId: this.imgsId,
-                    id: this.enterpriseId,
+                    id: this.enterpriseId
                 })
-            }else{
+            } else {
                 this.postData.data = JSON.stringify({
                     id: this.enterpriseId,
                     enterpriseId: this.enterpriseId,
-                    category:1,
-                    subcategory :11
+                    category: 1,
+                    subcategory: 11
                 })
             }
-
             return isJPG && isLt5M
         },
         handleChange1(info) {
@@ -241,6 +314,162 @@ export default {
             if (info.file.status === 'done') {
                 this.$message.success(info.file.response.msg)
                 this.getData()
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+            }
+        },
+        beforeUpload(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片格式!')
+            }
+            const isLt5M = file.size / 1024 / 1024 < 5
+            if (!isLt5M) {
+                this.$message.error('请勿上传超过5MB!')
+            }
+            if (this.imgid1 === 0) {
+                this.postData1.data = JSON.stringify({
+                    enterpriseId: this.enterpriseId,
+                    category: 1,
+                    subcategory: 12,
+                    id: this.enterpriseId
+                })
+            } else {
+                this.postData1.data = JSON.stringify({
+                    id: this.enterpriseId,
+                    imgsId: this.imgid1
+                })
+            }
+            return isJPG && isLt5M
+        },
+        handleChange(info) {
+            if (info.file.status === 'uploading') {
+                this.loading1 = true
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.loading1 = false
+                this.visible2 = false
+                this.getImg()
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+            }
+        },
+        beforeUpload2(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片格式!')
+            }
+            const isLt5M = file.size / 1024 / 1024 < 5
+            if (!isLt5M) {
+                this.$message.error('请勿上传超过5MB!')
+            }
+            if (this.imgid2 === 0) {
+                this.postData2.data = JSON.stringify({
+                    enterpriseId: this.enterpriseId,
+                    category: 1,
+                    subcategory: 14,
+                    id: this.enterpriseId
+                })
+            } else {
+                this.postData2.data = JSON.stringify({
+                    id: this.enterpriseId,
+                    imgsId: this.imgid2
+                })
+            }
+            return isJPG && isLt5M
+        },
+        handleChange2(info) {
+            if (info.file.status === 'uploading') {
+                this.loading2 = true
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.loading2 = false
+                this.visible2 = false
+                this.getImg()
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+            }
+        },
+        beforeUpload3(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片格式!')
+            }
+            const isLt5M = file.size / 1024 / 1024 < 5
+            if (!isLt5M) {
+                this.$message.error('请勿上传超过5MB!')
+            }
+            if (this.imgid3 === 0) {
+                this.postData3.data = JSON.stringify({
+                    enterpriseId: this.enterpriseId,
+                    category: 1,
+                    subcategory: 13,
+                    id: this.enterpriseId
+                })
+            } else {
+                this.postData3.data = JSON.stringify({
+                    id: this.enterpriseId,
+                    imgsId: this.imgid3
+                })
+            }
+            return isJPG && isLt5M
+        },
+        handleChange3(info) {
+            if (info.file.status === 'uploading') {
+                this.loading3 = true
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.loading3 = false
+                this.visible2 = false
+                this.getImg()
+            }
+            if (info.file.status === 'error') {
+                this.$message.error(info.file.response.msg)
+            }
+        },
+        beforeUpload4(file) {
+            const isJPG = file.type === 'image/jpeg'
+            if (!isJPG) {
+                this.$message.error('只支持 JPG 图片格式!')
+            }
+            const isLt5M = file.size / 1024 / 1024 < 5
+            if (!isLt5M) {
+                this.$message.error('请勿上传超过5MB!')
+            }
+            if (this.imgid4 === 0) {
+                this.postData4.data = JSON.stringify({
+                    enterpriseId: this.enterpriseId,
+                    category: 1,
+                    subcategory: 15,
+                    id: this.enterpriseId
+                })
+            } else {
+                this.postData4.data = JSON.stringify({
+                    id: this.enterpriseId,
+                    imgsId: this.imgid4
+                })
+            }
+            return isJPG && isLt5M
+        },
+        handleChange4(info) {
+            if (info.file.status === 'uploading') {
+                this.loading4 = true
+                return
+            }
+            if (info.file.status === 'done') {
+                this.$message.success(info.file.response.msg)
+                this.loading4 = false
+                this.visible2 = false
+                this.getImg()
             }
             if (info.file.status === 'error') {
                 this.$message.error(info.file.response.msg)
@@ -273,55 +502,33 @@ export default {
         },
         onChange(date, dateString) {
             this.time = dateString
+            this.defaultTime = date
         },
         confirm() {},
         changeImg() {},
         addCop() {
+            this.defaultTime = this.moment(this.data[6].title, this.dateFormat)
             this.visible = true
             this.$nextTick((_) => {
-                this.copForm.getFieldDecorator('name', {
-                    initialValue: this.copForms.name
+                this.copForm.setFieldsValue({
+                    name: this.copForms.name
                 })
-                this.copForm.getFieldDecorator('legalname', {
-                    initialValue: this.copForms.legalname
+                this.copForm.setFieldsValue({
+                    legalname: this.copForms.legalname
                 })
-                this.copForm.getFieldDecorator('tel', {
-                    initialValue: this.copForms.tel
+                this.copForm.setFieldsValue({
+                    tel: this.copForms.tel
                 })
-                this.copForm.getFieldDecorator('code', {
-                    initialValue: this.copForms.code
+                this.copForm.setFieldsValue({
+                    code: this.copForms.code
                 })
-                this.copForm.getFieldDecorator('description', {
-                    initialValue: this.copForms.description
+                this.copForm.setFieldsValue({
+                    description: this.copForms.description
                 })
             })
         },
         addCop2() {
             this.visible2 = true
-        },
-        handleChange(info) {
-            if (info.file.status === 'uploading') {
-                this.loading = true
-                return
-            }
-            if (info.file.status === 'done') {
-                // Get this url from response in real world.
-                // getBase64(info.file.originFileObj, (imageUrl) => {
-                //     this.imageUrl = imageUrl
-                //     this.loading = false
-                // })
-            }
-        },
-        beforeUpload(file) {
-            const isJPG = file.type === 'image/jpeg'
-            if (!isJPG) {
-                this.$message.error('You can only upload JPG file!')
-            }
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isLt2M) {
-                this.$message.error('Image must smaller than 2MB!')
-            }
-            return isJPG && isLt2M
         }
     },
     watch: {},

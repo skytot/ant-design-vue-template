@@ -4,7 +4,7 @@
         <div class="tool">
             <div class="tool-item">
                 <span class="lefts">文章类目</span>
-                <a-radio-group :value="def" buttonStyle="solid" @change="menuChange1" :disabled="disabled">
+                <a-radio-group :value="def" buttonStyle="solid" @change="menuChange1">
                     <a-radio-button :value="itm.categoryId" v-for="itm in cList" :key="itm.categoryId">{{itm.name}}</a-radio-button>
                 </a-radio-group>
             </div>
@@ -19,6 +19,7 @@
                 <editor @getContent="getContent" :html="content"></editor>
             </div>
             <div class="tool-item" style="margin-top:15px;">
+                <a-button @click="back" style="margin-right:15px">退出</a-button>
                 <a-button @click="push(1)" style="margin-right:15px">存草稿</a-button>
                 <a-button type="primary" @click="push(2)">发布</a-button>
             </div>
@@ -42,11 +43,11 @@ export default {
             type: 0,
             cList: [],
             content: '',
+            html: '',
             cid: 1,
             aid: 0,
             def: 0,
-            dId: 0,
-            disabled: false
+            dId: 0
         }
     },
     components: {
@@ -63,7 +64,6 @@ export default {
                     })[0].categoryId
                     this.type = this.def
                     this.dId = res.data.detailId
-                    this.disabled = true
                 })
         },
         getCategory() {
@@ -77,11 +77,14 @@ export default {
             })
         },
         getContent(data) {
-            this.content = data.toString()
+            this.html = data.toString()
         },
         menuChange1(val) {
             this.type = val.target.value
             this.def = val.target.value
+        },
+        back() {
+            this.$router.push('/articleAdmin/article')
         },
         push(i) {
             if (i === 1) {
@@ -90,10 +93,10 @@ export default {
                 } else {
                     if (this.aid === 0) {
                         articleAdd({
-                                categoryId: this.cid,
+                                categoryId: this.type,
                                 status: 1,
                                 name: this.title,
-                                content: this.content,
+                                content: this.html,
                                 enterpriseId: this.enterpriseId
                             })
                             .then((res) => {
@@ -106,13 +109,12 @@ export default {
                             })
                     } else {
                         articleUp({
-                                // categoryId: this.cid,
                                 status: 1,
                                 articleId: this.aid,
                                 detailId: this.dId,
                                 name: this.title,
-                                content: this.content,
-                                enterpriseId: this.enterpriseId
+                                content: this.html,
+                                categoryId: this.type
                             })
                             .then((res) => {
                                 if (res.status === 1) {
@@ -134,10 +136,10 @@ export default {
                 } else {
                     if (this.aid === 0) {
                         articleAdd({
-                                categoryId: this.cid,
+                                categoryId: this.type,
                                 status: 2,
                                 name: this.title,
-                                content: this.content,
+                                content: this.html,
                                 enterpriseId: this.enterpriseId
                             })
                             .then((res) => {
@@ -150,13 +152,12 @@ export default {
                             })
                     } else {
                         articleUp({
-                                // categoryId: this.cid,
+                                categoryId: this.type,
                                 status: 2,
                                 detailId: this.dId,
                                 articleId: this.aid,
                                 name: this.title,
-                                content: this.content,
-                                enterpriseId: this.enterpriseId
+                                content: this.html
                             })
                             .then((res) => {
                                 if (res.status === 1) {
@@ -175,8 +176,8 @@ export default {
     mounted() {
         this.getCategory()
             .then(() => {
-                if (this.$route.query.status !== 0) {
-                    this.aid = this.$route.query.status
+                if (Number(this.$route.query.status) !== 0) {
+                    this.aid = Number(this.$route.query.status)
                     this.getData()
                 }
             })

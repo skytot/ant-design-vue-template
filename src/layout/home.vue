@@ -34,7 +34,7 @@
                     <span>{{cop}}</span>
                     <a-dropdown>
                         <a class="ant-dropdown-link" href="#">
-                            <img :src="copImg" alt="" width="40px">
+                            <img :src="copImg" alt="" width="35px" style="border-radius:50%;height:35px;">
                         </a>
                         <a-menu slot="overlay">
                             <a-menu-item>
@@ -169,14 +169,24 @@ export default {
                         sessionStorage.setItem('tx_name', res.data.name)
                         this.systemName = res.data.name
                         this.cop = res.data.name
-                        this.copImg = res.data.url || 'static/img/user.jpg'
                         if (res.data.url) {
-                            sessionStorage.setItem('tx_url', res.data.url)
+                            sessionStorage.setItem('tx_url', '//' + res.data.url)
+                            this.copImg = '//' + res.data.url
                         } else {
                             sessionStorage.setItem('tx_url', 'static/img/user.jpg')
+                            this.copImg = 'static/img/user.jpg'
                         }
+                    } else if (res.status === -1) {
+                        this.$message.error('获取资质信息失败，请重新重新上传')
+                        this.$router.push({
+                            path: 'resinfo',
+                            query: {
+                                status: 1
+                            }
+                        })
                     } else {
                         this.$message.error('获取基本信息失败，请重新登录')
+                        this.$router.push('/login')
                     }
                 })
         }

@@ -37,7 +37,7 @@
                     <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登 录</a-button>
                 </a-form-item>
                 <div>
-                    <a>忘记密码</a>
+                    <!-- <a>忘记密码</a> -->
                     <router-link style="float: right" to="/Register">注册账户</router-link>
                 </div>
             </a-form>
@@ -46,6 +46,7 @@
 </div>
 </template>
 <script>
+import MD5 from 'md5'
 import {
     login,
     captcha,
@@ -107,7 +108,7 @@ export default {
                             if (res.status === 1) {
                                 login({
                                         username: this.form.getFieldValue('name'),
-                                        password: this.form.getFieldValue('password')
+                                        password: MD5(this.form.getFieldValue('password'))
                                     })
                                     .then((res) => {
                                         this.logging = false
@@ -116,6 +117,9 @@ export default {
                                             // this.$store.dispatch('setUser', '{name:"admin"}')
                                             this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/dashboard')
+                                        } else if (res.status === -1) {
+                                            this.$message.error(res.msg)
+                                            this.$router.push('/resinfo')
                                         } else {
                                             this.$message.error(res.msg)
                                         }
@@ -125,35 +129,6 @@ export default {
                                 this.$message.error(res.msg)
                             }
                         })
-                    // if (this.form.getFieldValue('name') === 'admin' && this.form.getFieldValue('password') === '888888') {
-                    //     sessionStorage.setItem('tx_ua', '{name:"admin"}')
-                    //     sessionStorage.setItem('tx_tk', '888888')
-                    //     this.$store.dispatch('setUser', '{name:"admin"}')
-                    //     this.$store.dispatch('setToken', '888888')
-                    //     this.$router.push('/dashboard')
-                    // } else {
-                    //     this.logging = false
-                    //     this.$error({
-                    //         title: 'This is an error message',
-                    //         content: 'some messages...some messages...'
-                    //     })
-                    // }
-                    // this.$axios.post('/login', {
-                    //         name: this.form.getFieldValue('name'),
-                    //         password: this.form.getFieldValue('password')
-                    //     })
-                    //     .then((res) => {
-                    //         this.logging = false
-                    //         const result = res.data
-                    //         if (result.code >= 0) {
-                    //             const user = result.data.user
-                    //             this.$router.push('/dashboard/workplace')
-                    //             this.$store.commit('account/setuser', user)
-                    //             this.$message.success(result.message, 3)
-                    //         } else {
-                    //             this.error = result.message
-                    //         }
-                    //     })
                 }
             })
         },
