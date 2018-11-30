@@ -13,6 +13,7 @@
                                     <a-upload :action="upHost" @change="handleChange1" :showUploadList="false" :beforeUpload="beforeUpload1" :data="postData">
                                         <a-button>
                                             <a-icon type="upload" /> 上传头像 </a-button>
+                                        <div style="font-size:12px;color:#999">jpg/png,小于1M；建议尺寸：200*200</div>
                                     </a-upload>
                                 </div>
                                 <div slot="title" v-else>{{item.name}}</div>
@@ -285,12 +286,13 @@ export default {
         },
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
-            if (!isJPG) {
-                this.$message.error('只支持 JPG 图片格式!')
+            const isPNG = file.type === 'image/png'
+            if (!isJPG || !isPNG) {
+                this.$message.error('只支持 JPG/PNG 图片格式!')
             }
-            const isLt5M = file.size / 1024 / 1024 < 5
+            const isLt5M = file.size / 1024 / 1024 < 1
             if (!isLt5M) {
-                this.$message.error('请勿上传超过5MB!')
+                this.$message.error('请勿上传超过1MB!')
             }
             if (this.imgsId) {
                 this.postData.data = JSON.stringify({
@@ -305,7 +307,7 @@ export default {
                     subcategory: 11
                 })
             }
-            return isJPG && isLt5M
+            return (isJPG || isPNG) && isLt5M
         },
         handleChange1(info) {
             if (info.file.status === 'uploading') {

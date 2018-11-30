@@ -31,7 +31,7 @@
                         </a-row>
                     </a-form-item>
                     <a-form-item>
-                        <a-form-item fieldDecoratorId="password" :fieldDecoratorOptions="{rules: [{ type:'string',required: true, message: '请输入密码', whitespace: true,min:6,max:18}]}">
+                        <a-form-item fieldDecoratorId="password" :fieldDecoratorOptions="{rules: [{ type:'string',required: true, message: '请输入密码,6-12位', whitespace: true,min:6,max:12}]}">
                             <a-input size="large" placeholder="请输入密码">
                                 <a-icon slot="prefix" type="mail" />
                             </a-input>

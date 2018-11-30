@@ -28,8 +28,8 @@
                                     <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost" @change="handleChange1" :beforeUpload="beforeUpload1" :data="postData1">
                                         <div>
                                             <a-icon :type="loading1 ? 'loading' : 'plus'" />
-                                            <div class="ant-upload-text">上传内容图</div>
-                                        </div>
+                                            <div class="ant-upload-text">上传内容图<br>支持png，jpg格式的图片,图片大小不超过1M</div>
+                                            </div>
                                     </a-upload>
                                 </div>
                             </div>
@@ -49,8 +49,8 @@
                         <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="menuHost" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false" :data="postData">
                             <div>
                                 <a-icon :type="loading ? 'loading' : 'plus'" />
-                                <div class="ant-upload-text">上传轮播图</div>
-                            </div>
+                                <div class="ant-upload-text">上传轮播图<br>支持JPG、PNG等图片格式，大小0.5M以下</div>
+                                </div>
                         </a-upload>
                     </div>
                 </div>
@@ -117,12 +117,13 @@ export default {
         },
         beforeUpload(file) {
             const isJPG = file.type === 'image/jpeg'
-            if (!isJPG) {
-                this.$message.error('只支持 JPG 图片!')
+            const isPNG = file.type === 'image/png'
+            if (!isJPG || !isPNG) {
+                this.$message.error('只支持 JPG/PNG 图片!')
             }
-            const isLt2M = file.size / 1024 / 1024 < 5
+            const isLt2M = file.size / 1024 / 1024 < 0.5
             if (!isLt2M) {
-                this.$message.error('图片不能大于 5MB!')
+                this.$message.error('图片不能大于 0.5MB!')
             }
             const MAX = this.dataImg.length >= 6
             if (MAX) {
@@ -134,16 +135,17 @@ export default {
                 category: 1,
                 subcategory: 16
             })
-            return isJPG && isLt2M && !MAX
+            return (isJPG || isPNG) && isLt2M && !MAX
         },
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
-            if (!isJPG) {
-                this.$message.error('只支持 JPG 图片!')
+            const isPNG = file.type === 'image/png'
+            if (!isJPG || !isPNG) {
+                this.$message.error('只支持 JPG/PNG 图片!')
             }
-            const isLt2M = file.size / 1024 / 1024 < 5
+            const isLt2M = file.size / 1024 / 1024 < 1
             if (!isLt2M) {
-                this.$message.error('图片不能大于 5MB!')
+                this.$message.error('图片不能大于 1MB!')
             }
             const MAX = this.dataContent.length > 10
             if (MAX) {
@@ -154,7 +156,7 @@ export default {
                 id: this.mid,
                 category: 4
             })
-            return isJPG && isLt2M && !MAX
+            return (isJPG || isPNG) && isLt2M && !MAX
         },
         handleChange(info) {
             if (info.file.status === 'uploading') {

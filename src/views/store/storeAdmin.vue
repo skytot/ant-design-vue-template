@@ -42,10 +42,10 @@
                 </a-table>
                 <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
                     <a-form layout="horizontal" :autoFormCreate="(form)=>{this.copForm = form}">
-                        <a-form-item label="门店名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:25,validateTrigger: ['blur','change']}]}">
+                        <a-form-item label="门店名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:100,validateTrigger: ['blur','change']}]}">
                             <a-input placeholder="请输入门店名称" />
                         </a-form-item>
-                        <a-form-item label="　联系人" fieldDecoratorId="contact" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:6,validateTrigger: ['blur','change']}]}">
+                        <a-form-item label="　联系人" fieldDecoratorId="contact" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:20,validateTrigger: ['blur','change']}]}">
                             <a-input v-model="copForm.contact" placeholder="请输入联系人"></a-input>
                         </a-form-item>
                         <a-form-item label="手　　机" fieldDecoratorId="tel" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern:/^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
@@ -1152,6 +1152,10 @@ export default {
                 if (!err) {
                     const town = this.secondTown
                     const add = this.adds
+                    if (add.length > 100) {
+                        this.$message.error('详细地址信息不超过100字')
+                        return
+                    }
                     if (this.title === '添加门店') {
                         if (this.time === '') {
                             this.$message.error('请选择开业时间')
@@ -1218,6 +1222,8 @@ export default {
         hideModal3() {
             if (this.adds1 === '' || this.secondTown1.length === 0) {
                 this.$message.error('请输入正确的地址信息')
+            } else if (this.adds1.length > 100) {
+                this.$message.error('详细地址不超过100字')
             } else {
                 addressUp({
                         addressId: this.aid,

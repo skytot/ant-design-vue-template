@@ -177,13 +177,14 @@ export default {
                             this.copImg = 'static/img/user.jpg'
                         }
                     } else if (res.status === -1) {
+                        sessionStorage.setItem('tx_eid', res.data.enterpriseId)
                         this.$message.error('获取资质信息失败，请重新重新上传')
-                        this.$router.push({
-                            path: 'resinfo',
-                            query: {
-                                status: 1
-                            }
-                        })
+                        // this.$router.push({
+                        //     path: '/resinfo',
+                        //     query: {
+                        //         status: 1
+                        //     }
+                        // })
                     } else {
                         this.$message.error('获取基本信息失败，请重新登录')
                         this.$router.push('/login')
@@ -209,7 +210,11 @@ export default {
     create() {},
     mounted() {
         if (!sessionStorage.getItem('tx_eid')) {
-            this.login()
+            if (!sessionStorage.getItem('tx_tk')) {
+                this.$router.push('/login')
+            } else {
+                this.login()
+            }
         } else {
             this.copImg = sessionStorage.getItem('tx_url')
         }

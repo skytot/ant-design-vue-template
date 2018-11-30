@@ -90,6 +90,8 @@ export default {
             if (i === 1) {
                 if (this.title.length === 0) {
                     this.$message.error('请输入文章标题')
+                } else if (this.title.length > 100) {
+                    this.$message.error('文章标题不超过100字')
                 } else {
                     if (this.aid === 0) {
                         articleAdd({

@@ -472,6 +472,8 @@ export default {
             const add = this.adds
             if (city === '' || town === '' || add === '') {
                 this.$message.error('请填写正确的详细地址信息')
+            } else if (add.length > 100) {
+                this.$message.error('详细地址信息不超过100字')
             } else {
                 if (this.title === '添加地址') {
                     adds({

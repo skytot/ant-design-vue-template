@@ -118,6 +118,8 @@ export default {
                                             this.$store.dispatch('setToken', res.data.token)
                                             this.$router.push('/dashboard')
                                         } else if (res.status === -1) {
+                                            sessionStorage.setItem('tx_tk', res.data.token)
+                                            this.$store.dispatch('setToken', res.data.token)
                                             this.$message.error(res.msg)
                                             this.$router.push('/resinfo')
                                         } else {

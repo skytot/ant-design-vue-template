@@ -28,7 +28,7 @@
             </span>
         </a-table>
         <a-modal :title="title" v-model="visible" @ok="hideModal" okText="确认" cancelText="取消">
-            <span>详细地址： </span>
+            <span>类目名称： </span>
             <br/>
             <a-input-group compact>
                 <a-input placeholder="请输入类目名称" v-model="name" />
@@ -89,6 +89,8 @@ export default {
         hideModal() {
             if (this.name === '') {
                 this.$message.error('请填写类目名称')
+            } else if (this.name.length > 30) {
+                this.$message.error('类目名称不超过30字')
             } else {
                 if (this.title === '添加类目') {
                     categoryAdd({

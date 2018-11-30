@@ -8,10 +8,10 @@
         </div>
         <div class="steps-content step1" style="width:800px; margin: 50px auto" v-if="current ===0">
             <a-form layout="horizontal" :autoFormCreate="(form)=>{this.copForm = form}">
-                <a-form-item label="企业名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:25,validateTrigger: ['blur','change']}]}">
+                <a-form-item label="企业名称：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确企业名称', whitespace: true,min:2,max:50,validateTrigger: ['blur','change']}]}">
                     <a-input placeholder="请输入企业名称" />
                 </a-form-item>
-                <a-form-item label="法人名称：" fieldDecoratorId="legalname" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:6,validateTrigger: ['blur','change']}]}">
+                <a-form-item label="法人名称：" fieldDecoratorId="legalname" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确法人名称', whitespace: true,min:2,max:30,validateTrigger: ['blur','change']}]}">
                     <a-input v-model="copForm.fname" placeholder="请输入法人名称"></a-input>
                 </a-form-item>
                 <a-form-item label="加盟电话：" fieldDecoratorId="code" required :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的加盟电话', whitespace: true,min:8,max:13}]}">
@@ -32,6 +32,7 @@
             </a-form>
         </div>
         <div class="steps-content step2" style="width:800px; margin: 50px auto" v-else-if="current === 1">
+            <div style="padding:10px 10px 10px 6em;color:#888;">上传资质认证图片，只支持jpg，小于5M</div>
             <a-form layout="horizontal" :autoFormCreate="(form)=>{this.copForm = form}">
                 <a-form-item label="营业执照：" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol" required fieldDecoratorId="yy">
                     <a-upload name="file" listType="picture-card" class="avatar-uploader" :showUploadList="false" :action="upHost" :beforeUpload="beforeUpload1" @change="handleChange1" :data="postData1">
@@ -627,6 +628,10 @@ export default {
                         const add = this.add
                         if (pro === '' || city === '' || town === '' || add === '') {
                             this.$message.error('请填写详细地址信息')
+                        } else if (add.length > 100) {
+                            this.$message.error('详细地址信息不超过100字')
+                        } else if (values.description.length > 200) {
+                            this.$message.error('简介信息不超过200字')
                         } else {
                             values.locationId = town
                             values.addressname = add
