@@ -33,7 +33,7 @@
                     <a-form-item>
                         <a-form-item fieldDecoratorId="password" :fieldDecoratorOptions="{rules: [{ type:'string',required: true, message: '请输入密码,6-12位', whitespace: true,min:6,max:12}]}">
                             <a-input size="large" placeholder="请输入密码">
-                                <a-icon slot="prefix" type="mail" />
+                                <a-icon slot="prefix" type="safety" />
                             </a-input>
                         </a-form-item>
                     </a-form-item>
@@ -80,7 +80,8 @@ export default {
             const reg = /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/
             if (reg.test(tel)) {
                 smscaptcha({
-                        username: tel
+                        username: tel,
+                        category: 0
                     })
                     .then((res) => {
                         if (res.status === 1) {

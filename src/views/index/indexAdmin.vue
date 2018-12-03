@@ -11,8 +11,7 @@
                         <a-tree showLine @select="onSelect" :defaultExpandAll="true">
                             <a-tree-node key="0-0">
                                 <span slot="title" style="color: #1890ff">菜单列表</span>
-                                <a-tree-node :title="item.name" :key="item.id+''" v-for="item in data">
-                                    <a-tree-node :title="itm.name" :key="itm.id+''" v-for="itm in item.webMenu" />
+                                <a-tree-node :title="item.name" :key="item.menuId+''" v-for="item in data">
                                 </a-tree-node>
                             </a-tree-node>
                         </a-tree>
@@ -22,15 +21,16 @@
                             <div style="padding:7px">内容管理</div>
                             <div v-show="mid !=0">
                                 <div>
-                                    <div v-for="itm in dataContent" style="width:100%;height:200px;margin:10px" class="data-content" :key="itm.id"><img :src="'//'+itm.url" alt="" style="height:200px"><i class="anticon anticon-delete" @click="del(itm,1)"></i></div>
-                                </div>
-                                <div v-show="dataContent.length<10">
-                                    <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost" @change="handleChange1" :beforeUpload="beforeUpload1" :data="postData1">
-                                        <div>
-                                            <a-icon :type="loading1 ? 'loading' : 'plus'" />
-                                            <div class="ant-upload-text">上传内容图<br>支持png，jpg格式的图片,图片大小不超过1M</div>
-                                            </div>
-                                    </a-upload>
+                                    <div v-for="itm in dataContent" style="height:200px;margin:0px;overflow:hidden" class="data-content" :key="itm.id"><img :src="'//'+itm.url" alt="" style="height:200px;margin:0 auto;"><i class="anticon anticon-delete"
+                                            @click="del(itm,1)"></i></div>
+                                    <div v-show="dataContent.length<10" style="display:inline-block;margin-top:-8px">
+                                        <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost" @change="handleChange1" :beforeUpload="beforeUpload1" :data="postData1">
+                                            <div>
+                                                <a-icon :type="loading1 ? 'loading' : 'plus'" />
+                                                <div class="ant-upload-text">上传内容图<br>支持png，jpg格式的图片,图片大小不超过1M</div>
+                                                </div>
+                                        </a-upload>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -51,6 +51,7 @@
                                 <a-icon :type="loading ? 'loading' : 'plus'" />
                                 <div class="ant-upload-text">上传轮播图<br>支持JPG、PNG等图片格式，大小0.5M以下</div>
                                 </div>
+                                <div>横版大图：宽高比1.78，最低尺寸1280*720。<br> 竖版图片：宽高比0.56，最低尺寸720*1280。 </div>
                         </a-upload>
                     </div>
                 </div>
@@ -98,7 +99,7 @@ export default {
                 })
         },
         onSelect(selectedKeys, info) {
-            if (info.node.$children.length === 0 && info.node.$parent.eventKey !== '0-0') {
+            if (info.node.$parent.eventKey === '0-0') {
                 this.getContent(selectedKeys)
             } else {
                 this.mid = 0
@@ -118,7 +119,7 @@ export default {
         beforeUpload(file) {
             const isJPG = file.type === 'image/jpeg'
             const isPNG = file.type === 'image/png'
-            if (!isJPG || !isPNG) {
+            if (!isJPG && !isPNG) {
                 this.$message.error('只支持 JPG/PNG 图片!')
             }
             const isLt2M = file.size / 1024 / 1024 < 0.5
@@ -140,7 +141,7 @@ export default {
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
             const isPNG = file.type === 'image/png'
-            if (!isJPG || !isPNG) {
+            if (!isJPG && !isPNG) {
                 this.$message.error('只支持 JPG/PNG 图片!')
             }
             const isLt2M = file.size / 1024 / 1024 < 1
@@ -277,7 +278,9 @@ export default {
 
 .data-content {
     position: relative;
-    background-color: #f5f5f5;
+    display: inline-block;
+    width: auto;
+    vertical-align: top;
 }
 
 .data-content i {

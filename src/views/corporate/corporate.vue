@@ -55,7 +55,7 @@
                 <a-form-item label="成立日期" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                     <a-date-picker style="width: 100%" @change="onChange" :value="defaultTime" />
                 </a-form-item>
-                <a-form-item label="备　　注" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
+                <a-form-item label="简　　介" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
                     <a-input v-model="copForms.description" placeholder="备注"></a-input>
                 </a-form-item>
             </a-form>
@@ -287,7 +287,7 @@ export default {
         beforeUpload1(file) {
             const isJPG = file.type === 'image/jpeg'
             const isPNG = file.type === 'image/png'
-            if (!isJPG || !isPNG) {
+            if (!isJPG && !isPNG) {
                 this.$message.error('只支持 JPG/PNG 图片格式!')
             }
             const isLt5M = file.size / 1024 / 1024 < 1

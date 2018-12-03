@@ -178,13 +178,14 @@ export default {
                         }
                     } else if (res.status === -1) {
                         sessionStorage.setItem('tx_eid', res.data.enterpriseId)
+                        sessionStorage.setItem('tx_url', 'static/img/user.jpg')
                         this.$message.error('获取资质信息失败，请重新重新上传')
-                        // this.$router.push({
-                        //     path: '/resinfo',
-                        //     query: {
-                        //         status: 1
-                        //     }
-                        // })
+                        this.$router.push({
+                            path: '/resinfo',
+                            query: {
+                                status: 1
+                            }
+                        })
                     } else {
                         this.$message.error('获取基本信息失败，请重新登录')
                         this.$router.push('/login')

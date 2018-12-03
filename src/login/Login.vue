@@ -37,12 +37,49 @@
                     <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登 录</a-button>
                 </a-form-item>
                 <div>
-                    <!-- <a>忘记密码</a> -->
+                    <a @click="forgetPwd">忘记密码</a>
                     <router-link style="float: right" to="/Register">注册账户</router-link>
                 </div>
             </a-form>
         </div>
     </div>
+    <a-modal title="忘记密码" v-model="visible" @ok="hideModal" okText="提交" cancelText="取消" width="360px" :maskClosable="false" :closable="false">
+        <div>
+            <a-form layout="horizontal">
+                <a-form-item>
+                    <a-input size="large" placeholder="请输入手机号码" :value="reTel" @change="onChange1">
+                        <a-icon slot="prefix" type="mobile" />
+                    </a-input>
+                </a-form-item>
+                <a-form-item>
+                    <a-row :gutter="8" style="margin: 0 -4px">
+                        <a-col :span="15">
+                            <a-form-item>
+                                <a-input size="large" placeholder="请输入手机验证码" :value="reCode" @change="onChange2">
+                                    <a-icon slot="prefix" type="mail" />
+                                </a-input>
+                            </a-form-item>
+                        </a-col>
+                        <a-col :span="9">
+                            <a-button style="width: 100%" class="captcha-button" size="large" @click="getCode" :disabled="codeStatus">{{codeMsg}}</a-button>
+                        </a-col>
+                    </a-row>
+                </a-form-item>
+                <a-form-item>
+                    <a-input size="large" placeholder="请输入新密码" :value="rePwd" @change="onChange3" type="password">
+                        <a-icon slot="prefix" type="safety" />
+                    </a-input>
+                </a-form-item>
+                <a-form-item>
+                    <a-form-item>
+                        <a-input size="large" placeholder="请重复输入新密码" :value="rePwds" @change="onChange4" type="password">
+                            <a-icon slot="prefix" type="safety" />
+                        </a-input>
+                    </a-form-item>
+                </a-form-item>
+            </a-form>
+        </div>
+    </a-modal>
 </div>
 </template>
 <script>
@@ -50,7 +87,10 @@ import MD5 from 'md5'
 import {
     login,
     captcha,
-    captchaCheck
+    captchaCheck,
+    smsCheck,
+    update,
+    smscaptcha
 } from '../api/api'
 export default {
     name: 'Login',
@@ -64,7 +104,12 @@ export default {
             form: {},
             codeStatus: false,
             codeImg: '',
-            codeToken: ''
+            codeToken: '',
+            codeToken1: '',
+            reTel: '',
+            reCode: '',
+            rePwd: '',
+            rePwds: ''
         }
     },
     computed: {
@@ -137,7 +182,114 @@ export default {
         userAgreement() {
             this.visible = true
         },
-        sign() {}
+        sign() {},
+        forgetPwd() {
+            this.visible = true
+        },
+        onChange1(val) {
+            const {
+                value
+            } = val.target
+            this.reTel = value
+        },
+        onChange2(val) {
+            const {
+                value
+            } = val.target
+            this.reCode = value
+        },
+        onChange3(val) {
+            const {
+                value
+            } = val.target
+            this.rePwd = value
+        },
+        onChange4(val) {
+            const {
+                value
+            } = val.target
+            this.rePwds = value
+        },
+        hideModal() {
+            const reg = /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/
+            const tel = this.reTel
+            const code = this.reCode
+            const pwd = this.rePwd
+            const pwds = this.rePwds
+            if (!reg.test(tel)) {
+                this.$message.error('请输入正确的手机号')
+            } else if (pwd !== pwds) {
+                this.$message.error('请输入一致的新密码')
+            } else if (this.codeToken1 === '') {
+                this.$message.error('请获取验证码')
+            } else if (code === '') {
+                this.$message.error('请输入验证码')
+            } else {
+                smsCheck({
+                        token: this.codeToken1,
+                        code: code
+                    })
+                    .then((res) => {
+                        if (res.status === 1) {
+                            update({
+                                    username: tel,
+                                    password: MD5(pwd)
+                                })
+                                .then((res) => {
+                                    if (res.status === 1) {
+                                        this.$message.success(res.msg)
+                                        this.reTel = ''
+                                        this.reCode = ''
+                                        this.codeToken1 = ''
+                                        this.rePwd = ''
+                                        this.rePwds = ''
+                                        this.visible = false
+                                    } else {
+                                        this.rePwd = ''
+                                        this.rePwds = ''
+                                        this.$message.error(res.msg)
+                                    }
+                                })
+                        } else {
+                            this.$message.error('验证码错误，请重试')
+                        }
+                    })
+            }
+        },
+        getCode() {
+            const tel = this.reTel
+            const reg = /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/
+            if (reg.test(tel)) {
+                smscaptcha({
+                        username: tel,
+                        category: 1
+                    })
+                    .then((res) => {
+                        if (res.status === 1) {
+                            this.$message.success('验证码发送成功')
+                            this.codeToken1 = res.data.token
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+                this.codeStatus = true
+                const str = '重发 '
+                let s = 60
+                this.codeMsg = '重发 60s'
+                const t = setInterval(() => {
+                    if (s > 1) {
+                        s--
+                        this.codeMsg = str + s + 's'
+                    } else {
+                        clearInterval(t)
+                        this.codeMsg = '获取验证码'
+                        this.codeStatus = false
+                    }
+                }, 1000)
+            } else {
+                this.$message.error('请输入正确的手机号')
+            }
+        }
     },
     mounted() {
         // this.getCodeImg()

@@ -113,7 +113,7 @@ export default {
     data() {
         return {
             upHost: upHost,
-            enterpriseId: 0,
+            enterpriseId: sessionStorage.getItem('tx_eid'),
             dateFormat: 'YYYY-MM-DD',
             provinceData: [],
             cityData: [],

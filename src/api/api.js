@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 const HOST = '//wechat123.natapp1.cc'
 // const token =
 //     getCookie('token') ||
@@ -45,9 +44,9 @@ export const article = `${HOST}/official/article`
 export const archivesResult = params => {
     return instance.get(`${base}/api/Result/getInfo`, {params})
 }
-// post
-export const getSchoolModules = params => {
-    return instance.post(`${base}/api/SchoolManage/getSchoolModules`, qs.stringify(params)).then(res => res.data)
+// 修改密码
+export const update = params => {
+    return instance.put(`${HOST}/users/enterprise/change`, JSON.stringify(params)).then(res => res.data)
 }
 // 登录
 export const login = params => {

@@ -1,9 +1,9 @@
 <template>
 <section>
     <div>
-        <div :style="{ marginBottom: '16px' }" v-if="data.length<4">
+        <!-- <div :style="{ marginBottom: '16px' }" v-if="data.length<4">
             <a-button @click="add" type="primary" icon="plus">添加类目</a-button>
-        </div>
+        </div> -->
         <a-table :columns="columns" :dataSource="data">
             <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
             <span slot="customTitle"> Name</span>
