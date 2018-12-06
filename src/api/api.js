@@ -4,12 +4,22 @@ const HOST = '//wechat123.natapp1.cc'
 //     getCookie('token') ||
 //     sessionStorage.getItem('token') ||
 //     process.env.API_TOKEN
+// 发送cookie处理
 // 统一头部处理
 const instance = axios.create({
+    withCredentials: true,
     headers: {
-        // 'content-type': 'application/x-www-form-urlencoded'
         'content-type': 'application/json;charset=utf-8'
     }
+
+})
+// 请求拦截器
+instance.interceptors.request.use(response => {
+    const token = sessionStorage.getItem('tx_tk')
+    if (token) {
+        response.headers['Token'] = token
+    }
+    return response
 })
 // 统一响应拦截器
 instance.interceptors.response.use(response => {
@@ -51,6 +61,10 @@ export const update = params => {
 // 登录
 export const login = params => {
     return instance.post(`${HOST}/users/enterprise/login`, JSON.stringify(params)).then(res => res.data)
+}
+// 子账号登录
+export const childLogin = params => {
+    return instance.post(`${HOST}/users/child/login`, JSON.stringify(params)).then(res => res.data)
 }
 // 注册
 export const register = params => {
@@ -195,4 +209,16 @@ export const storeImg = params => {
 // 门店地址更新 http://gangzhuhao.s1.natapp.cc/official/address
 export const addressUp = params => {
     return instance.put(`${HOST}/official/address`, JSON.stringify(params)).then(res => res.data)
+}
+// 账号获取 http://wechat123.natapp1.cc/users/child/{token}
+export const childAccount = params => {
+    return instance.get(`${HOST}/users/child/` + params).then(res => res.data)
+}
+// 账号添加 http://wechat123.natapp1.cc/users/child/{token}
+export const childAccountAdd = params => {
+    return instance.post(`${HOST}/users/child`, JSON.stringify(params)).then(res => res.data)
+}
+// 账号修改 http://wechat123.natapp1.cc/users/child/{token}
+export const childAccountChange = params => {
+    return instance.put(`${HOST}/users/child`, JSON.stringify(params)).then(res => res.data)
 }

@@ -9,6 +9,12 @@
             <div class="desc">Power By Ant Design </div> -->
         </div>
         <div class="login">
+            <div>
+                <a-radio-group defaultValue="1" buttonStyle="solid" style="margin-bottom:20px;width:100%" @change="change">
+                    <a-radio-button value="1" style="width:49%;text-align:center">主账号</a-radio-button>
+                    <a-radio-button value="2" style="width:49%;text-align:center">自媒体账号</a-radio-button>
+                </a-radio-group>
+            </div>
             <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
                 <a-form-item fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern: /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">
                     <a-input size="large" placeholder="请输入手机号">
@@ -36,7 +42,7 @@
                 <a-form-item>
                     <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登 录</a-button>
                 </a-form-item>
-                <div>
+                <div v-show="type==1">
                     <a @click="forgetPwd">忘记密码</a>
                     <router-link style="float: right" to="/Register">注册账户</router-link>
                 </div>
@@ -90,7 +96,8 @@ import {
     captchaCheck,
     smsCheck,
     update,
-    smscaptcha
+    smscaptcha,
+    childLogin
 } from '../api/api'
 export default {
     name: 'Login',
@@ -109,7 +116,8 @@ export default {
             reTel: '',
             reCode: '',
             rePwd: '',
-            rePwds: ''
+            rePwds: '',
+            type: '1'
         }
     },
     computed: {
@@ -137,6 +145,9 @@ export default {
                 this.$message.error('请输入正确的手机账户')
             }
         },
+        change(val) {
+            this.type = val.target.value
+        },
         changeCodeImg() {
             this.getCodeImg()
         },
@@ -151,26 +162,44 @@ export default {
                         })
                         .then((res) => {
                             if (res.status === 1) {
-                                login({
-                                        username: this.form.getFieldValue('name'),
-                                        password: MD5(this.form.getFieldValue('password'))
-                                    })
-                                    .then((res) => {
-                                        this.logging = false
-                                        if (res.status === 1) {
-                                            sessionStorage.setItem('tx_tk', res.data.token)
-                                            // this.$store.dispatch('setUser', '{name:"admin"}')
-                                            this.$store.dispatch('setToken', res.data.token)
-                                            this.$router.push('/dashboard')
-                                        } else if (res.status === -1) {
-                                            sessionStorage.setItem('tx_tk', res.data.token)
-                                            this.$store.dispatch('setToken', res.data.token)
-                                            this.$message.error(res.msg)
-                                            this.$router.push('/resinfo')
-                                        } else {
-                                            this.$message.error(res.msg)
-                                        }
-                                    })
+                                if (this.type === '1') {
+                                    login({
+                                            username: this.form.getFieldValue('name'),
+                                            password: MD5(this.form.getFieldValue('password'))
+                                        })
+                                        .then((res) => {
+                                            this.logging = false
+                                            if (res.status === 1) {
+                                                sessionStorage.setItem('tx_tk', res.data.token)
+                                                // this.$store.dispatch('setUser', '{name:"admin"}')
+                                                this.$store.dispatch('setToken', res.data.token)
+                                                this.$router.push('/dashboard')
+                                            } else if (res.status === -1) {
+                                                sessionStorage.setItem('tx_tk', res.data.token)
+                                                this.$store.dispatch('setToken', res.data.token)
+                                                this.$message.error(res.msg)
+                                                this.$router.push('/resinfo')
+                                            } else {
+                                                this.$message.error(res.msg)
+                                            }
+                                        })
+                                } else {
+                                    childLogin({
+                                            username: this.form.getFieldValue('name'),
+                                            password: MD5(this.form.getFieldValue('password'))
+                                        })
+                                        .then((res) => {
+                                            this.logging = false
+                                            if (res.status === 1) {
+                                                sessionStorage.setItem('tx_tk', res.data.token)
+                                                this.$store.dispatch('setToken', res.data.token)
+                                                sessionStorage.setItem('tx_ts', 2)
+                                                this.$router.push('/dashboard')
+                                            } else {
+                                                this.$message.error(res.msg)
+                                            }
+                                        })
+                                }
                             } else {
                                 this.logging = false
                                 this.$message.error(res.msg)
@@ -220,6 +249,8 @@ export default {
                 this.$message.error('请输入正确的手机号')
             } else if (pwd !== pwds) {
                 this.$message.error('请输入一致的新密码')
+            } else if (pwd.length > 12 || pwd.length < 6) {
+                this.$message.error('新密码为6-12为数字字母组合')
             } else if (this.codeToken1 === '') {
                 this.$message.error('请获取验证码')
             } else if (code === '') {

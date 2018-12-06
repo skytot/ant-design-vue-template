@@ -164,6 +164,9 @@ export default {
     },
     watch: {},
     mounted() {
+        if (Number(sessionStorage.getItem('tx_ts')) === 2) {
+            this.actions = this.actions.filter(i => i.type === 'edit')
+        }
         this.loading = true
         this.getData()
     }

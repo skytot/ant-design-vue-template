@@ -83,6 +83,7 @@ router.beforeEach((to, from, next) => {
         sessionStorage.removeItem('tx_eid')
         sessionStorage.removeItem('tx_url')
         sessionStorage.removeItem('tx_name')
+        sessionStorage.removeItem('tx_ts')
         next()
     } else {
         next()

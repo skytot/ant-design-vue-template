@@ -38,7 +38,7 @@
                         </a>
                         <a-menu slot="overlay">
                             <a-menu-item>
-                                <a href="javascript:;" @click="copInfo">
+                                <a href="javascript:;" @click="copInfo" v-if="type ===1">
                                     <a-icon type="user" />　企业信息　</a>
                             </a-menu-item>
                             <a-menu-item>
@@ -96,7 +96,8 @@ export default {
             breadcrumb: [],
             menus: [],
             cop: '福鼎润泽茶业有限公司',
-            copImg: ''
+            copImg: '',
+            type: 0
         }
     },
     computed: {
@@ -219,10 +220,18 @@ export default {
         } else {
             this.copImg = sessionStorage.getItem('tx_url')
         }
+        this.type = sessionStorage.getItem('tx_ts') || 1
+        if (Number(this.type) === 2) {
+            this.menus = this.$router.options.routes.filter((i) => {
+                return (i.hidden !== true && i.meta.permission[0] === 'child')
+            })
+            this.$router.push('/articleAdmin')
+        } else {
+            this.menus = this.$router.options.routes.filter((i) => {
+                return (i.hidden !== true)
+            })
+        }
         this.getBreadcrumb()
-        this.menus = this.$router.options.routes.filter((i) => {
-            return (i.hidden !== true)
-        })
     }
 }
 </script>

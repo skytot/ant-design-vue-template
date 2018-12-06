@@ -28,7 +28,8 @@ const articleAdmin = () => import ('../views/article/articleAdmin.vue')
 const articleEdit = () => import ('../views/article/articleEdit.vue')
 // 首页管理
 const indexAdmin = () => import ('../views/index/indexAdmin.vue')
-
+// 账号管理
+const accountAdmin = () => import ('../views/account/accountAdmin.vue')
 const routes = [
     {
         path: '/dashboard',
@@ -201,7 +202,7 @@ const routes = [
             leaf: true,
             title: '文章管理',
             icon: 'switcher',
-            permission: ['base']
+            permission: ['child']
         },
         children: [
             {
@@ -212,6 +213,27 @@ const routes = [
                 path: 'articleEdit',
                 component: articleEdit,
                 name: '文章编辑'
+            }
+        ]
+    }, {
+        path: '/account',
+        component: Home,
+        name: '自媒体账号管理',
+        redirect: '/account/accountAdmin',
+        iconCls: 'icon icon-nav-home',
+        leaf: true,
+        key: '8',
+        meta: {
+            leaf: true,
+            title: '自媒体账号管理',
+            icon: 'idcard',
+            permission: ['base']
+        },
+        children: [
+            {
+                path: 'accountAdmin',
+                component: accountAdmin,
+                name: '账号列表'
             }
         ]
     }, {
