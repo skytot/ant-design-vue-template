@@ -24,9 +24,10 @@ instance.interceptors.request.use(response => {
 // 统一响应拦截器
 instance.interceptors.response.use(response => {
     // 对响应数据统一判断
-    const code = response.data.code
-    if (code === '-99999') {
-        return code
+    const code = response.data.status
+    if (code === -99999) {
+        alert(response.data.msg)
+        window.location.href = '/#/login'
     }
     return response
 }, error => {
@@ -62,6 +63,10 @@ export const update = params => {
 export const login = params => {
     return instance.post(`${HOST}/users/enterprise/login`, JSON.stringify(params)).then(res => res.data)
 }
+// 退出
+export const logout = params => {
+    return instance.delete(`${HOST}/official/user/logout`, JSON.stringify(params)).then(res => res.data)
+}
 // 子账号登录
 export const childLogin = params => {
     return instance.post(`${HOST}/users/child/login`, JSON.stringify(params)).then(res => res.data)
@@ -94,20 +99,17 @@ export const enterprises = params => {
 export const location = params => {
     return instance.get(`${HOST}/location/` + params).then(res => res.data)
 }
-// 基本信息
+// 基本信息查询
 export const baseInfo = params => {
-    return instance.get(`${HOST}/enterprises/` + params).then(res => res.data)
+    return instance.get(`${HOST}/official/enterprises/` + params).then(res => res.data)
 }
 // 登录信息
 export const loginInfo = params => {
-    return instance.get(`${HOST}/official/mananger/index/` + params).then(res => res.data)
+    return instance.get(`${HOST}/official/mananger/index`).then(res => res.data)
 }
 // 基本信息修改
-// export const enterprisesUpdata = params => {
-//     return instance.get(`${HOST}/enterprises` + params).then(res => res.data)
-// }
 export const enterprisesUpdata = params => {
-    return instance.put(`${HOST}/enterprises`, JSON.stringify(params)).then(res => res.data)
+    return instance.put(`${HOST}/official/enterprises`, JSON.stringify(params)).then(res => res.data)
 }
 // 资质查询
 export const getImgs = params => {
@@ -212,13 +214,21 @@ export const addressUp = params => {
 }
 // 账号获取 http://wechat123.natapp1.cc/users/child/{token}
 export const childAccount = params => {
-    return instance.get(`${HOST}/users/child/` + params).then(res => res.data)
+    return instance.get(`${HOST}/official/users/child`).then(res => res.data)
 }
 // 账号添加 http://wechat123.natapp1.cc/users/child/{token}
 export const childAccountAdd = params => {
-    return instance.post(`${HOST}/users/child`, JSON.stringify(params)).then(res => res.data)
+    return instance.post(`${HOST}/official/users/child`, JSON.stringify(params)).then(res => res.data)
 }
 // 账号修改 http://wechat123.natapp1.cc/users/child/{token}
 export const childAccountChange = params => {
-    return instance.put(`${HOST}/users/child`, JSON.stringify(params)).then(res => res.data)
+    return instance.put(`${HOST}/official/users/child`, JSON.stringify(params)).then(res => res.data)
+}
+// 招商加盟轮播图 http://wechat123.natapp1.cc/official/broadcast/investment
+export const investment = params => {
+    return instance.get(`${HOST}/official/broadcast/investment`).then(res => res.data)
+}
+// 品牌文化轮播图 http://wechat123.natapp1.cc/official/broadcast/culture
+export const culture = params => {
+    return instance.get(`${HOST}/official/broadcast/culture`).then(res => res.data)
 }

@@ -54,7 +54,7 @@
                     </a-form-item>
                     <a-form-item>
                         <a-button style="width: 48%;margin-top: 24px;margin-right:1.5%" size="large" @click="close">取消</a-button>
-                        <a-button :loading="logging" style="width: 48%;margin-top: 24px" size="large" htmlType="submit" type="primary">确认注册</a-button>
+                        <a-button :loading="logging" style="width: 48%;margin-top: 24px" size="large" htmlType="submit" type="primary">确认</a-button>
                     </a-form-item>
                 </a-form>
             </div>
@@ -138,7 +138,7 @@ export default {
     },
     methods: {
         getData() {
-            childAccount(this.token)
+            childAccount()
                 .then((res) => {
                     this.data = res.data
                 })

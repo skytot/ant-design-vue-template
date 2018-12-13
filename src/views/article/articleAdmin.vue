@@ -31,6 +31,7 @@
                         {{text}}
                     </span>
                 </template>
+                <img slot="extra" width="180" alt="logo" :src="item.url" style="height:120px;" />
                 <span v-if="item.status ===2">已发布　</span>
                 <span v-else>草稿箱　</span>
                 <a-list-item-meta :description="item.description">
@@ -91,16 +92,20 @@ export default {
         getData() {
             axios({
                     method: 'get',
-                    url: article + '/' + this.enterpriseId + '/' + 10 + '/' + this.pageId,
+                    url: article + '/' + this.enterpriseId + '/' + 10 + '/' + this.pageId + '/' + this.menuId + '/' + this.status,
                     headers: {
-                        'status': Number(this.menuId),
-                        'categoryId': Number(this.status)
+                        Token: sessionStorage.getItem('tx_tk')
                     }
                 })
                 .then((res) => {
-                    this.cList = res.data.data.category
-                    this.listData = res.data.data.article.data
-                    this.loading = false
+                    if (res.data.status === -99999) {
+                        alert(res.data.msg)
+                        window.location.href = '/#/login'
+                    } else {
+                        this.cList = res.data.data.category
+                        this.listData = res.data.data.article.data
+                        this.loading = false
+                    }
                 })
             // article({
             //         enterpriseId: this.enterpriseId,

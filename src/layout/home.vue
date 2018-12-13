@@ -2,12 +2,12 @@
 <a-layout id="components-layout-demo-side" style="min-height: 100vh">
     <a-layout-sider collapsible :inlineCollapsed="collapsed">
         <div class="logo" />
-        <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline">
+        <a-menu theme="dark" :defaultSelectedKeys="defaultKey" mode="inline" @click="select" :selectedKeys="[current]">
             <a-menu-item :key="item.key" v-for="item in menus" v-if="item.leaf">
                 <router-link :to="item.path" :data-keys="item.key">
                     <a-icon :type="item.meta.icon" /> <span>{{item.meta.title}}</span></router-link>
             </a-menu-item>
-            <!-- <a-sub-menu :key="item.key" v-for="item in menus" v-if="!item.leaf">
+            <a-sub-menu :key="item.key" v-for="item in menus" v-if="!item.leaf">
                 <span slot="title">
                     <a-icon :type="item.meta.icon" /><span>{{item.name}}</span></span>
                 <a-menu-item :key="itm.Key" v-for="itm in item.children">
@@ -15,7 +15,7 @@
                         {{itm.name}}
                     </router-link>
                 </a-menu-item>
-            </a-sub-menu> -->
+            </a-sub-menu>
         </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -83,7 +83,8 @@
 </template>
 <script>
 import {
-    loginInfo
+    loginInfo,
+    logout
 } from '../api/api'
 export default {
     data() {
@@ -97,7 +98,8 @@ export default {
             menus: [],
             cop: '福鼎润泽茶业有限公司',
             copImg: '',
-            type: 0
+            type: 0,
+            current: '1'
         }
     },
     computed: {
@@ -125,10 +127,10 @@ export default {
                     // }
                     return arr
                 })
-                const v = [arr.filter(i => {
-                    return this.$route.path.indexOf(i.path) !== -1
-                })[0].key]
-                return v
+                // const v = [arr.filter(i => {
+                //     return this.$route.path.indexOf(i.path) !== -1
+                // })[0].key]
+                return ['61']
             } else {
                 return ['1']
             }
@@ -143,17 +145,17 @@ export default {
                 okText: '确认',
                 cancelText: '取消',
                 onOk() {
-                    // console.log(this)
-                    _this.$store.commit('USER', null)
-                    _this.$router.push('/login')
-                    // return new Promise((resolve, reject) => {
-                    //         console.log(resolve, reject)
-                    //         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    //     })
-                    //     .catch(() => console.log('Oops errors!'));
+                    _this.exit()
                 },
                 onCancel() {}
             })
+        },
+        exit() {
+            logout()
+                .then((res) => {
+                    this.$store.commit('USER', null)
+                    this.$router.push('/login')
+                })
         },
         copInfo() {
             this.$router.push('/corporate/mycorporate')
@@ -161,8 +163,12 @@ export default {
         getBreadcrumb() {
             this.breadcrumb = this.$route.matched
         },
+        select(e) {
+            sessionStorage.setItem('key', e.key)
+            this.current = e.key
+        },
         login() {
-            loginInfo(sessionStorage.getItem('tx_tk'))
+            loginInfo()
                 .then((res) => {
                     if (res.status === 1) {
                         this.$store.dispatch('setUser', res.data.enterpriseId)
@@ -232,6 +238,7 @@ export default {
             })
         }
         this.getBreadcrumb()
+        this.current = sessionStorage.getItem('key') || '1'
     }
 }
 </script>

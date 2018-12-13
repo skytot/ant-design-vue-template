@@ -28,6 +28,10 @@ const articleAdmin = () => import ('../views/article/articleAdmin.vue')
 const articleEdit = () => import ('../views/article/articleEdit.vue')
 // 首页管理
 const indexAdmin = () => import ('../views/index/indexAdmin.vue')
+// 首页管理/招商加盟
+const businessAdmin = () => import ('../views/index/businessAdmin.vue')
+// 首页管理/文化管理
+const cultureAdmin = () => import ('../views/index/cultureAdmin.vue')
 // 账号管理
 const accountAdmin = () => import ('../views/account/accountAdmin.vue')
 const routes = [
@@ -172,22 +176,32 @@ const routes = [
     }, {
         path: '/indexAdmin',
         component: Home,
-        name: '首页管理',
+        name: '公众号管理',
         redirect: '/indexAdmin/index',
         iconCls: 'icon icon-nav-home',
-        leaf: true,
-        key: '6',
+        leaf: false,
+        key: 'sub1',
         meta: {
-            leaf: true,
-            title: '首页管理',
+            title: '公众号管理',
             icon: 'desktop',
             permission: ['base']
         },
         children: [
             {
-                path: 'index',
+                path: '/index',
+                key: '6',
                 component: indexAdmin,
-                name: '首页信息'
+                name: '企业官网'
+            }, {
+                path: '/cultureAdmin',
+                key: '7',
+                component: cultureAdmin,
+                name: '品牌文化'
+            }, {
+                path: '/businessAdmin',
+                key: '8',
+                component: businessAdmin,
+                name: '招商加盟'
             }
         ]
     }, {
@@ -197,7 +211,7 @@ const routes = [
         redirect: '/articleAdmin/article',
         iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: '7',
+        key: '9',
         meta: {
             leaf: true,
             title: '文章管理',
@@ -222,7 +236,7 @@ const routes = [
         redirect: '/account/accountAdmin',
         iconCls: 'icon icon-nav-home',
         leaf: true,
-        key: '8',
+        key: '10',
         meta: {
             leaf: true,
             title: '自媒体账号管理',

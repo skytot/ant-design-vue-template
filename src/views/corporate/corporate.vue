@@ -56,7 +56,7 @@
                     <a-date-picker style="width: 100%" @change="onChange" :value="defaultTime" />
                 </a-form-item>
                 <a-form-item label="简　　介" fieldDecoratorId="description" :labelCol="formItemLayout.labelCol" :wrapperCol="formItemLayout.wrapperCol">
-                    <a-input v-model="copForms.description" placeholder="备注"></a-input>
+                    <a-textarea placeholder="公司简介" v-model="copForms.description" :autosize="{ minRows: 4, maxRows: 6 }" />
                 </a-form-item>
             </a-form>
         </a-modal>

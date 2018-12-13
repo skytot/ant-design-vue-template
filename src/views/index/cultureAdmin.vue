@@ -1,70 +1,30 @@
 <template>
 <section>
     <div class="card-container">
-        <a-tabs type="card">
-            <a-tab-pane tab="企业官网" key="1">
-                <!-- <div :style="{ marginBottom: '16px' }">
-                    <a-button @click="add" type="primary" icon="plus">添加门店</a-button>
-                </div> -->
-                <a-row>
-                    <a-col :span="6">
-                        <a-tree showLine @select="onSelect" :defaultExpandAll="true" :defaultSelectedKeys="['100000']">
-                            <a-tree-node key="0-0">
-                                <span slot="title" style="color: #1890ff">菜单列表</span>
-                                <a-tree-node :title="item.name" :key="item.menuId+''" v-for="item in data">
-                                </a-tree-node>
-                            </a-tree-node>
-                        </a-tree>
-                    </a-col>
-                    <a-col :span="18">
-                        <div>
-                            <div style="padding:7px">内容管理</div>
-                            <div v-show="mid !=0">
-                                <div>
-                                    <div v-for="itm in dataContent" style="height:200px;margin:0px;overflow:hidden" class="data-content" :key="itm.id"><img :src="'//'+itm.url" alt="" style="height:200px;margin:0 auto;"><i class="anticon anticon-delete"
-                                            @click="del(itm,1)"></i></div>
-                                    <div v-show="dataContent.length<10" style="display:inline-block;margin-top:-8px">
-                                        <a-upload listType="picture-card" name="file" class="avatar-uploader" :multiple="false" :showUploadList="false" :action="menuHost" @change="handleChange1" :beforeUpload="beforeUpload1" :data="postData1">
-                                            <div>
-                                                <a-icon :type="loading1 ? 'loading' : 'plus'" />
-                                                <div class="ant-upload-text">上传内容图<br>支持png，jpg格式的图片,图片大小不超过1M</div>
-                                                </div>
-                                        </a-upload>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="gutter-example">
+            <div style="margin:15px 0">轮播图列表</div>
+            <a-row :gutter="16">
+                <a-col class="gutter-row" :span="4" v-for="itm in dataImg" :key="itm.imgsId" style="overflow:hidden">
+                    <div class="gutter-box data-content"><img :src="'//'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
+                </a-col>
+            </a-row>
+            <div v-show="dataImg.length<6">
+                <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="menuHost" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false" :data="postData">
+                    <div>
+                        <a-icon :type="loading ? 'loading' : 'plus'" />
+                        <div class="ant-upload-text">上传轮播图<br>支持JPG、PNG等图片格式，大小2M以下</div>
                         </div>
-                    </a-col>
-                </a-row>
-            </a-tab-pane>
-            <!-- <a-tab-pane tab="品牌文化" key="2">
-                <div class="gutter-example">
-                    <div style="margin:15px 0">轮播图列表</div>
-                    <a-row :gutter="16">
-                        <a-col class="gutter-row" :span="4" v-for="itm in dataImg" :key="itm.imgsId" style="overflow:hidden">
-                            <div class="gutter-box data-content"><img :src="'//'+itm.url" alt="" height="200px"><i class="anticon anticon-delete" @click="del(itm,2)"></i></div>
-                        </a-col>
-                    </a-row>
-                    <div v-show="dataImg.length<6">
-                        <a-upload listType="picture-card" class="avatar-uploader" name="file" :multiple="false" :action="menuHost" @change="handleChange" :beforeUpload="beforeUpload" :showUploadList="false" :data="postData">
-                            <div>
-                                <a-icon :type="loading ? 'loading' : 'plus'" />
-                                <div class="ant-upload-text">上传轮播图<br>支持JPG、PNG等图片格式，大小0.5M以下</div>
-                                </div>
-                                <div>横版大图：宽高比1.78，最低尺寸1280*720。<br> 竖版图片：宽高比0.56，最低尺寸720*1280。 </div>
-                        </a-upload>
-                    </div>
-                </div>
-            </a-tab-pane> -->
-        </a-tabs>
+                        <div>横版大图：宽高比1.78，最低尺寸1280*720。<br> 竖版图片：宽高比0.56，最低尺寸720*1280。 </div>
+                </a-upload>
+            </div>
+        </div>
     </div>
 </section>
 </template>
 <script>
 import {
-    menu,
     broadcastAdd,
-    menuContent,
+    culture,
     upHost,
     delImg
 } from '../../api/api'
@@ -88,28 +48,9 @@ export default {
     },
     methods: {
         getData() {
-            menu()
+            culture()
                 .then((res) => {
-                    this.data = res.data
-                })
-            this.getContent(['100000'])
-        },
-        onSelect(selectedKeys, info) {
-            if (info.node.$parent.eventKey === '0-0') {
-                this.getContent(selectedKeys)
-            } else {
-                this.mid = 0
-            }
-        },
-        getContent(selectedKeys) {
-            menuContent(selectedKeys[0])
-                .then((res) => {
-                    this.mid = Number(selectedKeys)
-                    if (res.status === 1) {
-                        this.dataContent = res.data
-                    } else {
-                        this.$message.error(res.msg)
-                    }
+                    this.dataImg = res.data
                 })
         },
         beforeUpload(file) {
@@ -118,7 +59,7 @@ export default {
             if (!isJPG && !isPNG) {
                 this.$message.error('只支持 JPG/PNG 图片!')
             }
-            const isLt2M = file.size / 1024 / 1024 < 0.5
+            const isLt2M = file.size / 1024 / 1024 < 2
             if (!isLt2M) {
                 this.$message.error('图片不能大于 0.5MB!')
             }
