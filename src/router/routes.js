@@ -152,28 +152,30 @@ const routes = [
                 name: '门店信息'
             }
         ]
-    }, {
-        path: '/sortAdmin',
-        component: Home,
-        name: '类目管理',
-        redirect: '/sortAdmin/sort',
-        iconCls: 'icon icon-nav-home',
-        leaf: true,
-        key: '5',
-        meta: {
-            leaf: true,
-            title: '类目管理',
-            icon: 'profile',
-            permission: ['base']
-        },
-        children: [
-            {
-                path: 'sort',
-                component: sortAdmin,
-                name: '类目列表'
-            }
-        ]
-    }, {
+    },
+    // {
+    //     path: '/sortAdmin',
+    //     component: Home,
+    //     name: '类目管理',
+    //     redirect: '/sortAdmin/sort',
+    //     iconCls: 'icon icon-nav-home',
+    //     leaf: true,
+    //     key: '5',
+    //     meta: {
+    //         leaf: true,
+    //         title: '类目管理',
+    //         icon: 'profile',
+    //         permission: ['base']
+    //     },
+    //     children: [
+    //         {
+    //             path: 'sort',
+    //             component: sortAdmin,
+    //             name: '类目列表'
+    //         }
+    //     ]
+    // },
+    {
         path: '/indexAdmin',
         component: Home,
         name: '公众号管理',
@@ -192,65 +194,70 @@ const routes = [
                 key: '6',
                 component: indexAdmin,
                 name: '企业官网'
-            }, {
-                path: '/cultureAdmin',
-                key: '7',
-                component: cultureAdmin,
-                name: '品牌文化'
-            }, {
+            },
+            // {
+            //     path: '/cultureAdmin',
+            //     key: '7',
+            //     component: cultureAdmin,
+            //     name: '品牌文化'
+            // },
+            {
                 path: '/businessAdmin',
                 key: '8',
                 component: businessAdmin,
                 name: '招商加盟'
             }
         ]
-    }, {
-        path: '/articleAdmin',
-        component: Home,
-        name: '文章管理',
-        redirect: '/articleAdmin/article',
-        iconCls: 'icon icon-nav-home',
-        leaf: true,
-        key: '9',
-        meta: {
-            leaf: true,
-            title: '文章管理',
-            icon: 'switcher',
-            permission: ['child']
-        },
-        children: [
-            {
-                path: 'article',
-                component: articleAdmin,
-                name: '文章列表'
-            }, {
-                path: 'articleEdit',
-                component: articleEdit,
-                name: '文章编辑'
-            }
-        ]
-    }, {
-        path: '/account',
-        component: Home,
-        name: '自媒体账号管理',
-        redirect: '/account/accountAdmin',
-        iconCls: 'icon icon-nav-home',
-        leaf: true,
-        key: '10',
-        meta: {
-            leaf: true,
-            title: '自媒体账号管理',
-            icon: 'idcard',
-            permission: ['base']
-        },
-        children: [
-            {
-                path: 'accountAdmin',
-                component: accountAdmin,
-                name: '账号列表'
-            }
-        ]
-    }, {
+    },
+    // {
+    //     path: '/articleAdmin',
+    //     component: Home,
+    //     name: '文章管理',
+    //     redirect: '/articleAdmin/article',
+    //     iconCls: 'icon icon-nav-home',
+    //     leaf: true,
+    //     key: '9',
+    //     meta: {
+    //         leaf: true,
+    //         title: '文章管理',
+    //         icon: 'switcher',
+    //         permission: ['child']
+    //     },
+    //     children: [
+    //         {
+    //             path: 'article',
+    //             component: articleAdmin,
+    //             name: '文章列表'
+    //         }, {
+    //             path: 'articleEdit',
+    //             component: articleEdit,
+    //             name: '文章编辑'
+    //         }
+    //     ]
+    // },
+    // {
+    //     path: '/account',
+    //     component: Home,
+    //     name: '自媒体账号管理',
+    //     redirect: '/account/accountAdmin',
+    //     iconCls: 'icon icon-nav-home',
+    //     leaf: true,
+    //     key: '10',
+    //     meta: {
+    //         leaf: true,
+    //         title: '自媒体账号管理',
+    //         icon: 'idcard',
+    //         permission: ['base']
+    //     },
+    //     children: [
+    //         {
+    //             path: 'accountAdmin',
+    //             component: accountAdmin,
+    //             name: '账号列表'
+    //         }
+    //     ]
+    // },
+    {
         path: '/login',
         component: Login,
         name: '',

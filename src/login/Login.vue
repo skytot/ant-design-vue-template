@@ -10,10 +10,10 @@
         </div>
         <div class="login">
             <div>
-                <a-radio-group defaultValue="1" buttonStyle="solid" style="margin-bottom:20px;width:100%" @change="change">
+                <!-- <a-radio-group defaultValue="1" buttonStyle="solid" style="margin-bottom:20px;width:100%" @change="change">
                     <a-radio-button value="1" style="width:49%;text-align:center">主账号</a-radio-button>
                     <a-radio-button value="2" style="width:49%;text-align:center">自媒体账号</a-radio-button>
-                </a-radio-group>
+                </a-radio-group> -->
             </div>
             <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
                 <a-form-item fieldDecoratorId="name" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入正确的手机号码', whitespace: true,pattern: /^((\+?[0-9]{1,4})|(\(\+86\)))?(13[0-9]|14[59]|15[0-9]|16[56]|17[0-9]|18[0-9]|19[89])\d{8}$/}]}">

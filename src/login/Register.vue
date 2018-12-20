@@ -32,7 +32,7 @@
                     </a-form-item>
                     <a-form-item>
                         <a-form-item fieldDecoratorId="password" :fieldDecoratorOptions="{rules: [{ type:'string',required: true, message: '请输入密码,6-12位', whitespace: true,min:6,max:12}]}">
-                            <a-input size="large" placeholder="请输入密码">
+                            <a-input size="large" placeholder="请输入密码" type="password">
                                 <a-icon slot="prefix" type="safety" />
                             </a-input>
                         </a-form-item>
