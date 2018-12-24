@@ -1,5 +1,5 @@
 import axios from 'axios'
-const HOST = '//wechat123.natapp1.cc'
+const HOST = window.APIHOST
 // const token =
 //     getCookie('token') ||
 //     sessionStorage.getItem('token') ||
@@ -9,9 +9,8 @@ const HOST = '//wechat123.natapp1.cc'
 const instance = axios.create({
     withCredentials: true,
     headers: {
-        'content-type': 'application/json;charset=utf-8'
+        'content-type': 'application/jsoncharset=utf-8'
     }
-
 })
 // 请求拦截器
 instance.interceptors.request.use(response => {
